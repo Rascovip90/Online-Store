@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>المتجر الإلكتروني</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+    <!-- شريط علوي -->
+    <header>
+        <nav class="navbar">
+            <div class="logo"><span class="orange">متجر</span> <span class="white">إلكتروني</span></div>
+            <ul>
+                <li class="active"><a href="index.html">الرئيسية</a></li>
+                <li><a href="#offers">العروض</a></li>
+                <li><a href="control.html">لوحة التحكم</a></li>
+            </ul>
+        </nav>
+    </header>
+
+    <!-- المنتجات -->
+    <main>
+        <h2>جميع المنتجات</h2>
+        <div id="product-list" class="product-grid"></div>
+    </main>
+
+    <!-- السلة -->
+    <div id="cart" class="cart" draggable="true">
+        🛒 اطلب الآن (<span id="cart-count">0</span>)
+        <div id="cart-items"></div>
+        <div class="total">المجموع: <span id="cart-total">0</span> ر.ع</div>
+        <button id="order-btn">إرسال الطلب عبر واتساب</button>
+    </div>
+
+    <script src="script.js"></script>
+</body>
+</html>

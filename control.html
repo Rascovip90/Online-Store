@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>لوحة التحكم</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+    <div id="login-box">
+        <h2>تسجيل الدخول</h2>
+        <input type="password" id="password" placeholder="كلمة المرور">
+        <button onclick="checkPassword()">دخول</button>
+    </div>
+
+    <div id="admin-panel" style="display:none;">
+        <h2>إدارة المنتجات</h2>
+        <input type="text" id="product-name" placeholder="اسم المنتج">
+        <input type="number" id="product-price" placeholder="السعر">
+        <input type="url" id="product-image" placeholder="رابط الصورة">
+        <button onclick="addProduct()">إضافة المنتج</button>
+
+        <h3>المنتجات الحالية</h3>
+        <div id="admin-products" class="product-grid"></div>
+    </div>
+
+    <script src="script.js"></script>
+    <script>
+        function checkPassword() {
+            if (document.getElementById("password").value === "7732") {
+                document.getElementById("login-box").style.display = "none";
+                document.getElementById("admin-panel").style.display = "block";
+                loadAdminProducts();
+            } else {
+                alert("كلمة المرور غير صحيحة");
+            }
+        }
+    </script>
+</body>
+</html>
