@@ -1,41 +1,48 @@
 <!DOCTYPE html>
 <html lang="ar" dir="rtl">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>لوحة التحكم</title>
-    <link rel="stylesheet" href="style.css">
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>لوحة التحكم</title>
+<link rel="stylesheet" href="style.css">
 </head>
 <body>
 
-    <div id="login-box">
-        <h2>تسجيل الدخول</h2>
-        <input type="password" id="password" placeholder="كلمة المرور">
-        <button onclick="checkPassword()">دخول</button>
-    </div>
+<h2>لوحة التحكم</h2>
+<div>
+  <input type="text" id="name" placeholder="اسم المنتج">
+  <input type="text" id="price" placeholder="السعر">
+  <input type="text" id="image" placeholder="رابط الصورة">
+  <select id="category">
+    <option value="products">رئيسية</option>
+    <option value="offers">عروض</option>
+  </select>
+  <button onclick="addProduct()">إضافة المنتج</button>
+</div>
 
-    <div id="admin-panel" style="display:none;">
-        <h2>إدارة المنتجات</h2>
-        <input type="text" id="product-name" placeholder="اسم المنتج">
-        <input type="number" id="product-price" placeholder="السعر">
-        <input type="url" id="product-image" placeholder="رابط الصورة">
-        <button onclick="addProduct()">إضافة المنتج</button>
+<script>
+let products = JSON.parse(localStorage.getItem('products')) || [];
+let offers = JSON.parse(localStorage.getItem('offers')) || [];
 
-        <h3>المنتجات الحالية</h3>
-        <div id="admin-products" class="product-grid"></div>
-    </div>
+function addProduct() {
+  const name = document.getElementById('name').value;
+  const price = document.getElementById('price').value;
+  const image = document.getElementById('image').value;
+  const category = document.getElementById('category').value;
 
-    <script src="script.js"></script>
-    <script>
-        function checkPassword() {
-            if (document.getElementById("password").value === "7732") {
-                document.getElementById("login-box").style.display = "none";
-                document.getElementById("admin-panel").style.display = "block";
-                loadAdminProducts();
-            } else {
-                alert("كلمة المرور غير صحيحة");
-            }
-        }
-    </script>
+  const newProduct = { name, price, image };
+
+  if (category === 'products') {
+    products.push(newProduct);
+    localStorage.setItem('products', JSON.stringify(products));
+  } else {
+    offers.push(newProduct);
+    localStorage.setItem('offers', JSON.stringify(offers));
+  }
+
+  alert("تمت الإضافة بنجاح");
+}
+</script>
+
 </body>
 </html>

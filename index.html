@@ -1,39 +1,48 @@
 <!DOCTYPE html>
 <html lang="ar" dir="rtl">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>المتجر الإلكتروني</title>
-    <link rel="stylesheet" href="style.css">
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>متجر الكتروني</title>
+<link rel="stylesheet" href="style.css">
 </head>
 <body>
 
-    <!-- شريط علوي -->
-    <header>
-        <nav class="navbar">
-            <div class="logo"><span class="orange">متجر</span> <span class="white">إلكتروني</span></div>
-            <ul>
-                <li class="active"><a href="index.html">الرئيسية</a></li>
-                <li><a href="#offers">العروض</a></li>
-                <li><a href="control.html">لوحة التحكم</a></li>
-            </ul>
-        </nav>
-    </header>
-
-    <!-- المنتجات -->
-    <main>
-        <h2>جميع المنتجات</h2>
-        <div id="product-list" class="product-grid"></div>
-    </main>
-
-    <!-- السلة -->
-    <div id="cart" class="cart" draggable="true">
-        🛒 اطلب الآن (<span id="cart-count">0</span>)
-        <div id="cart-items"></div>
-        <div class="total">المجموع: <span id="cart-total">0</span> ر.ع</div>
-        <button id="order-btn">إرسال الطلب عبر واتساب</button>
+<header>
+  <div class="logo">
+    <span class="orange">متجر</span> <span class="white">الكتروني</span>
+  </div>
+  <nav>
+    <a href="index.html" class="active">الرئيسية</a>
+    <a href="#" id="offers-link">العروض</a>
+    <a href="admin.html">لوحة التحكم</a>
+    <div class="cart-icon" onclick="toggleCart()">
+      🛒 <span id="cart-count">0</span>
+      <span class="cart-badge" id="cart-badge"></span>
     </div>
+  </nav>
+</header>
 
-    <script src="script.js"></script>
+<main>
+  <section id="products-container" class="products"></section>
+  <section id="offers-container" class="products" style="display:none;"></section>
+</main>
+
+<!-- سلة الطلبات العلوية -->
+<div class="cart-popup" id="cart-popup">
+  <h3>سلة الطلبات</h3>
+  <div id="cart-items"></div>
+  <div class="cart-total">الإجمالي: <span id="cart-total">0</span> ر.س</div>
+  <button onclick="sendWhatsApp()">اطلب الآن</button>
+</div>
+
+<!-- السلة السفلية -->
+<div class="cart-box" id="cart-box">
+  <h4>🛒 السلة</h4>
+  <div id="bottom-cart-items"></div>
+  <div class="cart-total">الإجمالي: <span id="bottom-cart-total">0</span> ر.س</div>
+</div>
+
+<script src="script.js"></script>
 </body>
 </html>

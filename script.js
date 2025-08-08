@@ -1,128 +1,68 @@
-let products = JSON.parse(localStorage.getItem("products")) || [];
-let cart = JSON.parse(localStorage.getItem("cart")) || [];
+let products = JSON.parse(localStorage.getItem('products')) || [];
+let offers = JSON.parse(localStorage.getItem('offers')) || [];
+let cart = [];
 
-function renderProducts() {
-    const productList = document.getElementById("product-list");
-    if (!productList) return;
-    productList.innerHTML = "";
-    products.forEach(p => {
-        const div = document.createElement("div");
-        div.innerHTML = `
-            <img src="${p.image}" alt="${p.name}">
-            <h4>${p.name}</h4>
-            <p>${p.price} ر.ع</p>
-            ${isNew(p.date) ? '<span class="new-label">NEW</span>' : ''}
-            <button onclick="addToCart(${p.id})">إضافة للسلة</button>
-        `;
-        productList.appendChild(div);
-    });
+const productsContainer = document.getElementById('products-container');
+const offersContainer = document.getElementById('offers-container');
+const cartCount = document.getElementById('cart-count');
+const cartBadge = document.getElementById('cart-badge');
+
+function displayProducts(list, container) {
+  container.innerHTML = "";
+  list.forEach((p, index) => {
+    const productDiv = document.createElement('div');
+    productDiv.className = 'product';
+    productDiv.innerHTML = `
+      <img src="${p.image}" alt="${p.name}">
+      <h4>${p.name}</h4>
+      <p>${p.price} ر.س</p>
+      <button onclick="addToCart(${index}, '${container.id}')">+</button>
+    `;
+    container.appendChild(productDiv);
+  });
 }
 
-function renderCart() {
-    const cartItems = document.getElementById("cart-items");
-    const cartCount = document.getElementById("cart-count");
-    const cartTotal = document.getElementById("cart-total");
-    if (!cartItems) return;
-    cartItems.innerHTML = "";
-    let total = 0;
-    cart.forEach(item => {
-        total += item.price * item.qty;
-        cartItems.innerHTML += `
-            ${item.name} (${item.qty})
-            <button onclick="updateQty(${item.id}, 1)">+</button>
-            <button onclick="updateQty(${item.id}, -1)">-</button><br>
-        `;
-    });
-    cartCount.textContent = cart.length;
-    cartTotal.textContent = total;
-    localStorage.setItem("cart", JSON.stringify(cart));
+function addToCart(index, containerId) {
+  let selectedList = containerId === 'offers-container' ? offers : products;
+  cart.push(selectedList[index]);
+  updateCart();
 }
 
-function addToCart(id) {
-    const product = products.find(p => p.id === id);
-    const existing = cart.find(c => c.id === id);
-    if (existing) {
-        existing.qty++;
-    } else {
-        cart.push({ ...product, qty: 1 });
-    }
-    renderCart();
+function updateCart() {
+  cartCount.textContent = cart.length;
+  cartBadge.style.display = cart.length > 0 ? 'block' : 'none';
+
+  let total = 0;
+  let cartHTML = "";
+  let bottomCartHTML = "";
+
+  cart.forEach(item => {
+    total += parseFloat(item.price);
+    cartHTML += `<div>${item.name} - ${item.price} ر.س</div>`;
+    bottomCartHTML += `<div>${item.name} - ${item.price} ر.س</div>`;
+  });
+
+  document.getElementById('cart-items').innerHTML = cartHTML;
+  document.getElementById('bottom-cart-items').innerHTML = bottomCartHTML;
+  document.getElementById('cart-total').textContent = total;
+  document.getElementById('bottom-cart-total').textContent = total;
 }
 
-function updateQty(id, change) {
-    const item = cart.find(c => c.id === id);
-    if (!item) return;
-    item.qty += change;
-    if (item.qty <= 0) {
-        cart = cart.filter(c => c.id !== id);
-    }
-    renderCart();
+function toggleCart() {
+  const cartPopup = document.getElementById('cart-popup');
+  cartPopup.style.display = cartPopup.style.display === 'block' ? 'none' : 'block';
 }
 
-function addProduct() {
-    const name = document.getElementById("product-name").value;
-    const price = parseFloat(document.getElementById("product-price").value);
-    const image = document.getElementById("product-image").value;
-    if (!name || !price || !image) return alert("أكمل جميع الحقول");
-
-    const newProduct = {
-        id: Date.now(),
-        name, price, image,
-        date: new Date().toISOString()
-    };
-    products.push(newProduct);
-    localStorage.setItem("products", JSON.stringify(products));
-    loadAdminProducts();
+function sendWhatsApp() {
+  let message = "طلب جديد:\n";
+  cart.forEach(item => message += `${item.name} - ${item.price} ر.س\n`);
+  window.open(`https://wa.me/77324648?text=${encodeURIComponent(message)}`, '_blank');
 }
 
-function loadAdminProducts() {
-    const adminList = document.getElementById("admin-products");
-    if (!adminList) return;
-    adminList.innerHTML = "";
-    products.forEach(p => {
-        const div = document.createElement("div");
-        div.innerHTML = `
-            <img src="${p.image}" alt="${p.name}">
-            <h4>${p.name}</h4>
-            <p>${p.price} ر.ع</p>
-            <button onclick="deleteProduct(${p.id})">حذف</button>
-        `;
-        adminList.appendChild(div);
-    });
-}
-
-function deleteProduct(id) {
-    products = products.filter(p => p.id !== id);
-    localStorage.setItem("products", JSON.stringify(products));
-    loadAdminProducts();
-}
-
-function isNew(date) {
-    const oneDay = 24 * 60 * 60 * 1000;
-    return new Date() - new Date(date) < oneDay;
-}
-
-document.addEventListener("DOMContentLoaded", () => {
-    renderProducts();
-    renderCart();
-
-    const cartBox = document.getElementById("cart");
-    if (cartBox) {
-        cartBox.addEventListener("dragend", function(e) {
-            cartBox.style.left = e.pageX + "px";
-            cartBox.style.top = e.pageY + "px";
-        });
-    }
-
-    const orderBtn = document.getElementById("order-btn");
-    if (orderBtn) {
-        orderBtn.onclick = () => {
-            let msg = "طلب جديد:\n";
-            cart.forEach(item => {
-                msg += `${item.name} x${item.qty} = ${item.price * item.qty} ر.ع\n`;
-            });
-            msg += `المجموع: ${cart.reduce((sum, i) => sum + (i.price * i.qty), 0)} ر.ع`;
-            window.open(`https://wa.me/77324648?text=${encodeURIComponent(msg)}`);
-        };
-    }
+document.getElementById('offers-link').addEventListener('click', () => {
+  productsContainer.style.display = 'none';
+  offersContainer.style.display = 'grid';
+  displayProducts(offers, offersContainer);
 });
+
+displayProducts(products, productsContainer);
