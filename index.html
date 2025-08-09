@@ -130,12 +130,12 @@ main{ padding:14px; max-width:960px; margin:0 auto 100px auto; color:var(--text-
 .cart-side .head-controls{display:flex;align-items:center;gap:10px;}
 .cart-side .total-row{font-size:13px;color:var(--text-main);} /* السعر الإجمالي بالأسود */
 .cart-side .buy-btn{
-  background:var(--success); /* أخضر واتساب */
+  background:var(--danger); /* أحمر */
   color:#fff;border:none;padding:7px 10px;border-radius:8px;font-weight:900;cursor:pointer;
   font-size:12px;
   transition:background 0.18s;
   position:relative;
-  box-shadow: 0 3px 8px #25d3662b;
+  box-shadow: 0 3px 8px #ef44442b;
 }
 .cart-side .buy-btn.blink{
   animation: blinkBtn 0.7s alternate infinite;
@@ -158,7 +158,7 @@ main{ padding:14px; max-width:960px; margin:0 auto 100px auto; color:var(--text-
   display: none;
   z-index: 2;
 }
-.cart-side .buy-btn:hover{background:#1bb954;}
+.cart-side .buy-btn:hover{background:#dc2626;}
 .cart-side .content{padding:10px;flex:1;overflow:auto;}
 .cart-side .item{display:flex;gap:9px;align-items:center;padding:8px 0;border-bottom:1px solid var(--border);}
 .cart-side .item img{width:48px;height:48px;object-fit:cover;border-radius:6px;}
@@ -225,21 +225,21 @@ input[type="text"], input[type="number"], textarea, select{padding:7px;border-ra
   background: var(--primary-dark);
   opacity: 1;
 }
-.img-arrow.left { left: -24px; }
-.img-arrow.right { right: -24px; }
+.img-arrow.left { left: -36px; }
+.img-arrow.right { right: -36px; }
 .center{display:flex;align-items:center;justify-content:center;}
 @media (max-width:860px){
   .grid{grid-template-columns:repeat(auto-fill,minmax(120px,1fr));}
   .cart-side.open{width:78%;}
   .panel{width:90%;}
-  .img-arrow.left { left: -8px;}
-  .img-arrow.right { right: -8px;}
+  .img-arrow.left { left: -12px;}
+  .img-arrow.right { right: -12px;}
 }
 @media (max-width:420px){
   .card .main-img{height:110px;}
   .thumb{width:28px;height:20px;}
-  .img-arrow.left { left: 0;}
-  .img-arrow.right { right: 0;}
+  .img-arrow.left { left: -6px;}
+  .img-arrow.right { right: -6px;}
 }
 </style>
 </head>
