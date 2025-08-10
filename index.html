@@ -1,21 +1,23 @@
 <!DOCTYPE html>
 <html lang="ar" dir="rtl">
 <head>
-  <meta charset="utf-8"/>
-  <meta name="viewport" content="width=device-width, initial-scale=1"/>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
   <title>متجر إلكتروني</title>
   <link rel="stylesheet" href="style.css">
 </head>
 <body>
 
 <header>
-  <div class="logo">
-    <div class="title">متجر<br>الكتروني</div>
+  <div style="display:flex;gap:8px;align-items:center;">
+    <div class="logo" title="المتجر">
+      <div class="title">متجر<br>الكتروني</div>
+    </div>
   </div>
   <nav>
-    <a href="#home" id="nav-home" class="active">الرئيسية</a>
-    <a href="#offers" id="nav-offers">العروض</a>
-    <a href="#admin" id="nav-admin">لوحة التحكم</a>
+    <a id="nav-home" href="#home" class="active">الرئيسية</a>
+    <a id="nav-offers" href="#offers">العروض</a>
+    <a id="nav-admin" href="#control">لوحة التحكم</a>
   </nav>
 </header>
 
@@ -54,25 +56,35 @@
   <div class="content" id="sideContent">
     <div id="sideItems"></div>
   </div>
+  <div class="footer"></div>
+</div>
+
+<div class="img-viewer" id="imgViewer" role="dialog" aria-hidden="true">
+  <div class="box center" style="position:relative;">
+    <button id="viewerPrev" class="img-arrow left" aria-label="السابق">&#8592;</button>
+    <img id="viewerImg" src="" alt="صورة أكبر">
+    <button id="viewerNext" class="img-arrow right" aria-label="التالي">&#8594;</button>
+    <button id="viewerClose" style="position:absolute; top:14px; left:14px; background:#fff;border-radius:6px;padding:4px 6px; cursor:pointer; font-size:18px;">✖</button>
+  </div>
 </div>
 
 <div class="modal" id="adminModal" style="display:none;">
   <div class="panel">
-    <div class="panel-head">
-      <div>لوحة التحكم</div>
-      <button class="small-btn" onclick="closeAdmin()">✖</button>
+    <div style="display:flex;justify-content:space-between;align-items:center;">
+      <div style="font-weight:900;font-size:15px;color:var(--text-main);">لوحة التحكم</div>
+      <div><button class="small-btn" id="adminCloseBtn">✖</button></div>
     </div>
-    <div id="loginPanel" class="form-row">
+    <div id="loginPanel" class="form-row" style="margin-top:14px;">
       <input id="adminPass" type="password" placeholder="أدخل كلمة المرور">
-      <button class="small-btn" onclick="adminLogin()">دخول</button>
+      <button class="small-btn" id="adminLoginBtn">دخول</button>
     </div>
-    <div id="controlPanel" style="display:none;">
+    <div id="controlPanel" style="display:none; margin-top:9px;">
       <div class="form-row">
         <input id="prodName" placeholder="اسم المنتج">
         <input id="prodPrice" type="number" placeholder="السعر">
       </div>
       <div class="form-row">
-        <input id="prodImages" placeholder="روابط الصور مفصولة بفاصلة">
+        <input id="prodImages" placeholder="روابط الصور مفصولة بفاصلة (حتى 4 روابط)">
       </div>
       <div class="form-row">
         <textarea id="prodDesc" placeholder="الوصف (اختياري)"></textarea>
@@ -82,18 +94,22 @@
           <option value="normal">رئيسية</option>
           <option value="offer">عرض</option>
         </select>
-        <button class="small-btn" onclick="addProduct()">إضافة</button>
+        <button class="small-btn" id="submitProductBtn">حفظ / إضافة</button>
       </div>
+      <div style="margin-top:9px;color:var(--text-main);"><strong>المنتجات الحالية</strong></div>
       <div class="admin-list" id="adminList"></div>
     </div>
   </div>
 </div>
 
-<script src="https://unpkg.com/@supabase/supabase-js@2"></script>
-<script src="supabase.js"></script>
-<script src="products.js"></script>
-<script src="cart.js"></script>
-<script src="admin.js"></script>
-<script src="main.js"></script>
+<!-- Supabase SDK -->
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/dist/umd/supabase.min.js" defer></script>
+
+<!-- ملفات المشروع -->
+<script src="supabase.js" defer></script>
+<script src="products.js" defer></script>
+<script src="cart.js" defer></script>
+<script src="admin.js" defer></script>
+<script src="main.js" defer></script>
 </body>
 </html>
