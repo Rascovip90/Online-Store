@@ -1,92 +1,0 @@
-<!DOCTYPE html>
-<html lang="ar" dir="rtl">
-<head>
-<meta charset="utf-8">
-<meta name="viewport" content="width=device-width, initial-scale=1">
-<title>متجر إلكتروني - Khalid 2</title>
-<link rel="stylesheet" href="style.css">
-</head>
-<body>
-
-<header>
-  <div class="logo">
-    <div class="title">متجر<br>الكتروني</div>
-  </div>
-  <nav>
-    <a id="nav-home" class="active">الرئيسية</a>
-    <a id="nav-offers">العروض</a>
-    <a id="nav-admin">لوحة التحكم</a>
-  </nav>
-</header>
-
-<main>
-  <section id="home">
-    <h2 class="section-title">المنتجات</h2>
-    <div id="productsGrid" class="grid"></div>
-  </section>
-
-  <section id="offers" style="display:none">
-    <h2 class="section-title">العروض</h2>
-    <div id="offersGrid" class="grid"></div>
-  </section>
-</main>
-
-<div class="order-sticker" id="orderSticker" title="عرض السلة">
-  <div class="sticker-count" id="stickerCount">0</div>
-  <div class="icon">🛒</div>
-</div>
-
-<div class="cart-side" id="cartSide" aria-hidden="true">
-  <div class="head">
-    <div class="head-controls">
-      <div class="title">سلة المشتريات</div>
-      <div class="total-row">
-        <span>الإجمالي:</span>
-        <span id="sideTotalHead">0.00 ر.ع</span>
-      </div>
-      <button class="buy-btn" id="buyBtn">اطلب الآن عبر واتساب</button>
-    </div>
-    <div>
-      <button class="close-btn" id="closeCartBtn">✖</button>
-    </div>
-  </div>
-  <div class="content" id="sideItems"></div>
-</div>
-
-<div class="modal" id="adminModal">
-  <div class="panel">
-    <div class="panel-header">
-      <div>لوحة التحكم</div>
-      <button class="small-btn" onclick="closeAdmin()">✖</button>
-    </div>
-    <div id="loginPanel" class="form-row">
-      <input id="adminPass" type="password" placeholder="كلمة المرور">
-      <button class="small-btn" onclick="adminLogin()">دخول</button>
-    </div>
-    <div id="controlPanel" style="display:none;">
-      <div class="form-row">
-        <input id="prodName" placeholder="اسم المنتج">
-        <input id="prodPrice" type="number" placeholder="السعر">
-      </div>
-      <div class="form-row">
-        <input id="prodImages" placeholder="روابط الصور">
-      </div>
-      <div class="form-row">
-        <textarea id="prodDesc" placeholder="الوصف"></textarea>
-      </div>
-      <div class="form-row">
-        <select id="prodType">
-          <option value="normal">رئيسية</option>
-          <option value="offer">عرض</option>
-        </select>
-        <button class="small-btn" onclick="addProduct()">إضافة</button>
-      </div>
-      <div><strong>المنتجات الحالية</strong></div>
-      <div class="admin-list" id="adminList"></div>
-    </div>
-  </div>
-</div>
-
-<script src="script.js"></script>
-</body>
-</html>
