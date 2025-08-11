@@ -1,51 +1,68 @@
 const SUPABASE_URL = "https://rqiognpfzyyfyferyjah.supabase.co";
-const SUPABASE_KEY = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9...";
+const SUPABASE_KEY = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InJxaW9nbnBmenl5ZnlmZXJ5amFoIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NTQ3MzI2ODcsImV4cCI6MjA3MDMwODY4N30.srA9q_fRyWo0d4htuiC4lyrBg2j5QSABfA1yi_8MSIc";
+
 const { createClient } = supabase;
 const supabaseClient = createClient(SUPABASE_URL, SUPABASE_KEY);
 
-async function fetchProductsFromDB() {
-    let { data, error } = await supabaseClient
-        .from('products')
-        .select('*')
-        .order('id', { ascending: false });
-    if (error) return console.error(error);
-
-    products = data.map(p => ({
-        id: p.id,
-        name: p.name,
-        price: parseFloat(p.price),
-        images: p.images || [],
-        desc: p.description || '',
-        type: p.type || 'normal',
-        dateAdded: p.date_added
+async function loadProductsFromDB() {
+  try {
+    const { data, error } = await supabaseClient.from("products").select("*");
+    if (error) throw error;
+    products = data.map(row => ({
+      name: row.name,
+      price: parseFloat(row.price),
+      images: row.images || [],
+      desc: row.desc || "",
+      type: row.type || "normal"
     }));
-
     renderProducts();
-    renderOffers();
+  } catch (err) {
+    console.error("❌ خطأ في جلب البيانات:", err.message);
+    products = [];
+    renderProducts();
+  }
 }
 
 async function addProductToDB(product) {
-    let { error } = await supabaseClient
-        .from('products')
-        .insert([{
-            name: product.name,
-            price: product.price,
-            images: product.images,
-            description: product.desc,
-            type: product.type,
-            date_added: product.dateAdded
-        }]);
-    if (error) console.error(error);
-    else fetchProductsFromDB();
+  try {
+    const { error } = await supabaseClient.from("products").insert([product]);
+    if (error) throw error;
+    console.log("✅ تم حفظ المنتج في Supabase");
+  } catch (err) {
+    console.error("❌ فشل حفظ المنتج:", err.message);
+  }
 }
 
-async function deleteProductFromDB(id) {
-    let { error } = await supabaseClient
-        .from('products')
-        .delete()
-        .eq('id', id);
-    if (error) console.error(error);
-    else fetchProductsFromDB();
+async function deleteProductFromDB(productName) {
+  try {
+    const { error } = await supabaseClient.from("products").delete().eq("name", productName);
+    if (error) throw error;
+    console.log("🗑️ تم حذف المنتج من Supabase");
+  } catch (err) {
+    console.error("❌ فشل حذف المنتج:", err.message);
+  }
 }
 
-fetchProductsFromDB();
+addProduct = async function () {
+  const name = document.getElementById("prodName").value.trim();
+  const price = parseFloat(document.getElementById("prodPrice").value);
+  const images = document.getElementById("prodImages").value.split(",").map(s => s.trim()).filter(s => s);
+  const desc = document.getElementById("prodDesc").value.trim();
+  const type = document.getElementById("prodType").value;
+  if (!name || isNaN(price) || !images.length) return alert("الرجاء إدخال بيانات صحيحة");
+  const newProduct = { name, price, images, desc, type };
+  products.push(newProduct);
+  renderProducts();
+  renderAdminList();
+  await addProductToDB(newProduct);
+};
+
+deleteProduct = async function (index) {
+  const productName = products[index].name;
+  products.splice(index, 1);
+  renderProducts();
+  renderAdminList();
+  await deleteProductFromDB(productName);
+};
+
+loadProductsFromDB();
