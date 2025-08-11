@@ -1,14 +1,12 @@
-// بيانات السلة
+let products = []; // ستملأ من قاعدة البيانات لاحقاً
 let cart = JSON.parse(localStorage.getItem("cart") || "[]");
 
-// حفظ السلة
 function saveCart() {
   localStorage.setItem("cart", JSON.stringify(cart));
   updateCartCount();
   renderCart();
 }
 
-// إضافة للسلة
 function addToCart(product) {
   const existing = cart.find(item => item.id === product.id);
   if (existing) {
@@ -19,18 +17,15 @@ function addToCart(product) {
   saveCart();
 }
 
-// إزالة من السلة
 function removeFromCart(id) {
   cart = cart.filter(item => item.id !== id);
   saveCart();
 }
 
-// تحديث عداد السلة
 function updateCartCount() {
   document.getElementById("stickerCount").textContent = cart.length;
 }
 
-// عرض محتوى السلة
 function renderCart() {
   const sideItems = document.getElementById("sideItems");
   sideItems.innerHTML = "";
@@ -41,10 +36,9 @@ function renderCart() {
     div.textContent = `${item.name} x${item.qty} - ${item.price * item.qty} ر.ع`;
     sideItems.appendChild(div);
   });
-  document.getElementById("sideTotalHead").textContent = total.toFixed(2) + " ريال عماني";
+  document.getElementById("sideTotalHead").textContent = total.toFixed(2) + " ر.ع";
 }
 
-// فتح وإغلاق السلة
 document.getElementById("orderSticker").onclick = () => {
   document.getElementById("cartSide").classList.add("open");
 };
@@ -53,7 +47,6 @@ document.getElementById("closeCartBtn").onclick = () => {
   document.getElementById("cartSide").classList.remove("open");
 };
 
-// طلب عبر واتساب
 document.getElementById("buyBtn").onclick = () => {
   let message = "طلب جديد:\n";
   cart.forEach(item => {
@@ -64,66 +57,41 @@ document.getElementById("buyBtn").onclick = () => {
   window.open(`https://wa.me/96800000000?text=${encodeURIComponent(message)}`);
 };
 
-// بيانات المنتجات (نسخة محلية)
-let products = [
-  { id: 1, name: "منتج 1", price: 5, images: ["https://via.placeholder.com/150"], desc: "وصف المنتج", type: "normal" },
-  { id: 2, name: "عرض 1", price: 3, images: ["https://via.placeholder.com/150"], desc: "وصف العرض", type: "offer" }
-];
-
-// عرض المنتجات
 function renderProducts() {
   const grid = document.getElementById("productsGrid");
   grid.innerHTML = "";
-  products
-    .filter(p => p.type === "normal")
-    .forEach(p => grid.appendChild(createProductCard(p)));
+  products.filter(p => p.type === "normal")
+          .forEach(p => grid.appendChild(createCard(p)));
 }
 
-// عرض العروض
 function renderOffers() {
   const grid = document.getElementById("offersGrid");
   grid.innerHTML = "";
-  products
-    .filter(p => p.type === "offer")
-    .forEach(p => grid.appendChild(createProductCard(p)));
+  products.filter(p => p.type === "offer")
+          .forEach(p => grid.appendChild(createCard(p)));
 }
 
-// إنشاء كرت المنتج
-function createProductCard(product) {
+function createCard(product) {
   const card = document.createElement("div");
   card.className = "product-card";
-
   const img = document.createElement("img");
   img.src = product.images[0];
-  img.alt = product.name;
-
   const details = document.createElement("div");
   details.className = "details";
-
-  const title = document.createElement("h3");
-  title.textContent = product.name;
-
-  const desc = document.createElement("p");
-  desc.textContent = product.desc || "";
-
+  const h3 = document.createElement("h3");
+  h3.textContent = product.name;
+  const p = document.createElement("p");
+  p.textContent = product.desc || "";
   const price = document.createElement("strong");
   price.textContent = `${product.price} ر.ع`;
-
   const btn = document.createElement("button");
   btn.textContent = "أضف للسلة";
   btn.onclick = () => addToCart(product);
-
-  details.appendChild(title);
-  details.appendChild(desc);
-  details.appendChild(price);
-  details.appendChild(btn);
-
-  card.appendChild(img);
-  card.appendChild(details);
+  details.append(h3, p, price, btn);
+  card.append(img, details);
   return card;
 }
 
-// لوحة التحكم
 let isAdmin = false;
 
 function closeAdmin() {
@@ -144,17 +112,12 @@ function adminLogin() {
 
 function addProduct() {
   if (!isAdmin) return;
-
   const name = document.getElementById("prodName").value;
   const price = parseFloat(document.getElementById("prodPrice").value);
-  const imagesInput = document.getElementById("prodImages").value;
+  const images = document.getElementById("prodImages").value.split(",").map(i => i.trim());
   const desc = document.getElementById("prodDesc").value;
   const type = document.getElementById("prodType").value;
-
-  const images = imagesInput.split(",").map(i => i.trim()).filter(i => i);
-
   const id = products.length ? Math.max(...products.map(p => p.id)) + 1 : 1;
-
   products.push({ id, name, price, images, desc, type });
   renderProducts();
   renderOffers();
@@ -171,7 +134,6 @@ function renderAdminList() {
   });
 }
 
-// التنقل بين الصفحات
 document.getElementById("nav-home").onclick = () => {
   document.getElementById("home").style.display = "block";
   document.getElementById("offers").style.display = "none";
@@ -194,7 +156,6 @@ function setActive(id) {
   document.getElementById(id).classList.add("active");
 }
 
-// تحميل الصفحة
 window.onload = () => {
   renderProducts();
   renderOffers();
