@@ -1,0 +1,309 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>المتجر الإلكتروني</title>
+<style>
+:root {
+  --accent: #ff7a18;
+  --dark: #222;
+  --card: #fff;
+  --muted: #777;
+}
+body {
+  margin: 0;
+  font-family: "Tahoma", sans-serif;
+  background: #f5f5f5;
+  color: var(--dark);
+}
+header {
+  background: var(--accent);
+  color: #fff;
+  padding: 10px 20px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+header h1 { margin: 0; font-size: 18px; }
+nav a {
+  color: #fff;
+  margin-left: 15px;
+  text-decoration: none;
+  font-weight: bold;
+}
+nav a.active { border-bottom: 2px solid #fff; }
+.section-title { padding: 10px; background: #fff; margin: 0; }
+.grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+  gap: 15px;
+  padding: 15px;
+}
+.product-card {
+  background: var(--card);
+  border-radius: 10px;
+  overflow: hidden;
+  box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+  display: flex;
+  flex-direction: column;
+}
+.product-card img { width: 100%; height: 150px; object-fit: cover; }
+.product-card .details { padding: 10px; flex: 1; display: flex; flex-direction: column; }
+.product-card h3 { margin: 0 0 5px; font-size: 16px; }
+.product-card p { flex: 1; margin: 0 0 8px; font-size: 14px; color: var(--muted); }
+.product-card button {
+  background: var(--accent); border: none; color: #fff;
+  padding: 6px 12px; cursor: pointer; border-radius: 5px;
+}
+.order-sticker {
+  position: fixed; bottom: 20px; right: 20px;
+  background: var(--accent); color: #fff; padding: 10px;
+  border-radius: 50%; cursor: pointer;
+}
+.sticker-count {
+  position: absolute; top: -5px; right: -5px;
+  background: red; font-size: 12px; padding: 2px 5px; border-radius: 50%;
+}
+.cart-side {
+  position: fixed; top: 0; right: -350px;
+  width: 350px; height: 100%; background: #fff;
+  box-shadow: -2px 0 5px rgba(0,0,0,0.2);
+  transition: right 0.3s; display: flex; flex-direction: column;
+}
+.cart-side.open { right: 0; }
+.cart-side .head {
+  padding: 10px; background: var(--accent); color: #fff;
+  display: flex; justify-content: space-between; align-items: center;
+}
+.buy-btn { background: green; color: #fff; border: none; padding: 6px 12px; cursor: pointer; }
+textarea, input, select { width: 100%; padding: 6px; margin: 5px 0; box-sizing: border-box; }
+.admin-panel { padding: 15px; }
+.admin-table { width: 100%; border-collapse: collapse; margin-top: 15px; }
+.admin-table th, .admin-table td {
+  border: 1px solid #ccc; padding: 8px; text-align: center;
+}
+.admin-table th { background: #eee; }
+</style>
+</head>
+<body>
+
+<header>
+  <h1>المتجر الإلكتروني</h1>
+  <nav>
+    <a href="#" id="nav-home" class="active">الرئيسية</a>
+    <a href="#" id="nav-offers">العروض</a>
+    <a href="#" id="nav-admin">لوحة التحكم</a>
+  </nav>
+</header>
+
+<main>
+  <section id="home">
+    <h2 class="section-title">المنتجات</h2>
+    <div id="productsGrid" class="grid"></div>
+  </section>
+
+  <section id="offers" style="display:none;">
+    <h2 class="section-title">العروض</h2>
+    <div id="offersGrid" class="grid"></div>
+  </section>
+
+  <section id="admin" style="display:none;">
+    <h2 class="section-title">لوحة التحكم</h2>
+    <div class="admin-panel">
+      <input id="prodName" placeholder="اسم المنتج" />
+      <input id="prodPrice" type="number" placeholder="السعر" />
+      <input id="prodImages" placeholder="روابط الصور (مفصولة بفواصل)" />
+      <textarea id="prodDesc" placeholder="الوصف"></textarea>
+      <select id="prodType">
+        <option value="normal">رئيسية</option>
+        <option value="offer">عرض</option>
+      </select>
+      <button id="saveProductBtn">إضافة</button>
+    </div>
+    <table class="admin-table" id="adminTable">
+      <thead>
+        <tr>
+          <th>الاسم</th>
+          <th>السعر</th>
+          <th>النوع</th>
+          <th>التحكم</th>
+        </tr>
+      </thead>
+      <tbody></tbody>
+    </table>
+  </section>
+</main>
+
+<div class="order-sticker" id="orderSticker">
+  🛒 <div id="stickerCount" class="sticker-count">0</div>
+</div>
+
+<div class="cart-side" id="cartSide">
+  <div class="head">
+    <div>سلة المشتريات</div>
+    <button id="closeCartBtn">✖</button>
+  </div>
+  <div id="sideItems"></div>
+  <div style="padding:10px;">
+    <span>الإجمالي:</span>
+    <span id="sideTotalHead">0.00 ر.ع</span>
+  </div>
+  <button class="buy-btn" id="buyBtn">اطلب الآن عبر واتساب</button>
+</div>
+
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js"></script>
+<script src="database.js"></script>
+<script>
+let products = [];
+let cart = JSON.parse(localStorage.getItem("cart") || "[]");
+let editId = null;
+
+function saveCart(){
+  localStorage.setItem("cart", JSON.stringify(cart));
+  updateCartCount();
+  renderCart();
+}
+function addToCart(product){
+  let existing = cart.find(i => i.id === product.id);
+  if(existing) existing.qty++;
+  else cart.push({...product, qty:1});
+  saveCart();
+}
+function updateCartCount(){ document.getElementById("stickerCount").textContent = cart.length; }
+function renderCart(){
+  let sideItems = document.getElementById("sideItems");
+  sideItems.innerHTML = "";
+  let total = 0;
+  cart.forEach(item=>{
+    total += item.price * item.qty;
+    let div = document.createElement("div");
+    div.textContent = `${item.name} x${item.qty} - ${item.price * item.qty} ر.ع`;
+    sideItems.appendChild(div);
+  });
+  document.getElementById("sideTotalHead").textContent = total.toFixed(2) + " ر.ع";
+}
+
+document.getElementById("orderSticker").onclick = ()=> document.getElementById("cartSide").classList.add("open");
+document.getElementById("closeCartBtn").onclick = ()=> document.getElementById("cartSide").classList.remove("open");
+document.getElementById("buyBtn").onclick = ()=>{
+  let message = "طلب جديد:\n";
+  cart.forEach(i=> message += `${i.name} x${i.qty} = ${i.price * i.qty} ر.ع\n`);
+  let total = cart.reduce((s,i)=> s + i.price * i.qty, 0);
+  message += `الإجمالي: ${total.toFixed(2)} ر.ع`;
+  window.open(`https://wa.me/96800000000?text=${encodeURIComponent(message)}`);
+};
+
+async function loadProducts(){
+  products = await getProducts();
+  renderProducts();
+  renderOffers();
+  renderAdminTable();
+}
+function renderProducts(){
+  let grid = document.getElementById("productsGrid");
+  grid.innerHTML = "";
+  products.filter(p=>p.type==="normal").forEach(p=> grid.appendChild(createCard(p)));
+}
+function renderOffers(){
+  let grid = document.getElementById("offersGrid");
+  grid.innerHTML = "";
+  products.filter(p=>p.type==="offer").forEach(p=> grid.appendChild(createCard(p)));
+}
+function createCard(product){
+  let card = document.createElement("div");
+  card.className = "product-card";
+  let img = document.createElement("img");
+  img.src = product.images[0];
+  let details = document.createElement("div");
+  details.className = "details";
+  let h3 = document.createElement("h3"); h3.textContent = product.name;
+  let p = document.createElement("p"); p.textContent = product.description;
+  let price = document.createElement("strong"); price.textContent = `${product.price} ر.ع`;
+  let btn = document.createElement("button");
+  btn.textContent = "أضف للسلة";
+  btn.onclick = ()=> addToCart(product);
+  details.append(h3,p,price,btn);
+  card.append(img,details);
+  return card;
+}
+
+function renderAdminTable(){
+  let tbody = document.querySelector("#adminTable tbody");
+  tbody.innerHTML = "";
+  products.forEach(p=>{
+    let tr = document.createElement("tr");
+    tr.innerHTML = `
+      <td>${p.name}</td>
+      <td>${p.price}</td>
+      <td>${p.type}</td>
+      <td>
+        <button onclick="startEdit(${p.id})">✏️ تعديل</button>
+        <button onclick="removeProduct(${p.id})">🗑️ حذف</button>
+      </td>
+    `;
+    tbody.appendChild(tr);
+  });
+}
+
+async function addOrUpdateProduct(){
+  let product = {
+    name: document.getElementById("prodName").value,
+    price: parseFloat(document.getElementById("prodPrice").value),
+    images: document.getElementById("prodImages").value.split(","),
+    description: document.getElementById("prodDesc").value,
+    type: document.getElementById("prodType").value
+  };
+  if(editId){
+    await updateProduct(editId, product);
+    editId = null;
+    document.getElementById("saveProductBtn").textContent = "إضافة";
+  } else {
+    await insertProduct(product);
+  }
+  clearForm();
+  await loadProducts();
+}
+
+function startEdit(id){
+  let p = products.find(pr=> pr.id === id);
+  document.getElementById("prodName").value = p.name;
+  document.getElementById("prodPrice").value = p.price;
+  document.getElementById("prodImages").value = p.images.join(",");
+  document.getElementById("prodDesc").value = p.description;
+  document.getElementById("prodType").value = p.type;
+  editId = id;
+  document.getElementById("saveProductBtn").textContent = "حفظ التعديل";
+}
+
+async function removeProduct(id){
+  if(confirm("هل تريد حذف هذا المنتج؟")){
+    await deleteProduct(id);
+    await loadProducts();
+  }
+}
+
+function clearForm(){
+  document.getElementById("prodName").value = "";
+  document.getElementById("prodPrice").value = "";
+  document.getElementById("prodImages").value = "";
+  document.getElementById("prodDesc").value = "";
+  document.getElementById("prodType").value = "normal";
+}
+
+document.getElementById("saveProductBtn").onclick = addOrUpdateProduct;
+document.getElementById("nav-home").onclick = ()=>{showSection("home")};
+document.getElementById("nav-offers").onclick = ()=>{showSection("offers")};
+document.getElementById("nav-admin").onclick = ()=>{showSection("admin")};
+function showSection(id){
+  document.querySelectorAll("main section").forEach(sec=> sec.style.display="none");
+  document.getElementById(id).style.display = "block";
+  document.querySelectorAll("nav a").forEach(a=> a.classList.remove("active"));
+  document.getElementById("nav-"+id).classList.add("active");
+}
+loadProducts();
+updateCartCount();
+renderCart();
+</script>
+</body>
+</html>
