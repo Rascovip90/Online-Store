@@ -12,12 +12,12 @@
   --background: #fff;
   --text-main: #000;
   --muted: #888;
-  --danger: #ef4444; /* أحمر */
-  --success: #25D366; /* أخضر واتساب */
+  --danger: #ef4444;
+  --success: #25D366;
   --card: #fff;
   --border: #e5e7eb;
-  --active-bg: #f6f6f6; /* خلفية رمادية فاتحة للعنصر النشط */
-  --control-border: #111; /* أسود */
+  --active-bg: #f6f6f6;
+  --control-border: #111;
 }
 *{box-sizing:border-box}
 html,body{height:100%}
@@ -55,7 +55,7 @@ nav a{
 nav a.active{
   background:var(--active-bg);
   color:var(--text-main);
-  border:2.7px solid var(--danger); /* إطار أحمر حول القسم النشط */
+  border:2.7px solid var(--danger);
 }
 nav a:not(.active):hover{background:var(--active-bg);}
 nav a:not(.active){color:var(--text-main);}
@@ -84,7 +84,7 @@ main{ padding:14px; max-width:960px; margin:0 auto 100px auto; color:var(--text-
 .badge-new{
   position:absolute;top:7px;left:7px;
   background:transparent;
-  color:var(--danger); /* كلمة NEW باللون الأحمر */
+  color:var(--danger);
   padding:4px 6px;
   border-radius:6px;
   font-weight:800;font-size:10px;
@@ -128,9 +128,9 @@ main{ padding:14px; max-width:960px; margin:0 auto 100px auto; color:var(--text-
 .cart-side .title{font-weight:900;font-size:15px;color:var(--text-main);}
 .cart-side .close-btn{background:transparent;border:none;font-size:18px;cursor:pointer;color:var(--danger);}
 .cart-side .head-controls{display:flex;align-items:center;gap:10px;}
-.cart-side .total-row{font-size:13px;color:var(--text-main);} /* السعر الإجمالي بالأسود */
+.cart-side .total-row{font-size:13px;color:var(--text-main);}
 .cart-side .buy-btn{
-  background:var(--success); /* أخضر واتساب */
+  background:var(--success);
   color:#fff;border:none;padding:7px 10px;border-radius:8px;font-weight:900;cursor:pointer;
   font-size:12px;
   transition:background 0.18s;
@@ -177,7 +177,7 @@ main{ padding:14px; max-width:960px; margin:0 auto 100px auto; color:var(--text-
   background:var(--card);
   padding:12px;
   border-radius:10px;
-  border:2.7px solid var(--control-border); /* إطار أسود للوحة التحكم */
+  border:2.7px solid var(--control-border);
 }
 .form-row{display:flex;gap:7px;flex-wrap:wrap;margin-top:7px;}
 input[type="text"], input[type="number"], textarea, select{padding:7px;border-radius:7px;border:1px solid var(--border);flex:1;font-size:13px;color:var(--text-main);}
@@ -241,6 +241,25 @@ input[type="text"], input[type="number"], textarea, select{padding:7px;border-ra
   .img-arrow.left { left: 0;}
   .img-arrow.right { right: 0;}
 }
+/* رسالة حالة الاتصال (تظهر في أعلى الصفحة) */
+#statusBox {
+  position: fixed;
+  top: 62px;
+  left: 50%;
+  transform: translateX(-50%);
+  background: #fff3f3;
+  color: #a00;
+  border: 1px solid #f5c2c2;
+  padding: 8px 12px;
+  border-radius: 8px;
+  z-index: 700;
+  display: none;
+  max-width: 92%;
+  box-shadow: 0 2px 8px rgba(0,0,0,0.06);
+  font-size: 13px;
+  text-align: center;
+  direction: rtl;
+}
 </style>
 </head>
 <body>
@@ -268,6 +287,8 @@ input[type="text"], input[type="number"], textarea, select{padding:7px;border-ra
     <div id="offersGrid" class="grid"></div>
   </section>
 </main>
+
+<div id="statusBox" role="status"></div>
 
 <div class="order-sticker" id="orderSticker" title="عرض السلة">
   <div class="sticker-count" id="stickerCount">0</div>
@@ -338,16 +359,15 @@ input[type="text"], input[type="number"], textarea, select{padding:7px;border-ra
   </div>
 </div>
 
-<!-- مكتبة Supabase (مضمّنة) -->
+<!-- supabase lib -->
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 
 <script>
-/* ======= كود الجافاسكربت (معدل لقراءة البيانات من Supabase) ======= */
-
+/* ---------- إعدادات ومتحولات ---------- */
 const PRODUCTS_KEY = 'my_products_v3';
 const CART_KEY = 'my_cart_v3';
-const ADMIN_PASS = '7732'; // كلمة المرور كما طلبت
-let products = []; // سنملأها من Supabase
+const ADMIN_PASS = '7732';
+let products = JSON.parse(localStorage.getItem(PRODUCTS_KEY) || '[]'); // fallback local
 let cart = JSON.parse(localStorage.getItem(CART_KEY) || '[]');
 
 const productsGrid = document.getElementById('productsGrid');
@@ -367,14 +387,22 @@ const orderSticker = document.getElementById('orderSticker');
 const stickerCountEl = document.getElementById('stickerCount');
 const buyBtn = document.getElementById('buyBtn');
 const buyBtnIndicator = document.getElementById('buyBtnIndicator');
+const statusBox = document.getElementById('statusBox');
 
-/* ---------- وظائف مساعدة ---------- */
+/* ---------- أدوات صغيرة ---------- */
 function saveProducts(){ localStorage.setItem(PRODUCTS_KEY, JSON.stringify(products)); }
 function saveCart(){ localStorage.setItem(CART_KEY, JSON.stringify(cart)); }
 function formatCurrency(v){ return Number(v).toFixed(2); }
 function escapeHtml(s){ if(!s && s!==0) return ''; return String(s).replace(/[&<>"']/g,m=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[m])); }
+function showStatus(msg, isError = true){
+  statusBox.textContent = msg;
+  statusBox.style.display = 'block';
+  statusBox.style.background = isError ? '#fff3f3' : '#f3fff7';
+  statusBox.style.color = isError ? '#a00' : '#070';
+  setTimeout(()=>{ statusBox.style.display = 'none'; }, 6000);
+}
 
-/* ---------- رصف المنتجات في الصفحة (كما في الأصلي) ---------- */
+/* ---------- رسم المنتجات (كما الأصلي) ---------- */
 function renderProducts(){
   productsGrid.innerHTML='';
   const now=Date.now();
@@ -546,8 +574,6 @@ function openSideCart(){
   cartSide.classList.add('open');
   cartSide.setAttribute('aria-hidden','false');
   updateSticker(false);
-
-  // وميض زر واتساب لمدة 5 ثواني ثم تظهر النقطة الحمراء
   buyBtn.classList.add('blink');
   buyBtnIndicator.style.display = "none";
   setTimeout(function(){
@@ -568,7 +594,7 @@ document.getElementById('nav-admin').addEventListener('click',function(e){
   document.getElementById('adminModal').style.display = 'flex';
 });
 
-/* ---------- لوحة التحكم (الإدارة المحلية كما في الأصلي) ---------- */
+/* ---------- لوحة التحكم (محلياً كما الأصلي) ---------- */
 function openAdminModal(){
   adminModal.style.display='flex';
   loginPanel.style.display=sessionStorage.getItem('adminAuth')==='true'?'none':'flex';
@@ -582,7 +608,7 @@ function addProduct(){const name=document.getElementById('prodName').value.trim(
 function editProduct(id){const p=products.find(x=>x.id===id);if(!p)return;sessionStorage.setItem('adminAuth','true');loginPanel.style.display='none';controlPanel.style.display='block';document.getElementById('prodName').value=p.name;document.getElementById('prodPrice').value=p.price;document.getElementById('prodImages').value=Array.isArray(p.images)?p.images.join(', '):'';document.getElementById('prodDesc').value=p.desc||'';document.getElementById('prodType').value=p.type||'normal';deleteProduct(id);}
 function deleteProduct(id){if(!confirm('هل تريد حذف المنتج؟'))return;products=products.filter(p=>p.id!==id);cart=cart.filter(c=>c.id!==id);saveProducts();saveCart();renderProducts();renderOffers();renderCartViews();loadAdminList();}
 
-/* ---------- أقسام الصفحة وتصفح الهاش ---------- */
+/* ---------- أقسام ---------- */
 function showSection(sec){
   document.getElementById('home').style.display='none';
   document.getElementById('offers').style.display='none';
@@ -606,62 +632,61 @@ function initSectionFromHash(){
 }
 window.addEventListener('hashchange',initSectionFromHash);
 
-/* ======= الآن: ربط Supabase وجلب المنتجات ======= */
-/* ملاحظة: المفاتيح هنا هي نفس التي أرسلتها سابقًا */
+/* ========== Supabase setup and fetch ========== */
+/* استخدمت الرابط والمفتاح اللذان أرسلتَهما سابقاً */
 const SUPABASE_URL = 'https://rqiognpfzyyfyferyjah.supabase.co';
 const SUPABASE_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InJxaW9nbnBmenl5ZnlmZXJ5amFoIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NTQ3MzI2ODcsImV4cCI6MjA3MDMwODY4N30.srA9q_fRyWo0d4htuiC4lyrBg2j5QSABfA1yi_8MSIc';
 
 const supabase = supabase.createClient(SUPABASE_URL, SUPABASE_KEY);
 
+/* جلب المنتجات من جدول products (أسماء الأعمدة كما بالصورة: id,name,price,images,description,type,date_added) */
 async function fetchProductsFromSupabase(){
   try{
+    showStatus('جاري جلب المنتجات من الخادم...', false);
     const { data, error } = await supabase
       .from('products')
       .select('*')
       .order('date_added', { ascending: false });
 
     if(error){
-      console.error('خطأ من Supabase:', error);
-      // إذا فشل الجلب، يمكننا الاعتماد على القيم المحلية إن وجدت
+      console.error('Supabase error:', error);
+      showStatus('خطأ أثناء جلب المنتجات (راجع الصلاحيات أو الاسماء).', true);
+      // fallback to local storage if exists
       products = JSON.parse(localStorage.getItem(PRODUCTS_KEY) || '[]');
     } else {
-      // خريطة الحقول من DB إلى شكل الكود الأصلي
-      products = data.map(item => ({
-        id: item.id,
-        name: item.name || item.title || '',
-        price: item.price ? Number(item.price) : 0,
-        images: item.images ? String(item.images).split(',').map(s=>s.trim()).filter(s=>s) : [],
-        desc: item.description || item.desc || '',
-        type: item.type || 'normal',
-        dateAdded: item.date_added || item.dateAdded || Date.now()
-      }));
-      // خزّن نسخة محلياً لكي تعمل لوحة الإدارة (محلياً) كما في الأصلي
-      saveProducts();
+      if(!data || data.length===0){
+        showStatus('تم الاتصال بـ Supabase لكن لا يوجد منتجات في الجدول.', true);
+        // اترك products كما هو (محلي) أو افرغه إن أردت:
+        // products = [];
+      } else {
+        // map DB fields to صيغة الموقع
+        products = data.map(item => ({
+          id: item.id,
+          name: item.name || '',
+          price: item.price ? Number(item.price) : 0,
+          images: item.images ? String(item.images).split(',').map(s=>s.trim()).filter(s=>s) : [],
+          desc: item.description || '',
+          type: item.type || 'normal',
+          dateAdded: item.date_added || Date.now()
+        }));
+        saveProducts();
+        showStatus('تم جلب ' + products.length + ' منتج من Supabase.', false);
+      }
     }
-
-    // ارسم الواجهة
     renderProducts();
     renderOffers();
     renderCartViews();
     initSectionFromHash();
     updateSticker(false);
   }catch(err){
-    console.error('حدث خطأ غير متوقع أثناء جلب المنتجات:', err);
+    console.error('Unexpected fetch error:', err);
+    showStatus('خطأ غير متوقع أثناء جلب المنتجات.', true);
     products = JSON.parse(localStorage.getItem(PRODUCTS_KEY) || '[]');
     renderProducts(); renderOffers(); renderCartViews(); initSectionFromHash(); updateSticker(false);
   }
 }
 
-/* تشغيل مبدئي */
-(function init(){
-  // نقوم بقراءة السلة من localStorage (كما في الأصلي)
-  cart = cart.filter(ci=>products.some(p=>p.id===ci.id)); // أي عناصر سلة لا تطابق المنتجات الحالية تُزال
-  saveCart();
-  // الآن نملأ المنتجات من Supabase (هذا سيستدعي render...)
-  fetchProductsFromSupabase();
-})();
-
-/* ---------- زر طلب عبر واتساب (كما في الأصلي) ---------- */
+/* ---------- زر واتساب يعمل مباشرة ---------- */
 buyBtn.addEventListener('click', function(){
   if(cart.length === 0){ alert('السلة فارغة'); return; }
   let text = "مرحبًا، أود تقديم طلب شراء:\n";
@@ -677,11 +702,19 @@ buyBtn.addEventListener('click', function(){
   text += "---------------------\n";
   text += `المجموع الكلي: ${formatCurrency(total)} ريال عماني\n\n`;
   text += "يرجى تأكيد الطلب أو التواصل لأي استفسار. شكرًا لكم!";
-  // رقم الواتساب كما طلبت
+  // افتح رابط واتساب — استخدمت نفس الرقم كما طلبت
   window.open(`https://wa.me/77324648?text=${encodeURIComponent(text)}`, '_blank');
 });
 
-/* ---------- تعاملات الـ Escape ---------- */
+/* ---------- تهيئة أولية ---------- */
+(function init(){
+  // clean cart from missing items (products may be loaded after fetch)
+  cart = cart.filter(ci=>products.some(p=>p.id===ci.id));
+  saveCart();
+  // fetch from supabase (سيستدعي render)
+  fetchProductsFromSupabase();
+})();
+
 document.addEventListener('keydown',function(e){
   if(e.key==='Escape'){
     if(imgViewer.style.display==='flex')closeViewer();
@@ -689,6 +722,5 @@ document.addEventListener('keydown',function(e){
   }
 });
 </script>
-
 </body>
 </html>
