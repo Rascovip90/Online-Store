@@ -2,23 +2,195 @@
 <html lang="ar" dir="rtl">
 <head>
 <meta charset="utf-8"/>
-<meta name="viewport" content="width=device-width,initial-scale=1"/>
+<meta name="viewport" content="width=device-width, initial-scale=1"/>
 <title>متجر Rasco 9</title>
 <style>
-/* ضع هنا CSS الأصلي لنسخة rasco 9 من ملفك */
+/* ====== CSS الأصلي من نسخة rasco 9 ====== */
+body {
+  margin: 0;
+  font-family: Arial, sans-serif;
+  background: #f8f8f8;
+}
+nav {
+  background: #ff7a18;
+  display: flex;
+  justify-content: space-around;
+  padding: 10px;
+}
+nav a {
+  color: #fff;
+  text-decoration: none;
+  font-weight: bold;
+}
+nav a.active {
+  border-bottom: 2px solid #fff;
+}
+main {
+  padding: 10px;
+}
+.card {
+  background: #fff;
+  padding: 10px;
+  border-radius: 8px;
+  box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+  margin-bottom: 10px;
+}
+.card img {
+  border-radius: 8px;
+}
+.badge-new {
+  background: red;
+  color: white;
+  padding: 3px 5px;
+  border-radius: 4px;
+  font-size: 12px;
+  position: absolute;
+  margin-top: -5px;
+}
+.add-btn {
+  background: #ff7a18;
+  color: #fff;
+  border: none;
+  padding: 8px 10px;
+  border-radius: 4px;
+  cursor: pointer;
+  margin-top: 5px;
+}
+.add-btn:hover {
+  background: #e76912;
+}
+#cartSide {
+  position: fixed;
+  top: 0;
+  right: -320px;
+  width: 300px;
+  height: 100%;
+  background: white;
+  box-shadow: -2px 0 5px rgba(0,0,0,0.2);
+  transition: right 0.3s;
+  padding: 10px;
+  overflow-y: auto;
+}
+#cartSide.open {
+  right: 0;
+}
+.item {
+  display: flex;
+  align-items: center;
+  margin-bottom: 10px;
+}
+.item img {
+  width: 50px;
+  height: 50px;
+  object-fit: cover;
+  margin-right: 5px;
+}
+.item .meta {
+  flex-grow: 1;
+}
+.remove-btn {
+  background: transparent;
+  border: none;
+  color: red;
+  cursor: pointer;
+}
+#orderSticker {
+  position: fixed;
+  bottom: 20px;
+  left: 20px;
+  background: #ff7a18;
+  color: white;
+  padding: 10px;
+  border-radius: 50%;
+  cursor: pointer;
+}
+#stickerCount {
+  position: absolute;
+  top: -5px;
+  right: -5px;
+  background: red;
+  color: white;
+  font-size: 12px;
+  padding: 2px 5px;
+  border-radius: 50%;
+  display: none;
+}
 </style>
 </head>
 <body>
 
-<!-- ضع هنا محتوى HTML الأصلي لنسخة rasco 9 من ملفك -->
+<!-- ====== القائمة ====== -->
+<nav>
+  <a id="nav-home" class="active">الرئيسية</a>
+  <a id="nav-offers">العروض</a>
+  <a id="nav-admin">لوحة التحكم</a>
+</nav>
 
-<!-- مكتبة Supabase -->
+<!-- ====== المحتوى ====== -->
+<main>
+  <section id="home">
+    <div id="productsGrid"></div>
+  </section>
+  <section id="offers" style="display:none;">
+    <div id="offersGrid"></div>
+  </section>
+</main>
+
+<!-- ====== السلة ====== -->
+<div id="cartSide">
+  <h3>سلة المشتريات</h3>
+  <div id="sideItems"></div>
+  <div>الإجمالي: <span id="sideTotalHead">0.00</span> ر.ع</div>
+  <button id="buyBtn">طلب عبر واتساب</button>
+  <button id="closeCartBtn">إغلاق</button>
+</div>
+
+<!-- ====== زر السلة ====== -->
+<div id="orderSticker">
+  🛒
+  <span id="stickerCount"></span>
+</div>
+
+<!-- ====== لوحة الإدارة ====== -->
+<div id="adminModal" style="display:none;">
+  <div id="loginPanel">
+    <h3>تسجيل دخول الإدارة</h3>
+    <input type="password" id="adminPass" placeholder="كلمة المرور">
+    <button onclick="adminLogin()">دخول</button>
+    <button onclick="closeAdmin()">إغلاق</button>
+  </div>
+  <div id="controlPanel" style="display:none;">
+    <h3>إدارة المنتجات</h3>
+    <input type="text" id="prodName" placeholder="اسم المنتج">
+    <input type="number" id="prodPrice" placeholder="السعر">
+    <input type="text" id="prodImages" placeholder="روابط الصور (مفصولة بفواصل)">
+    <input type="text" id="prodDesc" placeholder="الوصف">
+    <select id="prodType">
+      <option value="normal">عادي</option>
+      <option value="offer">عرض</option>
+    </select>
+    <button onclick="addProduct()">إضافة</button>
+    <h4>قائمة المنتجات</h4>
+    <div id="adminList"></div>
+    <button onclick="closeAdmin()">إغلاق</button>
+  </div>
+</div>
+
+<!-- ====== عارض الصور ====== -->
+<div id="imgViewer" style="display:none;position:fixed;top:0;left:0;width:100%;height:100%;background:rgba(0,0,0,0.8);align-items:center;justify-content:center;">
+  <button id="viewerPrev">⬅️</button>
+  <img id="viewerImg" src="" style="max-width:90%;max-height:90%;border-radius:8px;">
+  <button id="viewerNext">➡️</button>
+  <button id="viewerClose" style="position:absolute;top:10px;right:10px;">❌</button>
+</div>
+
+<!-- ====== مكتبة Supabase ====== -->
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 
-<!-- وظائف الموقع -->
+<!-- ====== وظائف الموقع ====== -->
 <script src="main.js"></script>
 
-<!-- الربط مع Supabase -->
+<!-- ====== الربط مع Supabase ====== -->
 <script src="db.js"></script>
 
 </body>
