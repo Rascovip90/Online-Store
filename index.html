@@ -2,8 +2,8 @@
 <html lang="ar" dir="rtl">
 <head>
 <meta charset="utf-8" />
-<meta name="viewport" content="width=device-width,initial-scale=1" />
-<title>متجر إلكتروني</title>
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>متجر إلكتروني - Khalid 2</title>
 <link rel="stylesheet" href="style.css" />
 </head>
 <body>
@@ -13,9 +13,9 @@
     <div class="title">متجر<br>الكتروني</div>
   </div>
   <nav>
-    <a id="nav-home" href="#home" class="active">الرئيسية</a>
-    <a id="nav-offers" href="#offers">العروض</a>
-    <a id="nav-admin" href="#control">لوحة التحكم</a>
+    <a id="nav-home" class="active">الرئيسية</a>
+    <a id="nav-offers">العروض</a>
+    <a id="nav-admin">لوحة التحكم</a>
   </nav>
 </header>
 
@@ -24,6 +24,7 @@
     <h2 class="section-title">المنتجات</h2>
     <div id="productsGrid" class="grid"></div>
   </section>
+
   <section id="offers" style="display:none">
     <h2 class="section-title">العروض</h2>
     <div id="offersGrid" class="grid"></div>
@@ -48,7 +49,9 @@
         <span class="buy-btn-indicator" id="buyBtnIndicator"></span>
       </button>
     </div>
-    <div><button class="close-btn" id="closeCartBtn">✖</button></div>
+    <div>
+      <button class="close-btn" id="closeCartBtn">✖</button>
+    </div>
   </div>
   <div class="content" id="sideContent">
     <div id="sideItems"></div>
@@ -58,7 +61,7 @@
 <div class="img-viewer" id="imgViewer" aria-hidden="true">
   <div class="box center">
     <button id="viewerPrev" class="img-arrow left">&#8592;</button>
-    <img id="viewerImg" src="" alt="صورة أكبر">
+    <img id="viewerImg" src="" alt="صورة أكبر" />
     <button id="viewerNext" class="img-arrow right">&#8594;</button>
     <button id="viewerClose" class="close-img">✖</button>
   </div>
@@ -71,16 +74,16 @@
       <button class="small-btn" onclick="closeAdmin()">✖</button>
     </div>
     <div id="loginPanel" class="form-row">
-      <input id="adminPass" type="password" placeholder="أدخل كلمة المرور">
+      <input id="adminPass" type="password" placeholder="أدخل كلمة المرور" />
       <button class="small-btn" onclick="adminLogin()">دخول</button>
     </div>
     <div id="controlPanel" style="display:none;">
       <div class="form-row">
-        <input id="prodName" placeholder="اسم المنتج">
-        <input id="prodPrice" type="number" placeholder="السعر">
+        <input id="prodName" placeholder="اسم المنتج" />
+        <input id="prodPrice" type="number" placeholder="السعر" />
       </div>
       <div class="form-row">
-        <input id="prodImages" placeholder="روابط الصور مفصولة بفاصلة">
+        <input id="prodImages" placeholder="روابط الصور مفصولة بفاصلة" />
       </div>
       <div class="form-row">
         <textarea id="prodDesc" placeholder="الوصف (اختياري)"></textarea>
@@ -98,11 +101,6 @@
   </div>
 </div>
 
-<script src="supabase.js"></script>
-<script src="products.js"></script>
-<script src="cart.js"></script>
-<script src="admin.js"></script>
-<script src="main.js"></script>
-
+<script src="script.js"></script>
 </body>
 </html>
