@@ -1144,13 +1144,27 @@ async function init(){
     if(!confirm('هل تريد تفريغ السلة؟')) return;
     cart = []; saveCart(); renderCartModal(); showToast('تم تفريغ السلة','success');
   });
+  
+  // *** الكود المُعدل لرسالة WhatsApp ***
   document.getElementById('cartOrderBtn').addEventListener('click', ()=>{
     if(cart.length===0){ alert('السلة فارغة'); return; }
-    let text = "طلب جديد:\n";
-    cart.forEach((c,i)=>{ text += `${i+1}. ${c.name} x ${c.qty} = ${formatCurrency(c.price*c.qty)} ر.ع\n`; });
-    text += `المجموع: ${formatCurrency(calculateTotal())} ر.ع`;
+    
+    let text = "🛒 *طلب جديـد*\n\n";
+    text += "───────────────\n\n";
+    
+    cart.forEach((c, i) => {
+        text += `*${i + 1}. ${escapeHtml(c.name)}*\n`;
+        text += `   - الكمية: ${c.qty}\n`;
+        text += `   - السعر: ${formatCurrency(c.price * c.qty)} ر.ع\n\n`;
+    });
+    
+    text += "───────────────\n";
+    text += `*💰 الإجمالي: ${formatCurrency(calculateTotal())} ر.ع*\n\n`;
+    text += "_سيتم التواصل معكم لتأكيد الطلب._\n";
+    text += "شكرًا لثقتكم بمتجرنا!";
+
     const url = `https://wa.me/${WHATSAPP_NUMBER.replace('+','')}?text=${encodeURIComponent(text)}`;
-    window.open(url,'_blank');
+    window.open(url, '_blank');
   });
 }
 document.addEventListener('DOMContentLoaded', init);
