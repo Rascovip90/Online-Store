@@ -65,6 +65,35 @@ main{padding:12px;max-width:980px;margin:18px auto 120px auto}
 .card .add-btn:active{transform:translateY(2px)}
 .badge-new{position:absolute;top:10px;left:10px;background:transparent;color:var(--danger);padding:4px 6px;border-radius:6px;font-weight:800;font-size:11px;border:1px solid var(--danger)}
 
+/* وصف المنتج القابل للتوسع - إضافة جديدة */
+.card p.desc.expanded {
+  -webkit-line-clamp: unset;
+  overflow: visible;
+}
+
+.card .more-btn {
+  background: transparent;
+  border: 1px solid var(--border);
+  color: var(--danger);
+  padding: 4px 8px;
+  border-radius: 6px;
+  cursor: pointer;
+  font-size: 11px;
+  font-weight: 700;
+  margin-top: 4px;
+  display: none;
+  transition: all 0.2s;
+}
+
+.card .more-btn:hover {
+  background: var(--danger);
+  color: white;
+}
+
+.card .more-btn.show {
+  display: inline-block;
+}
+
 /* Offers: unified big cards; no big image/zoom */
 .offers-stack{ display:grid; grid-template-columns: repeat(auto-fill, minmax(300px, 1fr)); gap:16px; align-items:stretch; }
 .offer-card{ display:grid; grid-template-rows:auto auto 1fr; gap:8px; height:360px; overflow:hidden; }
@@ -216,8 +245,8 @@ main{padding:12px;max-width:980px;margin:18px auto 120px auto}
     <div class="logo"><div class="title">متجر إلكتروني</div></div>
   </div>
   <div class="quran-text">
-(بِسْمِ ٱللَّهِ ٱلرَّحْمَـٰنِ ٱلرَّحِيمِ)  
-"مَا يَفْتَحِ اللَّهِ لِلنَّاسِ مِن رَّحْمَةٍ فَلَا مُمْسِكَ لَهَا"
+(بِسْمِ ٱللَّهِ ٱلرَّحْمَـٰنِ ٱلرَّحِيمِ)  
+"مَا يَفْتَحِ اللَّهُ لِلنَّاسِ مِن رَّحْمَةٍ فَلَا مُمْسِكَ لَهَا"
   </div>
   <nav>
     <a id="nav-home" href="#home" class="active">الرئيسية</a>
@@ -241,7 +270,7 @@ main{padding:12px;max-width:980px;margin:18px auto 120px auto}
 <!-- Admin -->
 <section id="adminPage" style="display:none">
   <div class="admin-header">لوحة التحكم – المتجر</div>
-  <div class="quran-admin">(بِسْمِ اللَّهِ الرَّحْمَٰنِ الرَّحِيمِ) – "مَّا يَفْتَحِ اللَّهِ لِلنَّاسِ مِن رَّحْمَةٍ فَلَا مُمْسِكَ لَهَا"</div>
+  <div class="quran-admin">(بِسْمِ اللَّهِ الرَّحْمَٰنِ الرَّحِيمِ) – "مَّا يَفْتَحِ اللَّهُ لِلنَّاسِ مِن رَّحْمَةٍ فَلَا مُمْسِكَ لَهَا"</div>
 
   <div class="wrap">
     <div class="card">
@@ -352,7 +381,7 @@ main{padding:12px;max-width:980px;margin:18px auto 120px auto}
         <button id="btn-login" class="btn-3d btn-green" style="flex:1">دخول</button>
       </div>
       <div id="login-msg" class="msg"></div>
-      <p class="subtle" style="margin-top:10px;text-align:center">كلمة المرور الافتراضية: ﷺ صَــلِّــي عَــلَــى الــنَّــبِــي ﷺ</p>
+      <p class="subtle" style="margin-top:10px;text-align:center">كلمة المرور الافتراضية: ﷺ صَــلِّــي عَــلَــى الــنَّــبِــي ﷺ</p>
     </div>
   </div>
 </section>
@@ -482,7 +511,7 @@ async function fetchOffers(){
   renderOffers();
 }
 
-/* render products */
+/* render products - تعديل لإضافة زر مزيد */
 function renderProducts(){
   productsGrid.innerHTML = '';
   const now = Date.now();
@@ -491,6 +520,11 @@ function renderProducts(){
     const main = imgs[0] || '';
     const card = document.createElement('div'); 
     card.className='card product-card';
+    
+    // معرف فريد لكل منتج
+    const descId = `desc-${p.id}`;
+    const btnId = `more-${p.id}`;
+    
     card.innerHTML = `
       ${(now - (p.created_at? new Date(p.created_at).getTime() : now) < 12*3600*1000) ? '<div class="badge-new">NEW</div>' : ''}
       <div class="img-box">
@@ -498,7 +532,8 @@ function renderProducts(){
       </div>
       <div class="body">
         <h4>${escapeHtml(p.name)}</h4>
-        <p class="desc">${escapeHtml(p.desc||'')}</p>
+        <p class="desc" id="${descId}">${escapeHtml(p.desc||'')}</p>
+        <button class="more-btn" id="${btnId}" onclick="toggleDescription('${p.id}')">مزيد ↓</button>
         <p class="price">${formatCurrency(p.price)} ر.ع</p>
       </div>
       <div class="btn-row">
@@ -511,8 +546,43 @@ function renderProducts(){
       </div>
     `;
     productsGrid.appendChild(card);
+    
+    // فحص إذا كان النص طويل ويحتاج زر "مزيد"
+    setTimeout(() => {
+      checkIfTextNeedsMore(p.id);
+    }, 50);
   });
   attachThumbHandlers();
+}
+
+/* دوال جديدة لزر المزيد */
+// فحص إذا كان النص يحتاج زر "مزيد"
+function checkIfTextNeedsMore(productId) {
+  const desc = document.getElementById(`desc-${productId}`);
+  const btn = document.getElementById(`more-${productId}`);
+  
+  if (!desc || !btn) return;
+  
+  // فحص إذا كان النص مقطوع
+  if (desc.scrollHeight > desc.clientHeight) {
+    btn.classList.add('show');
+  }
+}
+
+// تبديل عرض النص الكامل
+function toggleDescription(productId) {
+  const desc = document.getElementById(`desc-${productId}`);
+  const btn = document.getElementById(`more-${productId}`);
+  
+  if (!desc || !btn) return;
+  
+  if (desc.classList.contains('expanded')) {
+    desc.classList.remove('expanded');
+    btn.textContent = 'مزيد ↓';
+  } else {
+    desc.classList.add('expanded');
+    btn.textContent = 'أقل ↑';
+  }
 }
 
 /* render offers */
