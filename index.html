@@ -3,7 +3,19 @@
 <head>
 <meta charset="utf-8" />
 <meta name="viewport" content="width=device-width,initial-scale=1" />
-<title>متجر إلكتروني - النسخة النهائية</title>
+<span style="
+  position: relative;
+  left: -40%;
+  color: red;
+  font-weight: bold;
+  text-shadow:
+    1px 1px 0 #fff,
+    2px 2px 0 #ccc,
+    3px 3px 0 #999,
+    4px 4px 0 #666,
+    5px 5px 15px #000;">
+  تسوق الآن
+</span>
 <style>
 :root{
   --danger:#ef4444;
@@ -235,6 +247,10 @@ main{padding:12px;max-width:980px;margin:18px auto 120px auto}
   .img-arrow.right{right:8px}
   .mini-card{width:120px;height:82px}
   .cart-modal{width:94%}
+}
+#imgViewer .viewer-bar {
+  position: absolute !important;
+  bottom: -60px !important; /* حرك النص لأسفل */
 }
 </style>
 </head>
@@ -1160,7 +1176,7 @@ async function init(){
     
     text += "───────────────\n";
     text += `*💰 الإجمالي: ${formatCurrency(calculateTotal())} ر.ع*\n\n`;
-    text += "_سيتم التواصل معكم لتأكيد الطلب._\n";
+    text += "شكراً لكم لتواصلكم سوف يتم* التواصل معكم في اقرب وقت لتاكد طلبكم*";
     text += "شكرًا لثقتكم بمتجرنا!";
 
     const url = `https://wa.me/${WHATSAPP_NUMBER.replace('+','')}?text=${encodeURIComponent(text)}`;
