@@ -20,6 +20,30 @@
   --border:#e5e7eb;
   --shadow:0 8px 16px rgba(15,23,42,0.06);
   --shadow-lg:0 18px 36px rgba(15,23,42,0.12);
+  
+  /* متغيرات أحجام البطاقات الافتراضية */
+  --product-card-width: 200px;
+  --product-card-height: auto;
+  --product-card-padding: 16px;
+  --product-card-font-size: 16px;
+  --product-card-title-size: 16px;
+  --product-card-price-size: 18px;
+  --product-card-image-height: 140px;
+  
+  --offer-card-width: 320px;
+  --offer-card-height: 380px;
+  --offer-card-padding: 16px;
+  --offer-card-font-size: 16px;
+  --offer-card-title-size: 18px;
+  --offer-card-price-size: 18px;
+  
+  --create-offer-card-width: 180px;
+  --create-offer-card-height: auto;
+  --create-offer-card-padding: 16px;
+  --create-offer-card-font-size: 14px;
+  --create-offer-card-title-size: 15px;
+  --create-offer-card-price-size: 16px;
+  --create-offer-card-image-height: 120px;
 }
 /* Base */
 *{box-sizing:border-box}
@@ -27,8 +51,16 @@ html,body{height:100%}
 body{margin:0;font-family:'Tajawal',Arial,Helvetica,sans-serif;background:var(--bg);color:var(--text);-webkit-font-smoothing:antialiased}
 body.no-scroll{overflow:hidden}
 header{
-  position:sticky;top:0;z-index:140;padding:16px;border-bottom:0;display:flex;flex-direction:column;align-items:center;gap:12px;
-  background:linear-gradient(135deg,var(--primary),var(--secondary));box-shadow:var(--shadow)
+  position:relative; /* تغيير من sticky إلى relative */
+  z-index:140;
+  padding:16px;
+  border-bottom:0;
+  display:flex;
+  flex-direction:column;
+  align-items:center;
+  gap:12px;
+  background:linear-gradient(135deg,var(--primary),var(--secondary));
+  box-shadow:var(--shadow);
 }
 .header-top{display:flex;align-items:center;justify-content:center;gap:12px;width:100%}
 .logo .title{font-weight:900;font-size:24px;color:#fff;text-align:center;text-shadow:0 1px 2px rgba(0,0,0,.15)}
@@ -40,9 +72,9 @@ nav a.active{border-color:var(--primary);background:var(--primary);color:white;t
 /* layout */
 main{padding:16px;max-width:1200px;margin:20px auto}
 .section-title{margin:8px 0 16px;font-size:20px;font-weight:700;color:var(--primary)}
-.grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(200px,1fr));gap:16px}
+.grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(var(--product-card-width),1fr));gap:16px}
 /* card */
-.card{background:var(--card);border-radius:16px;padding:16px;border:1px solid var(--border);position:relative;overflow:hidden;box-shadow:var(--shadow);transition:all 0.3s ease}
+.card{background:var(--card);border-radius:16px;padding:var(--product-card-padding);border:1px solid var(--border);position:relative;overflow:hidden;box-shadow:var(--shadow);transition:all 0.3s ease}
 .card:hover{transform:translateY(-4px);box-shadow:var(--shadow-lg)}
 /* share badge */
 .share-badge{
@@ -53,26 +85,115 @@ main{padding:16px;max-width:1200px;margin:20px auto}
 .share-badge:hover{transform:scale(1.06);opacity:1}
 .share-badge .material-icons{font-size:20px;line-height:1}
 /* Product card */
-.card.product-card{display:grid;grid-template-rows:auto 1fr auto auto;gap:12px;text-align:center}
-.product-card .img-box{width:100%;height:140px;overflow:hidden;border-radius:12px;background:var(--bg);position:relative}
-.product-card .img-box img{width:100%;height:100%;object-fit:cover;display:block;cursor:pointer}
-.card h4{margin:8px 0 4px;font-size:16px;font-weight:800}
-.card p.desc{font-size:14px;color:var(--text-secondary);display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden;min-height:3.2em}
-.card p.desc.expanded{-webkit-line-clamp:unset;overflow:visible}
-.card p.price{color:var(--primary);font-weight:800;margin:6px 0;font-size:18px}
-.product-card .btn-row{display:flex;gap:8px;justify-content:center;flex-wrap:wrap;margin-top:8px}
-.product-card .thumbs{display:flex;gap:8px;justify-content:center;flex-wrap:wrap;margin-top:8px}
+.card.product-card{
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 12px;
+  text-align: center;
+  min-height: var(--product-card-height);
+}
+
+.product-card .img-box{
+  width: 100%;
+  height: var(--product-card-image-height);
+  overflow: hidden;
+  border-radius: 12px;
+  background: var(--bg);
+  position: relative;
+  order: 1; /* الصورة أولاً */
+}
+
+.product-card .img-box img{
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  display: block;
+  cursor: pointer;
+}
+
+.card h4{
+  margin: 8px 0 4px;
+  font-size: var(--product-card-title-size);
+  font-weight: 800;
+  order: 2; /* العنوان ثانياً (تحت الصورة) */
+}
+
+.card p.desc{
+  font-size: var(--product-card-font-size);
+  color: var(--text-secondary);
+  display: -webkit-box;
+  -webkit-line-clamp: 2;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+  min-height: 3.2em;
+  order: 3; /* الوصف ثالثاً */
+}
+
+.card p.desc.expanded{
+  -webkit-line-clamp: unset;
+  overflow: visible;
+}
+
+.card p.price{
+  color: var(--primary);
+  font-weight: 800;
+  margin: 6px 0;
+  font-size: var(--product-card-price-size);
+  order: 4; /* السعر رابعاً */
+}
+
+.product-card .btn-row{
+  display: flex;
+  gap: 8px;
+  justify-content: center;
+  flex-wrap: wrap;
+  margin-top: 8px;
+  order: 5; /* الأزرار خامساً */
+}
+
+.product-card .thumbs{
+  display: flex;
+  gap: 8px;
+  justify-content: center;
+  flex-wrap: wrap;
+  margin-top: 8px;
+  order: 6; /* الصور المصغرة سادساً */
+}
+
 .card .add-btn{background:var(--primary);color:#fff;border:0;padding:10px 14px;border-radius:12px;cursor:pointer;font-weight:700;box-shadow:var(--shadow);transition:all 0.2s ease}
 .card .add-btn:hover{background:var(--primary-dark);transform:translateY(-2px)}
 .badge-new{position:absolute;top:12px;left:12px;background:#fff;color:var(--accent);padding:6px 10px;border-radius:8px;font-weight:800;font-size:12px;border:1px solid var(--accent);box-shadow:var(--shadow)}
-.card .more-btn{background:transparent;border:1px solid var(--border);color:var(--primary);padding:6px 12px;border-radius:8px;cursor:pointer;font-size:12px;font-weight:700;margin-top:8px;display:none;transition:all 0.3s ease}
-.card .more-btn:hover{background:var(--primary);color:white}
-.card .more-btn.show{display:inline-block}
+.card .more-btn{
+  background: transparent;
+  border: 1px solid var(--border);
+  color: var(--primary);
+  padding: 6px 12px;
+  border-radius: 8px;
+  cursor: pointer;
+  font-size: 12px;
+  font-weight: 700;
+  margin-top: 8px;
+  display: inline-block !important; /* إظهار الزر دائماً */
+  transition: all 0.3s ease;
+  order: 3; /* نفس ترتيب الوصف */
+}
+
+.card .more-btn:hover{
+  background: var(--primary);
+  color: white;
+}
+
+.card .more-btn.show{
+  display: inline-block;
+}
 /* Offers */
-.offers-stack{display:grid;grid-template-columns:repeat(auto-fill,minmax(320px,1fr));gap:20px;align-items:stretch}
-.offer-card{display:grid;grid-template-rows:auto auto 1fr;gap:12px;height:380px;overflow:hidden}
+.offers-stack{display:grid;grid-template-columns:repeat(auto-fill,minmax(var(--offer-card-width),1fr));gap:20px;align-items:stretch}
+.offer-card{display:grid;grid-template-rows:auto auto 1fr;gap:12px;height:var(--offer-card-height);overflow:hidden;padding:var(--offer-card-padding)}
 .offer-card .header{display:flex;justify-content:space-between;align-items:center}
-.offer-card .offer-desc{font-size:14px;color:var(--text-secondary);display:-webkit-box;-webkit-line-clamp:3;-webkit-box-orient:vertical;overflow:hidden}
+.offer-card .offer-desc{font-size:var(--offer-card-font-size);color:var(--text-secondary);display:-webkit-box;-webkit-line-clamp:3;-webkit-box-orient:vertical;overflow:hidden}
+.offer-card h3{font-size:var(--offer-card-title-size)}
+.offer-card .price-text{font-size:var(--offer-card-price-size)}
 /* mini-cards inside offers */
 .mini-grid{display:flex;gap:10px;align-items:center;justify-content:flex-start;flex-wrap:nowrap;overflow:auto;padding:8px;max-width:100%}
 #offersGrid .mini-grid{flex-wrap:wrap;overflow:hidden;padding:8px 0;align-content:flex-start}
@@ -134,7 +255,7 @@ main{padding:16px;max-width:1200px;margin:20px auto}
 /* mini-detail */
 .mini-detail-overlay{position:fixed;inset:0;display:none;align-items:center;justify-content:center;background:rgba(0,0,0,0.6);z-index:3100;padding:16px}
 .mini-detail-overlay.active{display:flex}
-.mini-detail{width:94%;max-width:580px;background:var(--card);border-radius:16px;padding:16px;box-shadow:0 25px 50px -12px rgba(0,0,0,0.25);transform:translateY(20px) scale(.96);opacity:0;transition:transform 0.3s ease, opacity 0.3s}
+.mini-detail{width:94%;max-width:580px;background:var(--card);border-radius:16px;padding:16px;box-shadow:0 25px 50px -12px rgba(0,0,0,0.25);transform:translateY(20px) scale(.96);opacity:0;transition:transform 0.3s ease, opacity 0.3}
 .mini-detail.active{transform:translateY(0) scale(1);opacity:1}
 .mini-detail .close-x{position:absolute;top:16px;left:16px;background:var(--card);border-radius:10px;padding:8px 10px;border:0;cursor:pointer;box-shadow:var(--shadow);font-size:20px}
 .mini-detail img{width:100%;height:240px;object-fit:cover;border-radius:12px;margin-bottom:12px}
@@ -177,6 +298,160 @@ main{padding:16px;max-width:1200px;margin:20px auto}
 #adminPage .select-products .p-row:last-child{border-bottom:none}
 #adminPage .refresh-btn{background:var(--secondary);color:#fff;border:none;border-radius:12px;padding:10px 14px;cursor:pointer;font-weight:700;box-shadow:var(--shadow);margin-top:10px}
 #adminPage .refresh-btn:hover{background:#059669;transform:translateY(-2px)}
+/* إعدادات أحجام البطاقات المفصلة */
+.card-settings-container {
+  margin-top: 20px;
+  padding: 20px;
+  background: var(--bg);
+  border-radius: 16px;
+  border: 1px solid var(--border);
+}
+.card-settings-container h3 {
+  margin-top: 0;
+  margin-bottom: 20px;
+  color: var(--primary);
+  text-align: center;
+}
+.card-type-settings {
+  margin-bottom: 30px;
+  padding: 20px;
+  background: white;
+  border-radius: 12px;
+  box-shadow: 0 2px 8px rgba(0,0,0,0.08);
+  border: 1px solid var(--border);
+}
+.card-type-settings h4 {
+  margin-top: 0;
+  margin-bottom: 15px;
+  color: var(--primary);
+  border-bottom: 1px solid var(--border);
+  padding-bottom: 8px;
+}
+.settings-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+  gap: 15px;
+}
+.setting-group {
+  margin-bottom: 15px;
+}
+.setting-group label {
+  display: block;
+  margin-bottom: 5px;
+  font-weight: 600;
+  color: var(--text);
+}
+.setting-group input, .setting-group select {
+  width: 100%;
+  padding: 8px 12px;
+  border-radius: 6px;
+  border: 1px solid var(--border);
+  background: white;
+}
+.setting-group input[type="range"] {
+  padding: 0;
+}
+.range-value {
+  display: inline-block;
+  margin-right: 8px;
+  font-weight: 600;
+  color: var(--primary);
+}
+.color-preview {
+  display: inline-block;
+  width: 20px;
+  height: 20px;
+  border-radius: 4px;
+  border: 1px solid var(--border);
+  vertical-align: middle;
+  margin-right: 8px;
+}
+.preview-section {
+  margin-top: 20px;
+  padding: 15px;
+  background: var(--bg);
+  border-radius: 8px;
+  border: 1px dashed var(--border);
+}
+.preview-title {
+  font-weight: 600;
+  margin-bottom: 10px;
+  color: var(--text);
+}
+.preview-container {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  min-height: 200px;
+}
+.preview-card {
+  background: var(--card);
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  padding: 10px;
+  text-align: center;
+  box-shadow: var(--shadow);
+  transition: all 0.3s ease;
+  max-width: 100%;
+}
+.preview-card:hover {
+  transform: translateY(-2px);
+  box-shadow: var(--shadow-lg);
+}
+.preview-card img {
+  width: 100%;
+  height: 80px;
+  object-fit: cover;
+  border-radius: 6px;
+  margin-bottom: 8px;
+}
+.preview-card h5 {
+  margin: 0 0 5px;
+  font-size: 14px;
+  font-weight: 700;
+}
+.preview-card p {
+  margin: 0 0 5px;
+  font-size: 12px;
+  color: var(--text-secondary);
+}
+.preview-card .price {
+  font-weight: 700;
+  color: var(--primary);
+  margin-top: 5px;
+}
+.reset-btn {
+  background: var(--danger);
+  color: white;
+  border: none;
+  padding: 8px 16px;
+  border-radius: 6px;
+  cursor: pointer;
+  font-weight: 600;
+  margin-top: 10px;
+  transition: all 0.2s ease;
+}
+.reset-btn:hover {
+  background: #dc2626;
+  transform: translateY(-1px);
+}
+.save-settings-btn {
+  background: var(--secondary);
+  color: white;
+  border: none;
+  padding: 12px 24px;
+  border-radius: 8px;
+  cursor: pointer;
+  font-weight: 700;
+  font-size: 16px;
+  width: 100%;
+  margin-top: 20px;
+  transition: all 0.2s ease;
+}
+.save-settings-btn:hover {
+  background: #059669;
+  transform: translateY(-2px);
+}
 /* اقتراح المنتج */
 .suggestion-form{background:var(--card);border-radius:16px;padding:20px;margin:24px 0;border:1.5px solid var(--border);box-shadow:var(--shadow)}
 .suggestion-form h3{margin:0 0 16px;font-size:20px;color:var(--text)}
@@ -190,8 +465,8 @@ main{padding:16px;max-width:1200px;margin:20px auto}
 /* Create Your Own Offer */
 .create-offer-section{background:var(--card);border-radius:16px;padding:20px;margin:24px 0;border:1.5px solid var(--border);box-shadow:var(--shadow)}
 .create-offer-section h3{margin:0 0 16px;font-size:20px;color:var(--text)}
-.create-offer-section .products-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(180px,1fr));gap:16px;margin-bottom:20px}
-.create-offer-section .product-card{position:relative;cursor:pointer;transition:all 0.3s ease}
+.create-offer-section .products-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(var(--create-offer-card-width),1fr));gap:16px;margin-bottom:20px}
+.create-offer-section .product-card{position:relative;cursor:pointer;transition:all 0.3s ease;padding:var(--create-offer-card-padding)}
 .create-offer-section .product-card.selected{border:3px solid var(--primary);transform:scale(1.03);box-shadow:0 0 0 2px rgba(99,102,241,0.2)}
 .create-offer-section .product-card .selection-indicator{position:absolute;top:8px;left:8px;width:24px;height:24px;background:var(--primary);border-radius:50%;display:flex;align-items:center;justify-content:center;color:white;font-weight:bold;opacity:0;transform:scale(0);transition:all 0.3s ease}
 .create-offer-section .product-card.selected .selection-indicator{opacity:1;transform:scale(1)}
@@ -235,57 +510,66 @@ main{padding:16px;max-width:1200px;margin:20px auto}
 .card.selected {
   border: 2px solid red !important;
 }
-
 /* تغيير لون علامة الصح */
 .card.selected .check-icon {
   background-color: red !important;
   border-color: red !important;
 }
 }
-
 /* تدرّج الهيدر يصبح أخضر */
 header{
   background: linear-gradient(135deg, var(--primary), var(--secondary));
 }
-
 /* 2) تصغير البطاقات + ضمان عمودين على الأقل */
 .grid{
   /* أصغر من السابق: يضمن عمودين على الشاشات الصغيرة */
   grid-template-columns: repeat(auto-fill, minmax(160px, 1fr));
 }
-
 /* قسم "اصنع عرضك" - تصغير الكروت وضمان عمودين */
 .create-offer-section .products-grid{
   grid-template-columns: repeat(auto-fill, minmax(150px, 1fr));
 }
-
 /* تقليل حجم بطاقة المنتج فقط (بدون التأثير على بقية البطاقات) */
 .card.product-card{
   padding: 12px;
 }
-
 /* تصغير صورة البطاقة */
 .product-card .img-box{
   height: 120px; /* كانت 140px */
 }
-
 /* تصغير النصوص قليلاً */
 .card.product-card h4{ font-size: 15px; }
 .card.product-card p.desc{ font-size: 13px; min-height: 2.8em; }
 .card.product-card p.price{ font-size: 16px; }
-
 /* تصغير الأزرار داخل البطاقة */
 .card.product-card .add-btn{
   padding: 8px 12px;
   font-size: 13px;
 }
-
 /* تحسين إضافي للمحمول لعرض أكثر أريحية */
 @media (max-width: 420px){
   .grid{ grid-template-columns: repeat(auto-fill, minmax(150px, 1fr)); }
   .create-offer-section .products-grid{ grid-template-columns: repeat(auto-fill, minmax(140px, 1fr)); }
   .product-card .img-box{ height: 110px; }
 }
+<style>
+  .card {
+    position: relative;
+  }
+
+.share-badge {
+  position: absolute;
+  top: 0;      /* فوق تمامًا */
+  right: -6px; /* يمين */
+  z-index: 10;
+}
+
+  .badge-new {
+    position: absolute;
+    top: -8px;
+    left: -6px;
+  }
+</style>
 </style>
 </head>
 <body>
@@ -351,7 +635,7 @@ header{
 </main>
 <section id="adminPage" style="display:none">
   <div class="admin-header">لوحة التحكم – المتجر</div>
-  <div class="quran-admin">(بِسْمِ اللَّهِ الرَّحْمَٰنِ الرَّحِيمِ) – "مَّا يَفْتَحِ اللَّهِ لِلنَّاسِ مِن رَّحْمَةٍ فَلَا مُمْسِكَ لَهَا"</div>
+  <div class="quran-admin">(بِسْمِ اللَّهِ الرَّحْمَٰنِ الرَّحِيمِ) – "مَّا يَفْتَحِ اللَّهُ لِلنَّاسِ مِن رَّحْمَةٍ فَلَا مُمْسِكَ لَهَا"</div>
   <div class="wrap">
     <div class="card">
       <div class="tabs">
@@ -359,6 +643,7 @@ header{
         <button class="tab" data-tab="offers-sec">العروض</button>
         <button class="tab" data-tab="lists-sec">القوائم الحالية</button>
         <button class="tab" data-tab="suggestions-sec">اقتراحات المنتجات</button>
+        <button class="tab" data-tab="card-settings-sec">إعدادات البطاقات</button>
       </div>
       <section id="products-sec" class="section active">
         <h2>إضافة منتج</h2>
@@ -410,6 +695,188 @@ header{
       <section id="suggestions-sec" class="section">
         <h2>اقتراحات المنتجات</h2>
         <div id="list-suggestions" class="list"></div>
+      </section>
+      <section id="card-settings-sec" class="section">
+        <h2>إعدادات البطاقات المتقدمة</h2>
+        <div class="card-settings-container">
+          <div class="card-type-settings">
+            <h4>إعدادات بطاقات المنتجات</h4>
+            <div class="settings-grid">
+              <div class="setting-group">
+                <label>عرض البطاقة (px)</label>
+                <input type="range" id="product-card-width-slider" min="150" max="300" value="200" step="10">
+                <span class="range-value" id="product-card-width-value">200px</span>
+              </div>
+              <div class="setting-group">
+                <label>ارتفاع البطاقة</label>
+                <select id="product-card-height-select">
+                  <option value="auto">تلقائي</option>
+                  <option value="300px">ثابت (300px)</option>
+                  <option value="350px">ثابت (350px)</option>
+                  <option value="400px">ثابت (400px)</option>
+                </select>
+              </div>
+              <div class="setting-group">
+                <label>حجم الخط العام (px)</label>
+                <input type="range" id="product-font-size-slider" min="12" max="20" value="16" step="1">
+                <span class="range-value" id="product-font-size-value">16px</span>
+              </div>
+              <div class="setting-group">
+                <label>حجم عنوان المنتج (px)</label>
+                <input type="range" id="product-title-size-slider" min="14" max="22" value="16" step="1">
+                <span class="range-value" id="product-title-size-value">16px</span>
+              </div>
+              <div class="setting-group">
+                <label>حجم السعر (px)</label>
+                <input type="range" id="product-price-size-slider" min="14" max="24" value="18" step="1">
+                <span class="range-value" id="product-price-size-value">18px</span>
+              </div>
+              <div class="setting-group">
+                <label>ارتفاع الصورة (px)</label>
+                <input type="range" id="product-image-height-slider" min="100" max="200" value="140" step="10">
+                <span class="range-value" id="product-image-height-value">140px</span>
+              </div>
+              <div class="setting-group">
+                <label>الحشو الداخلي (px)</label>
+                <input type="range" id="product-padding-slider" min="8" max="24" value="16" step="2">
+                <span class="range-value" id="product-padding-value">16px</span>
+              </div>
+              <div class="setting-group">
+                <label>لون الخلفية</label>
+                <input type="color" id="product-bg-color" value="#ffffff">
+                <span class="color-preview" id="product-bg-preview" style="background-color:#ffffff"></span>
+              </div>
+            </div>
+            <div class="preview-section">
+              <div class="preview-title">معاينة بطاقة المنتج</div>
+              <div class="preview-container">
+                <div class="preview-card" id="product-preview-card">
+                  <img src="https://via.placeholder.com/200x140" alt="معاينة">
+                  <h5>اسم المنتج</h5>
+                  <p>وصف مختصر للمنتج</p>
+                  <div class="price">25.00 ر.ع</div>
+                </div>
+              </div>
+            </div>
+            <button class="reset-btn" id="reset-product-settings">استعادة الإعدادات الافتراضية</button>
+          </div>
+          
+          <div class="card-type-settings">
+            <h4>إعدادات بطاقات العروض</h4>
+            <div class="settings-grid">
+              <div class="setting-group">
+                <label>عرض البطاقة (px)</label>
+                <input type="range" id="offer-card-width-slider" min="250" max="400" value="320" step="10">
+                <span class="range-value" id="offer-card-width-value">320px</span>
+              </div>
+              <div class="setting-group">
+                <label>ارتفاع البطاقة (px)</label>
+                <input type="range" id="offer-card-height-slider" min="300" max="500" value="380" step="10">
+                <span class="range-value" id="offer-card-height-value">380px</span>
+              </div>
+              <div class="setting-group">
+                <label>حجم الخط العام (px)</label>
+                <input type="range" id="offer-font-size-slider" min="12" max="20" value="16" step="1">
+                <span class="range-value" id="offer-font-size-value">16px</span>
+              </div>
+              <div class="setting-group">
+                <label>حجم عنوان العرض (px)</label>
+                <input type="range" id="offer-title-size-slider" min="14" max="24" value="18" step="1">
+                <span class="range-value" id="offer-title-size-value">18px</span>
+              </div>
+              <div class="setting-group">
+                <label>حجم السعر (px)</label>
+                <input type="range" id="offer-price-size-slider" min="14" max="24" value="18" step="1">
+                <span class="range-value" id="offer-price-size-value">18px</span>
+              </div>
+              <div class="setting-group">
+                <label>الحشو الداخلي (px)</label>
+                <input type="range" id="offer-padding-slider" min="8" max="24" value="16" step="2">
+                <span class="range-value" id="offer-padding-value">16px</span>
+              </div>
+              <div class="setting-group">
+                <label>لون الخلفية</label>
+                <input type="color" id="offer-bg-color" value="#ffffff">
+                <span class="color-preview" id="offer-bg-preview" style="background-color:#ffffff"></span>
+              </div>
+            </div>
+            <div class="preview-section">
+              <div class="preview-title">معاينة بطاقة العرض</div>
+              <div class="preview-container">
+                <div class="preview-card" id="offer-preview-card" style="width:320px; height:380px;">
+                  <h5>اسم العرض</h5>
+                  <p>وصف مختصر للعرض</p>
+                  <div class="price">99.00 ر.ع</div>
+                </div>
+              </div>
+            </div>
+            <button class="reset-btn" id="reset-offer-settings">استعادة الإعدادات الافتراضية</button>
+          </div>
+          
+          <div class="card-type-settings">
+            <h4>إعدادات بطاقات "اصنع عرضك بنفسك"</h4>
+            <div class="settings-grid">
+              <div class="setting-group">
+                <label>عرض البطاقة (px)</label>
+                <input type="range" id="create-offer-card-width-slider" min="140" max="240" value="180" step="10">
+                <span class="range-value" id="create-offer-card-width-value">180px</span>
+              </div>
+              <div class="setting-group">
+                <label>ارتفاع البطاقة</label>
+                <select id="create-offer-card-height-select">
+                  <option value="auto">تلقائي</option>
+                  <option value="250px">ثابت (250px)</option>
+                  <option value="300px">ثابت (300px)</option>
+                  <option value="350px">ثابت (350px)</option>
+                </select>
+              </div>
+              <div class="setting-group">
+                <label>حجم الخط العام (px)</label>
+                <input type="range" id="create-offer-font-size-slider" min="12" max="18" value="14" step="1">
+                <span class="range-value" id="create-offer-font-size-value">14px</span>
+              </div>
+              <div class="setting-group">
+                <label>حجم عنوان المنتج (px)</label>
+                <input type="range" id="create-offer-title-size-slider" min="12" max="20" value="15" step="1">
+                <span class="range-value" id="create-offer-title-size-value">15px</span>
+              </div>
+              <div class="setting-group">
+                <label>حجم السعر (px)</label>
+                <input type="range" id="create-offer-price-size-slider" min="12" max="20" value="16" step="1">
+                <span class="range-value" id="create-offer-price-size-value">16px</span>
+              </div>
+              <div class="setting-group">
+                <label>ارتفاع الصورة (px)</label>
+                <input type="range" id="create-offer-image-height-slider" min="80" max="160" value="120" step="10">
+                <span class="range-value" id="create-offer-image-height-value">120px</span>
+              </div>
+              <div class="setting-group">
+                <label>الحشو الداخلي (px)</label>
+                <input type="range" id="create-offer-padding-slider" min="8" max="24" value="16" step="2">
+                <span class="range-value" id="create-offer-padding-value">16px</span>
+              </div>
+              <div class="setting-group">
+                <label>لون الخلفية</label>
+                <input type="color" id="create-offer-bg-color" value="#ffffff">
+                <span class="color-preview" id="create-offer-bg-preview" style="background-color:#ffffff"></span>
+              </div>
+            </div>
+            <div class="preview-section">
+              <div class="preview-title">معاينة بطاقة "اصنع عرضك"</div>
+              <div class="preview-container">
+                <div class="preview-card" id="create-offer-preview-card">
+                  <img src="https://via.placeholder.com/180x120" alt="معاينة">
+                  <h5>اسم المنتج</h5>
+                  <p>وصف مختصر</p>
+                  <div class="price">25.00 ر.ع</div>
+                </div>
+              </div>
+            </div>
+            <button class="reset-btn" id="reset-create-offer-settings">استعادة الإعدادات الافتراضية</button>
+          </div>
+          
+          <button class="save-settings-btn" id="save-all-card-settings">حفظ جميع الإعدادات</button>
+        </div>
       </section>
     </div>
   </div>
@@ -488,24 +955,19 @@ let editingProductId = null;
 let deepLinkHandled = false;
 let selectedProductsForOffer = [];
 let supabaseClient = null;
-
 /* init supabase */
 async function initSupabase() {
   try {
-    showToast('جاري الاتصال بقاعدة البيانات...', 'info');
     if (typeof supabase === 'undefined') throw new Error("لم يتم تحميل مكتبة Supabase");
     const client = supabase.createClient(SUPABASE_URL, SUPABASE_KEY, { auth:{persistSession:false}, realtime:{timeout:10000} });
     const { error } = await client.from('products').select('id').limit(1);
     if (error) throw error;
-    showToast('تم الاتصال بقاعدة البيانات بنجاح', 'success');
     return client;
   } catch (error) {
     console.error('فشل الاتصال بقاعدة البيانات:', error);
-    showToast('فشل الاتصال بقاعدة البيانات، يرجى التحقق من اتصال الإنترنت', 'error');
     throw error;
   }
 }
-
 /* dom refs */
 const productsGrid = document.getElementById('productsGrid');
 const offersGrid = document.getElementById('offersGrid');
@@ -525,7 +987,6 @@ const miniName = document.getElementById('miniDetailName');
 const miniDesc = document.getElementById('miniDetailDesc');
 const miniPrice = document.getElementById('miniDetailPrice');
 const miniAddCartBtn = document.getElementById('miniAddCartBtn');
-
 /* helpers */
 function showToast(txt, type, ms) {
   if (!type) type = 'error';
@@ -542,7 +1003,6 @@ function showToast(txt, type, ms) {
 function escapeHtml(s){ if(s==null) return ''; return String(s).replace(/[&<>"']/g,m=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[m])); }
 function formatCurrency(v){ return Number(v||0).toFixed(2); }
 function toggleBodyScroll(lock){ document.body.classList.toggle('no-scroll', !!lock); }
-
 /* cart */
 function saveCart(){ localStorage.setItem('my_cart_v_final2', JSON.stringify(cart)); }
 function calculateTotal(){ return cart.reduce((s,it)=> s + (Number(it.price)||0) * (it.qty||1),0); }
@@ -599,18 +1059,15 @@ function addToCartById(id){
   if(ex) ex.qty++; else cart.push({id:p.id,name:p.name,price:p.price,images:p.images,qty:1,isOffer:false});
   saveCart(); renderCartModal(); showToast('تمت الإضافة','success',1200);
 }
-
 /* fetch */
 async function fetchProducts(){
   try{
-    showToast('جاري تحميل المنتجات...','info');
     if(!supabaseClient) throw new Error("لم يتم تهيئة الاتصال بقاعدة البيانات");
     const { data, error } = await supabaseClient.from('products').select('*').order('created_at',{ascending:false});
-    if(error){ console.error(error); showToast('فشل جلب المنتجات','error');
+    if(error){ console.error(error); 
       productsGrid.innerHTML = '<div class="empty-state"><h3>لا توجد منتجات متاحة</h3><p>لم نتمكن من تحميل المنتجات من قاعدة البيانات.</p><button class="btn-3d" onclick="fetchProducts()">إعادة المحاولة</button></div>'; return;
     }
     if(!data || data.length===0){
-      showToast('لا توجد منتجات متاحة حالياً','warning');
       productsGrid.innerHTML = '<div class="empty-state"><h3>لا توجد منتجات</h3><p>يمكنك إضافة منتجات جديدة من لوحة التحكم.</p></div>'; return;
     }
     products = data.map(p=>({
@@ -618,22 +1075,20 @@ async function fetchProducts(){
       images:Array.isArray(p.images)?p.images:(p.images?String(p.images).split(',').map(s=>s.trim()):[]),
       desc:p.description||'', type:p.type||'normal', created_at:p.created_at, disabled:!!p.disabled
     }));
-    renderProducts(); renderCreateOfferProducts(); showToast('تم تحميل المنتجات بنجاح','success');
+    renderProducts(); renderCreateOfferProducts(); 
   }catch(e){
-    console.error(e); showToast('حدث خطأ أثناء تحميل المنتجات','error');
+    console.error(e); 
     productsGrid.innerHTML = '<div class="empty-state"><h3>حدث خطأ</h3><p>لم نتمكن من تحميل المنتجات. الرجاء المحاولة مرة أخرى.</p><button class="btn-3d" onclick="fetchProducts()">إعادة المحاولة</button></div>';
   }
 }
 async function fetchOffers(){
   try{
-    showToast('جاري تحميل العروض...','info');
     if(!supabaseClient) throw new Error("لم يتم تهيئة الاتصال بقاعدة البيانات");
     const { data, error } = await supabaseClient.from('offers').select('*').order('created_at',{ascending:false});
-    if(error){ console.error(error); showToast('فشل جلب العروض','error');
+    if(error){ console.error(error); 
       offersGrid.innerHTML = '<div class="empty-state"><h3>لا توجد عروض متاحة</h3><p>لم نتمكن من تحميل العروض من قاعدة البيانات.</p><button class="btn-3d" onclick="fetchOffers()">إعادة المحاولة</button></div>'; return;
     }
     if(!data || data.length===0){
-      showToast('لا توجد عروض متاحة حالياً','warning');
       offersGrid.innerHTML = '<div class="empty-state"><h3>لا توجد عروض</h3><p>يمكنك إضافة عروض جديدة من لوحة التحكم.</p></div>'; return;
     }
     offers = data.map(o=>({
@@ -642,13 +1097,12 @@ async function fetchOffers(){
       products_ids:Array.isArray(o.products_ids)?o.products_ids:(o.products_ids?String(o.products_ids).split(',').map(n=>Number(n.trim())):[]),
       desc:o.description||''
     }));
-    renderOffers(); showToast('تم تحميل العروض بنجاح','success');
+    renderOffers(); 
   }catch(e){
-    console.error(e); showToast('حدث خطأ أثناء تحميل العروض','error');
+    console.error(e); 
     offersGrid.innerHTML = '<div class="empty-state"><h3>حدث خطأ</h3><p>لم نتمكن من تحميل العروض. الرجاء المحاولة مرة أخرى.</p><button class="btn-3d" onclick="fetchOffers()">إعادة المحاولة</button></div>';
   }
 }
-
 /* render products (+ share badge) */
 function renderProducts(){
   productsGrid.innerHTML = '';
@@ -685,13 +1139,13 @@ function renderProducts(){
   });
   attachThumbHandlers();
 }
-
 /* desc toggle */
 function checkIfTextNeedsMore(productId){
   const desc = document.getElementById('desc-'+productId);
   const btn = document.getElementById('more-'+productId);
   if(!desc || !btn) return;
-  setTimeout(()=>{ if(desc.scrollHeight > desc.clientHeight) btn.classList.add('show'); else btn.classList.remove('show'); },50);
+  // جعل الزر ظاهراً دائماً بغض النظر عن طول النص
+  btn.classList.add('show');
 }
 function toggleDescription(productId){
   const desc = document.getElementById('desc-'+productId);
@@ -700,7 +1154,6 @@ function toggleDescription(productId){
   if(desc.classList.contains('expanded')){ desc.classList.remove('expanded'); btn.textContent='مزيد ↓'; }
   else { desc.classList.add('expanded'); btn.textContent='أقل ↑'; }
 }
-
 /* render offers (+ share badge) */
 function renderOffers(){
   offersGrid.innerHTML = '';
@@ -739,7 +1192,6 @@ function renderOffers(){
   });
   attachMiniCardHandlers();
 }
-
 /* create offer products (+ share badge) */
 function renderCreateOfferProducts(){
   createOfferProducts.innerHTML = '';
@@ -804,7 +1256,6 @@ function sendSelectedProductsToWhatsApp(){
   selectedProductsForOffer = []; updateSelectedProductsDisplay();
   document.querySelectorAll('#create-offer-products .product-card').forEach(card=> card.classList.remove('selected'));
 }
-
 /* offers cart */
 function addOfferToCart(offerId){
   const o = offers.find(x=> x.id===offerId); if(!o) return;
@@ -812,7 +1263,6 @@ function addOfferToCart(offerId){
   if(ex) ex.qty++; else cart.push({id:o.id,name:o.name,price:o.price,images:o.images,qty:1,isOffer:true});
   saveCart(); renderCartModal(); showToast('تمت إضافة العرض إلى السلة','success',1200);
 }
-
 /* thumbs */
 function attachThumbHandlers(){
   document.querySelectorAll('.thumb').forEach(t=>{
@@ -830,7 +1280,6 @@ function attachThumbHandlers(){
     m.addEventListener('click', function(){ const id = Number(this.dataset.id); if(id) openViewerById(id, Number(this.dataset.index||0)); });
   });
 }
-
 /* minis */
 let miniVibeIntervals = [];
 function attachMiniCardHandlers(){
@@ -845,7 +1294,6 @@ function attachMiniCardHandlers(){
     miniVibeIntervals.push(iv);
   });
 }
-
 /* mini detail */
 function openMiniDetail(prodId){
   const p = products.find(pp=> pp.id===prodId);
@@ -861,7 +1309,6 @@ function closeMiniDetail(){
 }
 document.getElementById('miniDetailClose').addEventListener('click', closeMiniDetail);
 miniOverlay.addEventListener('click', e=>{ if(e.target===miniOverlay) closeMiniDetail(); });
-
 /* share + deep links */
 function productDeepLink(id){ return window.location.origin + window.location.pathname + '?p='+encodeURIComponent(id)+'#home'; }
 function offerDeepLink(id){ return window.location.origin + window.location.pathname + '?o='+encodeURIComponent(id)+'#offers'; }
@@ -889,7 +1336,6 @@ function shareOffer(id){
     navigator.clipboard.writeText(link).then(()=> showToast('تم نسخ رابط العرض','success'), ()=> alert(link));
   }else{ prompt('نسخ الرابط:', link); }
 }
-
 /* image viewer */
 let viewerImgs = [], viewerIndex = 0, viewerProduct = null;
 const imgViewerEl = document.getElementById('imgViewer');
@@ -920,7 +1366,6 @@ viewerPrev.addEventListener('click', function(){ if(!viewerImgs.length) return; 
 viewerNext.addEventListener('click', function(){ if(!viewerImgs.length) return; viewerIndex = (viewerIndex + 1)%viewerImgs.length; viewerImg.classList.add('fade'); setTimeout(()=>{ viewerImg.src = viewerImgs[viewerIndex]; viewerImg.classList.remove('fade'); updateViewerInfo(); },120); });
 viewerClose.addEventListener('click', closeViewer);
 imgViewerEl.addEventListener('click', e=>{ if(e.target===imgViewerEl) closeViewer(); });
-
 /* Admin */
 let adminInitialized=false, adminBootstrapped=false;
 function adminShowLogin(){ document.getElementById('adminLoginModal').classList.remove('hidden'); }
@@ -937,6 +1382,7 @@ function ensureAdminInitialized(){
       sections.forEach(s=> s.classList.remove('active'));
       const targetSection = adminRoot.querySelector('#'+t.dataset.tab); if(targetSection) targetSection.classList.add('active');
       if(t.dataset.tab==='suggestions-sec'){ adminLoadSuggestions(); }
+      if(t.dataset.tab==='card-settings-sec'){ loadCardSettings(); }
     });
   });
   const adminPass = adminRoot.querySelector('#admin-pass');
@@ -949,7 +1395,6 @@ function ensureAdminInitialized(){
   });
   adminPass.addEventListener('keydown', e=>{ if(e.key==='Enter') loginBtn.click(); });
   document.getElementById('adminLoginClose')?.addEventListener('click', function(){ document.getElementById('adminLoginModal').classList.add('hidden'); navigateTo('home'); });
-
   /* Save Product */
   const btnAddProduct = adminRoot.querySelector('#btn-add-product');
   const msgAddProduct = adminRoot.querySelector('#msg-add-product');
@@ -981,7 +1426,6 @@ function ensureAdminInitialized(){
       setTimeout(async()=>{ await adminLoadProducts(); },500);
     }catch(e){ console.error(e); showMsg(msgAddProduct,'❌ حدث خطأ غير متوقع: '+e.message,'err'); btnAddProduct.textContent='حفظ المنتج'; btnAddProduct.disabled=false; }
   });
-
   /* Save/Update Offer */
   const btnAddOffer = adminRoot.querySelector('#btn-add-offer');
   const msgAddOffer = adminRoot.querySelector('#msg-add-offer');
@@ -1022,8 +1466,367 @@ function ensureAdminInitialized(){
       console.error(e); msgAddOffer.textContent='❌ حدث خطأ غير متوقع: '+e.message; msgAddOffer.className='msg err'; msgAddOffer.style.display='block'; btnAddOffer.textContent='حفظ العرض'; btnAddOffer.disabled=false;
     }
   });
+  
+  /* Card Settings Functions */
+  function setupCardSettings() {
+    // Product card settings
+    const productWidthSlider = document.getElementById('product-card-width-slider');
+    const productWidthValue = document.getElementById('product-card-width-value');
+    const productHeightSelect = document.getElementById('product-card-height-select');
+    const productFontSizeSlider = document.getElementById('product-font-size-slider');
+    const productFontSizeValue = document.getElementById('product-font-size-value');
+    const productTitleSizeSlider = document.getElementById('product-title-size-slider');
+    const productTitleSizeValue = document.getElementById('product-title-size-value');
+    const productPriceSizeSlider = document.getElementById('product-price-size-slider');
+    const productPriceSizeValue = document.getElementById('product-price-size-value');
+    const productImageHeightSlider = document.getElementById('product-image-height-slider');
+    const productImageHeightValue = document.getElementById('product-image-height-value');
+    const productPaddingSlider = document.getElementById('product-padding-slider');
+    const productPaddingValue = document.getElementById('product-padding-value');
+    const productBgColor = document.getElementById('product-bg-color');
+    const productBgPreview = document.getElementById('product-bg-preview');
+    const productPreviewCard = document.getElementById('product-preview-card');
+    const resetProductSettings = document.getElementById('reset-product-settings');
+    
+    // Offer card settings
+    const offerWidthSlider = document.getElementById('offer-card-width-slider');
+    const offerWidthValue = document.getElementById('offer-card-width-value');
+    const offerHeightSlider = document.getElementById('offer-card-height-slider');
+    const offerHeightValue = document.getElementById('offer-card-height-value');
+    const offerFontSizeSlider = document.getElementById('offer-font-size-slider');
+    const offerFontSizeValue = document.getElementById('offer-font-size-value');
+    const offerTitleSizeSlider = document.getElementById('offer-title-size-slider');
+    const offerTitleSizeValue = document.getElementById('offer-title-size-value');
+    const offerPriceSizeSlider = document.getElementById('offer-price-size-slider');
+    const offerPriceSizeValue = document.getElementById('offer-price-size-value');
+    const offerPaddingSlider = document.getElementById('offer-padding-slider');
+    const offerPaddingValue = document.getElementById('offer-padding-value');
+    const offerBgColor = document.getElementById('offer-bg-color');
+    const offerBgPreview = document.getElementById('offer-bg-preview');
+    const offerPreviewCard = document.getElementById('offer-preview-card');
+    const resetOfferSettings = document.getElementById('reset-offer-settings');
+    
+    // Create offer card settings
+    const createOfferWidthSlider = document.getElementById('create-offer-card-width-slider');
+    const createOfferWidthValue = document.getElementById('create-offer-card-width-value');
+    const createOfferHeightSelect = document.getElementById('create-offer-card-height-select');
+    const createOfferFontSizeSlider = document.getElementById('create-offer-font-size-slider');
+    const createOfferFontSizeValue = document.getElementById('create-offer-font-size-value');
+    const createOfferTitleSizeSlider = document.getElementById('create-offer-title-size-slider');
+    const createOfferTitleSizeValue = document.getElementById('create-offer-title-size-value');
+    const createOfferPriceSizeSlider = document.getElementById('create-offer-price-size-slider');
+    const createOfferPriceSizeValue = document.getElementById('create-offer-price-size-value');
+    const createOfferImageHeightSlider = document.getElementById('create-offer-image-height-slider');
+    const createOfferImageHeightValue = document.getElementById('create-offer-image-height-value');
+    const createOfferPaddingSlider = document.getElementById('create-offer-padding-slider');
+    const createOfferPaddingValue = document.getElementById('create-offer-padding-value');
+    const createOfferBgColor = document.getElementById('create-offer-bg-color');
+    const createOfferBgPreview = document.getElementById('create-offer-bg-preview');
+    const createOfferPreviewCard = document.getElementById('create-offer-preview-card');
+    const resetCreateOfferSettings = document.getElementById('reset-create-offer-settings');
+    
+    const saveAllSettings = document.getElementById('save-all-card-settings');
+    
+    // Update product card preview
+    function updateProductPreview() {
+      const width = productWidthSlider.value + 'px';
+      const height = productHeightSelect.value;
+      const fontSize = productFontSizeSlider.value + 'px';
+      const titleSize = productTitleSizeSlider.value + 'px';
+      const priceSize = productPriceSizeSlider.value + 'px';
+      const imageHeight = productImageHeightSlider.value + 'px';
+      const padding = productPaddingSlider.value + 'px';
+      const bgColor = productBgColor.value;
+      
+      productWidthValue.textContent = width;
+      productFontSizeValue.textContent = fontSize;
+      productTitleSizeValue.textContent = titleSize;
+      productPriceSizeValue.textContent = priceSize;
+      productImageHeightValue.textContent = imageHeight;
+      productPaddingValue.textContent = padding;
+      productBgPreview.style.backgroundColor = bgColor;
+      
+      productPreviewCard.style.width = width;
+      productPreviewCard.style.height = height;
+      productPreviewCard.style.fontSize = fontSize;
+      productPreviewCard.style.padding = padding;
+      productPreviewCard.style.backgroundColor = bgColor;
+      productPreviewCard.querySelector('h5').style.fontSize = titleSize;
+      productPreviewCard.querySelector('.price').style.fontSize = priceSize;
+      productPreviewCard.querySelector('img').style.height = imageHeight;
+    }
+    
+    // Update offer card preview
+    function updateOfferPreview() {
+      const width = offerWidthSlider.value + 'px';
+      const height = offerHeightSlider.value + 'px';
+      const fontSize = offerFontSizeSlider.value + 'px';
+      const titleSize = offerTitleSizeSlider.value + 'px';
+      const priceSize = offerPriceSizeSlider.value + 'px';
+      const padding = offerPaddingSlider.value + 'px';
+      const bgColor = offerBgColor.value;
+      
+      offerWidthValue.textContent = width;
+      offerHeightValue.textContent = height;
+      offerFontSizeValue.textContent = fontSize;
+      offerTitleSizeValue.textContent = titleSize;
+      offerPriceSizeValue.textContent = priceSize;
+      offerPaddingValue.textContent = padding;
+      offerBgPreview.style.backgroundColor = bgColor;
+      
+      offerPreviewCard.style.width = width;
+      offerPreviewCard.style.height = height;
+      offerPreviewCard.style.fontSize = fontSize;
+      offerPreviewCard.style.padding = padding;
+      offerPreviewCard.style.backgroundColor = bgColor;
+      offerPreviewCard.querySelector('h5').style.fontSize = titleSize;
+      offerPreviewCard.querySelector('.price').style.fontSize = priceSize;
+    }
+    
+    // Update create offer card preview
+    function updateCreateOfferPreview() {
+      const width = createOfferWidthSlider.value + 'px';
+      const height = createOfferHeightSelect.value;
+      const fontSize = createOfferFontSizeSlider.value + 'px';
+      const titleSize = createOfferTitleSizeSlider.value + 'px';
+      const priceSize = createOfferPriceSizeSlider.value + 'px';
+      const imageHeight = createOfferImageHeightSlider.value + 'px';
+      const padding = createOfferPaddingSlider.value + 'px';
+      const bgColor = createOfferBgColor.value;
+      
+      createOfferWidthValue.textContent = width;
+      createOfferFontSizeValue.textContent = fontSize;
+      createOfferTitleSizeValue.textContent = titleSize;
+      createOfferPriceSizeValue.textContent = priceSize;
+      createOfferImageHeightValue.textContent = imageHeight;
+      createOfferPaddingValue.textContent = padding;
+      createOfferBgPreview.style.backgroundColor = bgColor;
+      
+      createOfferPreviewCard.style.width = width;
+      createOfferPreviewCard.style.height = height;
+      createOfferPreviewCard.style.fontSize = fontSize;
+      createOfferPreviewCard.style.padding = padding;
+      createOfferPreviewCard.style.backgroundColor = bgColor;
+      createOfferPreviewCard.querySelector('h5').style.fontSize = titleSize;
+      createOfferPreviewCard.querySelector('.price').style.fontSize = priceSize;
+      createOfferPreviewCard.querySelector('img').style.height = imageHeight;
+    }
+    
+    // Add event listeners for product card settings
+    productWidthSlider.addEventListener('input', updateProductPreview);
+    productHeightSelect.addEventListener('change', updateProductPreview);
+    productFontSizeSlider.addEventListener('input', updateProductPreview);
+    productTitleSizeSlider.addEventListener('input', updateProductPreview);
+    productPriceSizeSlider.addEventListener('input', updateProductPreview);
+    productImageHeightSlider.addEventListener('input', updateProductPreview);
+    productPaddingSlider.addEventListener('input', updateProductPreview);
+    productBgColor.addEventListener('input', updateProductPreview);
+    
+    // Add event listeners for offer card settings
+    offerWidthSlider.addEventListener('input', updateOfferPreview);
+    offerHeightSlider.addEventListener('input', updateOfferPreview);
+    offerFontSizeSlider.addEventListener('input', updateOfferPreview);
+    offerTitleSizeSlider.addEventListener('input', updateOfferPreview);
+    offerPriceSizeSlider.addEventListener('input', updateOfferPreview);
+    offerPaddingSlider.addEventListener('input', updateOfferPreview);
+    offerBgColor.addEventListener('input', updateOfferPreview);
+    
+    // Add event listeners for create offer card settings
+    createOfferWidthSlider.addEventListener('input', updateCreateOfferPreview);
+    createOfferHeightSelect.addEventListener('change', updateCreateOfferPreview);
+    createOfferFontSizeSlider.addEventListener('input', updateCreateOfferPreview);
+    createOfferTitleSizeSlider.addEventListener('input', updateCreateOfferPreview);
+    createOfferPriceSizeSlider.addEventListener('input', updateCreateOfferPreview);
+    createOfferImageHeightSlider.addEventListener('input', updateCreateOfferPreview);
+    createOfferPaddingSlider.addEventListener('input', updateCreateOfferPreview);
+    createOfferBgColor.addEventListener('input', updateCreateOfferPreview);
+    
+    // Reset product settings
+    resetProductSettings.addEventListener('click', function() {
+      productWidthSlider.value = 200;
+      productHeightSelect.value = 'auto';
+      productFontSizeSlider.value = 16;
+      productTitleSizeSlider.value = 16;
+      productPriceSizeSlider.value = 18;
+      productImageHeightSlider.value = 140;
+      productPaddingSlider.value = 16;
+      productBgColor.value = '#ffffff';
+      updateProductPreview();
+    });
+    
+    // Reset offer settings
+    resetOfferSettings.addEventListener('click', function() {
+      offerWidthSlider.value = 320;
+      offerHeightSlider.value = 380;
+      offerFontSizeSlider.value = 16;
+      offerTitleSizeSlider.value = 18;
+      offerPriceSizeSlider.value = 18;
+      offerPaddingSlider.value = 16;
+      offerBgColor.value = '#ffffff';
+      updateOfferPreview();
+    });
+    
+    // Reset create offer settings
+    resetCreateOfferSettings.addEventListener('click', function() {
+      createOfferWidthSlider.value = 180;
+      createOfferHeightSelect.value = 'auto';
+      createOfferFontSizeSlider.value = 14;
+      createOfferTitleSizeSlider.value = 15;
+      createOfferPriceSizeSlider.value = 16;
+      createOfferImageHeightSlider.value = 120;
+      createOfferPaddingSlider.value = 16;
+      createOfferBgColor.value = '#ffffff';
+      updateCreateOfferPreview();
+    });
+    
+    // Save all settings
+    saveAllSettings.addEventListener('click', function() {
+      // Update CSS variables for product cards
+      document.documentElement.style.setProperty('--product-card-width', productWidthSlider.value + 'px');
+      document.documentElement.style.setProperty('--product-card-height', productHeightSelect.value);
+      document.documentElement.style.setProperty('--product-card-font-size', productFontSizeSlider.value + 'px');
+      document.documentElement.style.setProperty('--product-card-title-size', productTitleSizeSlider.value + 'px');
+      document.documentElement.style.setProperty('--product-card-price-size', productPriceSizeSlider.value + 'px');
+      document.documentElement.style.setProperty('--product-card-image-height', productImageHeightSlider.value + 'px');
+      document.documentElement.style.setProperty('--product-card-padding', productPaddingSlider.value + 'px');
+      
+      // Update CSS variables for offer cards
+      document.documentElement.style.setProperty('--offer-card-width', offerWidthSlider.value + 'px');
+      document.documentElement.style.setProperty('--offer-card-height', offerHeightSlider.value + 'px');
+      document.documentElement.style.setProperty('--offer-card-font-size', offerFontSizeSlider.value + 'px');
+      document.documentElement.style.setProperty('--offer-card-title-size', offerTitleSizeSlider.value + 'px');
+      document.documentElement.style.setProperty('--offer-card-price-size', offerPriceSizeSlider.value + 'px');
+      document.documentElement.style.setProperty('--offer-card-padding', offerPaddingSlider.value + 'px');
+      
+      // Update CSS variables for create offer cards
+      document.documentElement.style.setProperty('--create-offer-card-width', createOfferWidthSlider.value + 'px');
+      document.documentElement.style.setProperty('--create-offer-card-height', createOfferHeightSelect.value);
+      document.documentElement.style.setProperty('--create-offer-card-font-size', createOfferFontSizeSlider.value + 'px');
+      document.documentElement.style.setProperty('--create-offer-card-title-size', createOfferTitleSizeSlider.value + 'px');
+      document.documentElement.style.setProperty('--create-offer-card-price-size', createOfferPriceSizeSlider.value + 'px');
+      document.documentElement.style.setProperty('--create-offer-card-image-height', createOfferImageHeightSlider.value + 'px');
+      document.documentElement.style.setProperty('--create-offer-card-padding', createOfferPaddingSlider.value + 'px');
+      
+      // Save settings to localStorage
+      const settings = {
+        product: {
+          width: productWidthSlider.value + 'px',
+          height: productHeightSelect.value,
+          fontSize: productFontSizeSlider.value + 'px',
+          titleSize: productTitleSizeSlider.value + 'px',
+          priceSize: productPriceSizeSlider.value + 'px',
+          imageHeight: productImageHeightSlider.value + 'px',
+          padding: productPaddingSlider.value + 'px',
+          bgColor: productBgColor.value
+        },
+        offer: {
+          width: offerWidthSlider.value + 'px',
+          height: offerHeightSlider.value + 'px',
+          fontSize: offerFontSizeSlider.value + 'px',
+          titleSize: offerTitleSizeSlider.value + 'px',
+          priceSize: offerPriceSizeSlider.value + 'px',
+          padding: offerPaddingSlider.value + 'px',
+          bgColor: offerBgColor.value
+        },
+        createOffer: {
+          width: createOfferWidthSlider.value + 'px',
+          height: createOfferHeightSelect.value,
+          fontSize: createOfferFontSizeSlider.value + 'px',
+          titleSize: createOfferTitleSizeSlider.value + 'px',
+          priceSize: createOfferPriceSizeSlider.value + 'px',
+          imageHeight: createOfferImageHeightSlider.value + 'px',
+          padding: createOfferPaddingSlider.value + 'px',
+          bgColor: createOfferBgColor.value
+        }
+      };
+      
+      localStorage.setItem('card-settings', JSON.stringify(settings));
+      
+      // Re-render all cards to apply new settings
+      renderProducts();
+      renderOffers();
+      renderCreateOfferProducts();
+      
+      showToast('تم حفظ إعدادات البطاقات بنجاح', 'success');
+    });
+    
+    // Initialize previews
+    updateProductPreview();
+    updateOfferPreview();
+    updateCreateOfferPreview();
+  }
+  
+  // Call setup function when card settings tab is opened
+  setupCardSettings();
 }
-
+function loadCardSettings() {
+  // Load saved settings from localStorage
+  const savedSettings = localStorage.getItem('card-settings');
+  if (savedSettings) {
+    const settings = JSON.parse(savedSettings);
+    
+    // Apply product card settings
+    if (settings.product) {
+      document.getElementById('product-card-width-slider').value = parseInt(settings.product.width);
+      document.getElementById('product-card-height-select').value = settings.product.height;
+      document.getElementById('product-font-size-slider').value = parseInt(settings.product.fontSize);
+      document.getElementById('product-title-size-slider').value = parseInt(settings.product.titleSize);
+      document.getElementById('product-price-size-slider').value = parseInt(settings.product.priceSize);
+      document.getElementById('product-image-height-slider').value = parseInt(settings.product.imageHeight);
+      document.getElementById('product-padding-slider').value = parseInt(settings.product.padding);
+      document.getElementById('product-bg-color').value = settings.product.bgColor;
+      
+      // Update CSS variables
+      document.documentElement.style.setProperty('--product-card-width', settings.product.width);
+      document.documentElement.style.setProperty('--product-card-height', settings.product.height);
+      document.documentElement.style.setProperty('--product-card-font-size', settings.product.fontSize);
+      document.documentElement.style.setProperty('--product-card-title-size', settings.product.titleSize);
+      document.documentElement.style.setProperty('--product-card-price-size', settings.product.priceSize);
+      document.documentElement.style.setProperty('--product-card-image-height', settings.product.imageHeight);
+      document.documentElement.style.setProperty('--product-card-padding', settings.product.padding);
+    }
+    
+    // Apply offer card settings
+    if (settings.offer) {
+      document.getElementById('offer-card-width-slider').value = parseInt(settings.offer.width);
+      document.getElementById('offer-card-height-slider').value = parseInt(settings.offer.height);
+      document.getElementById('offer-font-size-slider').value = parseInt(settings.offer.fontSize);
+      document.getElementById('offer-title-size-slider').value = parseInt(settings.offer.titleSize);
+      document.getElementById('offer-price-size-slider').value = parseInt(settings.offer.priceSize);
+      document.getElementById('offer-padding-slider').value = parseInt(settings.offer.padding);
+      document.getElementById('offer-bg-color').value = settings.offer.bgColor;
+      
+      // Update CSS variables
+      document.documentElement.style.setProperty('--offer-card-width', settings.offer.width);
+      document.documentElement.style.setProperty('--offer-card-height', settings.offer.height);
+      document.documentElement.style.setProperty('--offer-card-font-size', settings.offer.fontSize);
+      document.documentElement.style.setProperty('--offer-card-title-size', settings.offer.titleSize);
+      document.documentElement.style.setProperty('--offer-card-price-size', settings.offer.priceSize);
+      document.documentElement.style.setProperty('--offer-card-padding', settings.offer.padding);
+    }
+    
+    // Apply create offer card settings
+    if (settings.createOffer) {
+      document.getElementById('create-offer-card-width-slider').value = parseInt(settings.createOffer.width);
+      document.getElementById('create-offer-card-height-select').value = settings.createOffer.height;
+      document.getElementById('create-offer-font-size-slider').value = parseInt(settings.createOffer.fontSize);
+      document.getElementById('create-offer-title-size-slider').value = parseInt(settings.createOffer.titleSize);
+      document.getElementById('create-offer-price-size-slider').value = parseInt(settings.createOffer.priceSize);
+      document.getElementById('create-offer-image-height-slider').value = parseInt(settings.createOffer.imageHeight);
+      document.getElementById('create-offer-padding-slider').value = parseInt(settings.createOffer.padding);
+      document.getElementById('create-offer-bg-color').value = settings.createOffer.bgColor;
+      
+      // Update CSS variables
+      document.documentElement.style.setProperty('--create-offer-card-width', settings.createOffer.width);
+      document.documentElement.style.setProperty('--create-offer-card-height', settings.createOffer.height);
+      document.documentElement.style.setProperty('--create-offer-card-font-size', settings.createOffer.fontSize);
+      document.documentElement.style.setProperty('--create-offer-card-title-size', settings.createOffer.titleSize);
+      document.documentElement.style.setProperty('--create-offer-card-price-size', settings.createOffer.priceSize);
+      document.documentElement.style.setProperty('--create-offer-card-image-height', settings.createOffer.imageHeight);
+      document.documentElement.style.setProperty('--create-offer-card-padding', settings.createOffer.padding);
+    }
+  }
+}
 async function adminLoadProducts(){
   try{
     const adminRoot = document.getElementById('adminPage');
@@ -1108,7 +1911,6 @@ async function adminLoadProducts(){
     return data;
   }catch(e){ console.error(e); showToast('فشل تحميل المنتجات: '+e.message,'error'); return []; }
 }
-
 async function adminLoadOffers(){
   try{
     const adminRoot = document.getElementById('adminPage');
@@ -1171,7 +1973,6 @@ async function adminLoadOffers(){
     return data;
   }catch(e){ console.error(e); showToast('فشل تحميل العروض: '+e.message,'error'); return []; }
 }
-
 /* suggestions */
 async function adminLoadSuggestions(){
   try{
@@ -1207,7 +2008,6 @@ async function adminLoadSuggestions(){
     });
   }catch(e){ console.error(e); showToast('فشل تحميل الاقتراحات: '+e.message,'error'); }
 }
-
 /* navigation */
 function navigateTo(section){
   document.getElementById('home').style.display='none';
@@ -1225,7 +2025,6 @@ function navigateTo(section){
     else{ adminShowLogin(); }
   }
 }
-
 /* deep link */
 function handleDeepLink(){
   if(deepLinkHandled) return;
@@ -1242,33 +2041,64 @@ function handleDeepLink(){
   if(pid && products.length){ navigateTo('home'); setTimeout(()=>{ openViewerById(pid,0); cleanAndLock('#home'); },180); }
   else if(oid && offers.length){ navigateTo('offers'); setTimeout(()=>{ const el = document.querySelector('.offer-card[data-offer-id="'+oid+'"]'); if(el) el.scrollIntoView({behavior:'smooth',block:'start'}); cleanAndLock('#offers'); },180); }
 }
-
 /* admin bootstrap */
 async function adminBootstrap(){
   try{
-    adminBootstrapped = true; showToast('جاري تحميل بيانات لوحة التحكم...','info');
+    adminBootstrapped = true; 
     await Promise.all([adminLoadProducts(), adminLoadOffers()]);
-    showToast('تم تحميل بيانات لوحة التحكم بنجاح','success');
   }catch(e){ console.error(e); showToast('فشل تحميل بيانات لوحة التحكم: '+e.message,'error'); }
 }
-
 /* init */
 async function init(){
   try{
-    showToast('جاري تحميل المتجر...','info');
+    // تحميل إعدادات البطاقات من التخزين المحلي
+    loadCardSettings();
+    
+    // تهيئة الاتصال بقاعدة البيانات بدون رسائل
     supabaseClient = await initSupabase();
+    
+    // تحميل البيانات من التخزين المحلي
     cart = JSON.parse(localStorage.getItem('my_cart_v_final2')||'[]');
+    
+    // تحميل جميع البيانات بشكل متوازٍ بدون رسائل تحميل
     await Promise.all([fetchProducts(), fetchOffers()]);
+    
+    // تحديث واجهة السلة
     renderCartModal(); updateSticker();
-
+    
+    // إعداد مستمعي الأحداث
     const orderStickerEl = document.getElementById('orderSticker');
     const closeCartModal = document.getElementById('closeCartModal');
     const cartClearBtn = document.getElementById('cartClearBtn');
     const cartOrderBtn = document.getElementById('cartOrderBtn');
-
-    if(orderStickerEl){ orderStickerEl.addEventListener('click', function(){ renderCartModal(); cartModal.classList.add('active'); cartModal.setAttribute('aria-hidden','false'); toggleBodyScroll(true); }); }
-    if(closeCartModal){ closeCartModal.addEventListener('click', function(){ cartModal.classList.remove('active'); cartModal.setAttribute('aria-hidden','true'); toggleBodyScroll(false); }); }
-    if(cartClearBtn){ cartClearBtn.addEventListener('click', function(){ if(!confirm('هل تريد تفريغ السلة؟')) return; cart=[]; saveCart(); renderCartModal(); showToast('تم تفريغ السلة','success'); }); }
+    
+    if(orderStickerEl){ 
+      orderStickerEl.addEventListener('click', function(){ 
+        renderCartModal(); 
+        cartModal.classList.add('active'); 
+        cartModal.setAttribute('aria-hidden','false'); 
+        toggleBodyScroll(true); 
+      }); 
+    }
+    
+    if(closeCartModal){ 
+      closeCartModal.addEventListener('click', function(){ 
+        cartModal.classList.remove('active'); 
+        cartModal.setAttribute('aria-hidden','true'); 
+        toggleBodyScroll(false); 
+      }); 
+    }
+    
+    if(cartClearBtn){ 
+      cartClearBtn.addEventListener('click', function(){ 
+        if(!confirm('هل تريد تفريغ السلة؟')) return; 
+        cart=[]; 
+        saveCart(); 
+        renderCartModal(); 
+        showToast('تم تفريغ السلة','success'); 
+      }); 
+    }
+    
     if(cartOrderBtn){
       cartOrderBtn.addEventListener('click', function(){
         if(cart.length===0){ alert('السلة فارغة'); return; }
@@ -1281,7 +2111,7 @@ async function init(){
         window.open(url,'_blank');
       });
     }
-
+    
     const suggestionSubmit = document.getElementById('suggestion-submit');
     if(suggestionSubmit){
       suggestionSubmit.addEventListener('click', async function(){
@@ -1289,48 +2119,77 @@ async function init(){
         const description = document.getElementById('suggestion-desc').value.trim();
         const suggested_by = document.getElementById('suggestion-by').value.trim();
         if(!name){ showToast('الرجاء إدخال اسم المنتج المقترح','error'); return; }
-        const originalBtnText = suggestionSubmit.textContent; suggestionSubmit.innerHTML='<div class="loading-spinner"></div> جاري الإرسال...'; suggestionSubmit.disabled=true;
+        const originalBtnText = suggestionSubmit.textContent; 
+        suggestionSubmit.innerHTML='<div class="loading-spinner"></div> جاري الإرسال...'; 
+        suggestionSubmit.disabled=true;
         try{
           const suggestion = { name, description, suggested_by, created_at:new Date().toISOString() };
           const { error } = await supabaseClient.from('product_suggestions').insert([suggestion]).select();
-          suggestionSubmit.innerHTML=originalBtnText; suggestionSubmit.disabled=false;
+          suggestionSubmit.innerHTML=originalBtnText; 
+          suggestionSubmit.disabled=false;
           if(error){ console.error(error); showToast('فشل إرسال الاقتراح: '+error.message,'error'); return; }
           document.getElementById('suggestion-success').style.display='block';
-          document.getElementById('suggestion-name').value=''; document.getElementById('suggestion-desc').value=''; document.getElementById('suggestion-by').value='';
+          document.getElementById('suggestion-name').value=''; 
+          document.getElementById('suggestion-desc').value=''; 
+          document.getElementById('suggestion-by').value='';
           setTimeout(()=>{ document.getElementById('suggestion-success').style.display='none'; },5000);
           showToast('تم إرسال اقتراحك بنجاح','success');
-        }catch(e){ console.error(e); suggestionSubmit.innerHTML=originalBtnText; suggestionSubmit.disabled=false; showToast('فشل إرسال الاقتراح: '+e.message,'error'); }
+        }catch(e){ 
+          console.error(e); 
+          suggestionSubmit.innerHTML=originalBtnText; 
+          suggestionSubmit.disabled=false; 
+          showToast('فشل إرسال الاقتراح: '+e.message,'error'); 
+        }
       });
     }
+    
     createOfferBtn.addEventListener('click', sendSelectedProductsToWhatsApp);
-
+    
     const refreshProductsBtn = document.getElementById('refresh-products');
     if(refreshProductsBtn){
       refreshProductsBtn.addEventListener('click', async function(){
-        showToast('جاري تحديث المنتجات...','info');
-        const originalBtnText=refreshProductsBtn.textContent; refreshProductsBtn.innerHTML='<div class="loading-spinner"></div> جاري التحديث...'; refreshProductsBtn.disabled=true;
-        try{ await Promise.all([adminLoadProducts(), adminLoadOffers(), fetchProducts(), fetchOffers()]); refreshProductsBtn.innerHTML=originalBtnText; refreshProductsBtn.disabled=false; showToast('تم تحديث البيانات بنجاح','success'); }
-        catch(e){ console.error(e); refreshProductsBtn.innerHTML=originalBtnText; refreshProductsBtn.disabled=false; showToast('فشل تحديث البيانات: '+e.message,'error'); }
+        const originalBtnText=refreshProductsBtn.textContent; 
+        refreshProductsBtn.innerHTML='<div class="loading-spinner"></div> جاري التحديث...'; 
+        refreshProductsBtn.disabled=true;
+        try{ 
+          await Promise.all([adminLoadProducts(), adminLoadOffers(), fetchProducts(), fetchOffers()]); 
+          refreshProductsBtn.innerHTML=originalBtnText; 
+          refreshProductsBtn.disabled=false; 
+          showToast('تم تحديث البيانات بنجاح','success'); 
+        }
+        catch(e){ 
+          console.error(e); 
+          refreshProductsBtn.innerHTML=originalBtnText; 
+          refreshProductsBtn.disabled=false; 
+          showToast('فشل تحديث البيانات: '+e.message,'error'); 
+        }
       });
     }
+    
+    // معالجة الروابط العميقة بعد تحميل جميع البيانات
     setTimeout(handleDeepLink, 500);
-    showToast('تم تحميل المتجر بنجاح','success');
-  }catch(error){ console.error('خطأ في التهيئة:', error); showToast('حدث خطأ أثناء تحميل المتجر: '+error.message,'error'); }
+  }catch(error){ 
+    console.error('خطأ في التهيئة:', error); 
+    showToast('حدث خطأ أثناء تحميل المتجر: '+error.message,'error'); 
+  }
 }
-
 document.addEventListener('DOMContentLoaded', init);
 window.addEventListener('hashchange', handleDeepLink);
 window.addEventListener('popstate', handleDeepLink);
-
 /* nav clicks */
 document.getElementById('nav-home').addEventListener('click', e=>{ e.preventDefault(); navigateTo('home'); });
 document.getElementById('nav-offers').addEventListener('click', e=>{ e.preventDefault(); navigateTo('offers'); });
 document.getElementById('nav-create').addEventListener('click', e=>{ e.preventDefault(); navigateTo('create'); });
 document.getElementById('nav-admin').addEventListener('click', e=>{ e.preventDefault(); navigateTo('admin'); });
-
 /* Keyboard */
 document.addEventListener('keydown', function(e){
-  if(e.key==='Escape'){ closeViewer(); cartModal.classList.remove('active'); document.getElementById('cartModal').setAttribute('aria-hidden','true'); closeMiniDetail(); toggleBodyScroll(false); }
+  if(e.key==='Escape'){ 
+    closeViewer(); 
+    cartModal.classList.remove('active'); 
+    document.getElementById('cartModal').setAttribute('aria-hidden','true'); 
+    closeMiniDetail(); 
+    toggleBodyScroll(false); 
+  }
   if(document.getElementById('imgViewer').classList.contains('active')){
     if(e.key==='ArrowLeft') document.getElementById('viewerPrev').click();
     else if(e.key==='ArrowRight') document.getElementById('viewerNext').click();
