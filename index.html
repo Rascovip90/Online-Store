@@ -2213,7 +2213,47 @@ async function init(){
     showToast('حدث خطأ أثناء تحميل المتجر: '+error.message,'error'); 
   }
 }
+// إضافة هذه الدالة في بداية الكود
+function observeOffers() {
+  const observer = new IntersectionObserver((entries) => {
+    entries.forEach(entry => {
+      if (entry.isIntersecting) {
+        // إذا كان العرض مرئيًا، نقوم بتحديثه تلقائيًا
+        const offerElement = entry.target;
+        const offerId = offerElement.dataset.offerId;
+        
+        // تحقق من وجود العرض في قاعدة البيانات
+        const offer = offers.find(o => o.id === Number(offerId));
+        if (offer) {
+          // تحديث محتوى العرض هنا
+          updateOfferContent(offerId);
+        }
+      }
+    });
+  }, { threshold: 0.1 });
 
+  // مراقبة جميع العروض
+  document.querySelectorAll('#offersGrid .offer-card').forEach(offer => {
+    observer.observe(offer);
+  });
+}
+
+// دالة لتحديث محتوى العرض
+function updateOfferContent(offerId) {
+  // هنا يمكنك استدعاء بيانات العرض من قاعدة البيانات
+  // واستبدال محتوى العرض في DOM
+  
+  // مثال بسيط لتحديث محتوى العرض
+  const offerElement = document.querySelector(`#offersGrid .offer-card[data-offer-id="${offerId}"]`);
+  if (offerElement) {
+    offerElement.style.opacity = '0.7';
+    
+    // استدعاء بيانات العرض من الخلفية
+    setTimeout(() => {
+      offerElement.style.opacity = '1';
+    }, 500);
+  }
+}
 document.addEventListener('DOMContentLoaded', init);
 window.addEventListener('hashchange', handleDeepLink);
 window.addEventListener('popstate', handleDeepLink);
