@@ -958,7 +958,7 @@ let selectedProductsForOffer = [];
 let supabaseClient = null;
 // متغيرات لتحديث العروض تلقائياً
 let lastOffersFetchTime = 0;
-const OFFERS_FETCH_INTERVAL = 0.4; // دقيقة واحدة بالمللي ثانية
+const OFFERS_FETCH_INTERVAL = 60000; // دقيقة واحدة بالمللي ثانية
 /* init supabase */
 async function initSupabase() {
   try {
