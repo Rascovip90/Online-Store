@@ -8,10 +8,10 @@
 <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
 <style>
 :root{
-  --primary:#6d28d9;         /* violet-700 */
-  --primary-dark:#5b21b6;    /* violet-800 */
-  --secondary:#06b6d4;       /* cyan-500 */
-  --accent:#f97316;          /* orange-500 */
+  --primary:#008080;        /* green-600 */
+  --primary-dark:#000000;   /* green-700 */
+  --secondary:#10b981;      /* emerald-500 */
+  --accent:#f59e0b;         /* amber-500 */
   --danger:#ef4444;
   --bg:#f6f7fb;
   --card:#ffffff;
@@ -956,6 +956,9 @@ let editingProductId = null;
 let deepLinkHandled = false;
 let selectedProductsForOffer = [];
 let supabaseClient = null;
+// متغيرات لتحديث العروض تلقائياً
+let lastOffersFetchTime = 0;
+const OFFERS_FETCH_INTERVAL = 0.4; // دقيقة واحدة بالمللي ثانية
 /* init supabase */
 async function initSupabase() {
   try {
@@ -1099,6 +1102,9 @@ async function fetchOffers(){
       desc:o.description||''
     }));
     renderOffers(); 
+    
+    // تحديث وقت آخر تحديث للعروض
+    lastOffersFetchTime = Date.now();
   }catch(e){
     console.error(e); 
     offersGrid.innerHTML = '<div class="empty-state"><h3>حدث خطأ</h3><p>لم نتمكن من تحميل العروض. الرجاء المحاولة مرة أخرى.</p><button class="btn-3d" onclick="fetchOffers()">إعادة المحاولة</button></div>';
@@ -1230,7 +1236,6 @@ function renderCreateOfferProducts(){
     });
   });
 }
-
 function checkIfCreateTextNeedsMore(productId){
   const desc = document.getElementById('create-desc-'+productId);
   const btn = document.getElementById('create-more-'+productId);
@@ -1238,7 +1243,6 @@ function checkIfCreateTextNeedsMore(productId){
   // جعل الزر ظاهراً دائماً بغض النظر عن طول النص
   btn.classList.add('show');
 }
-
 function toggleCreateDescription(productId){
   const desc = document.getElementById('create-desc-'+productId);
   const btn = document.getElementById('create-more-'+productId);
@@ -1252,7 +1256,6 @@ function toggleCreateDescription(productId){
     btn.textContent='أقل ↑'; 
   }
 }
-
 function toggleProductSelection(productId){
   const index = selectedProductsForOffer.findIndex(p=> p.id===productId);
   if(index>-1) selectedProductsForOffer.splice(index,1);
@@ -1478,6 +1481,8 @@ function ensureAdminInitialized(){
         if(offerIndex>-1 && data && data.length>0){
           offers[offerIndex]={id:data[0].id,name:data[0].name,price:Number(data[0].price)||0,products_ids:Array.isArray(data[0].products_ids)?data[0].products_ids:[],desc:data[0].description||'',images:data[0].images||[]};
           renderOffers();
+          // تحديث العروض في الواجهة الرئيسية
+          fetchOffers();
         }
         msgAddOffer.textContent='✅ تم حفظ تعديل العرض بنجاح'; msgAddOffer.className='msg ok'; msgAddOffer.style.display='block'; editingOfferId=null; btnAddOffer.textContent='حفظ العرض';
       }else{
@@ -1488,6 +1493,9 @@ function ensureAdminInitialized(){
           offers.unshift({id:data[0].id,name:data[0].name,price:Number(data[0].price)||0,products_ids:Array.isArray(data[0].products_ids)?data[0].products_ids:[],desc:data[0].description||'',images:data[0].images||[]});
           renderOffers();
           msgAddOffer.textContent='✅ تم إضافة العرض بنجاح'; msgAddOffer.className='msg ok'; msgAddOffer.style.display='block';
+          
+          // تحديث العروض في الواجهة الرئيسية
+          fetchOffers();
         }else{
           console.error('لم يتم إرجاع بيانات العرض'); msgAddOffer.textContent='⚠️ تم الإضافة لكن يجب تحديث الصفحة'; msgAddOffer.className='msg ok'; msgAddOffer.style.display='block';
         }
@@ -1860,7 +1868,6 @@ function loadCardSettings() {
     }
   }
 }
-
 async function adminLoadProducts(){
   try{
     const adminRoot = document.getElementById('adminPage');
@@ -1945,7 +1952,6 @@ async function adminLoadProducts(){
     return data;
   }catch(e){ console.error(e); showToast('فشل تحميل المنتجات: '+e.message,'error'); return []; }
 }
-
 async function adminLoadOffers(){
   try{
     const adminRoot = document.getElementById('adminPage');
@@ -2008,7 +2014,6 @@ async function adminLoadOffers(){
     return data;
   }catch(e){ console.error(e); showToast('فشل تحميل العروض: '+e.message,'error'); return []; }
 }
-
 /* suggestions */
 async function adminLoadSuggestions(){
   try{
@@ -2044,7 +2049,6 @@ async function adminLoadSuggestions(){
     });
   }catch(e){ console.error(e); showToast('فشل تحميل الاقتراحات: '+e.message,'error'); }
 }
-
 /* navigation */
 function navigateTo(section){
   document.getElementById('home').style.display='none';
@@ -2052,17 +2056,42 @@ function navigateTo(section){
   document.getElementById('create').style.display='none';
   document.getElementById('adminPage').style.display='none';
   document.querySelectorAll('nav a').forEach(a=> a.classList.remove('active'));
-  if(section==='home'){ document.getElementById('home').style.display='block'; document.getElementById('nav-home').classList.add('active'); window.location.hash='#home'; }
-  else if(section==='offers'){ document.getElementById('offers').style.display='block'; document.getElementById('nav-offers').classList.add('active'); window.location.hash='#offers'; }
-  else if(section==='create'){ document.getElementById('create').style.display='block'; document.getElementById('nav-create').classList.add('active'); window.location.hash='#create'; }
+  if(section==='home'){ 
+    document.getElementById('home').style.display='block'; 
+    document.getElementById('nav-home').classList.add('active'); 
+    window.location.hash='#home'; 
+  }
+  else if(section==='offers'){ 
+    document.getElementById('offers').style.display='block'; 
+    document.getElementById('nav-offers').classList.add('active'); 
+    window.location.hash='#offers';
+    
+    // تحديث العروض فقط إذا مر أكثر من دقيقة منذ آخر تحديث
+    const now = Date.now();
+    if (now - lastOffersFetchTime > OFFERS_FETCH_INTERVAL) {
+      fetchOffers();
+      lastOffersFetchTime = now;
+    }
+  }
+  else if(section==='create'){ 
+    document.getElementById('create').style.display='block'; 
+    document.getElementById('nav-create').classList.add('active'); 
+    window.location.hash='#create'; 
+  }
   else if(section==='admin'){
-    document.getElementById('adminPage').style.display='block'; document.getElementById('nav-admin').classList.add('active'); window.location.hash='#admin';
+    document.getElementById('adminPage').style.display='block'; 
+    document.getElementById('nav-admin').classList.add('active'); 
+    window.location.hash='#admin';
     ensureAdminInitialized();
-    if(sessionStorage.getItem('adminAuth')==='true'){ adminHideLogin(); if(!adminBootstrapped) adminBootstrap(); }
-    else{ adminShowLogin(); }
+    if(sessionStorage.getItem('adminAuth')==='true'){ 
+      adminHideLogin(); 
+      if(!adminBootstrapped) adminBootstrap(); 
+    }
+    else{ 
+      adminShowLogin(); 
+    }
   }
 }
-
 /* deep link */
 function handleDeepLink(){
   if(deepLinkHandled) return;
@@ -2079,7 +2108,6 @@ function handleDeepLink(){
   if(pid && products.length){ navigateTo('home'); setTimeout(()=>{ openViewerById(pid,0); cleanAndLock('#home'); },180); }
   else if(oid && offers.length){ navigateTo('offers'); setTimeout(()=>{ const el = document.querySelector('.offer-card[data-offer-id="'+oid+'"]'); if(el) el.scrollIntoView({behavior:'smooth',block:'start'}); cleanAndLock('#offers'); },180); }
 }
-
 /* admin bootstrap */
 async function adminBootstrap(){
   try{
@@ -2087,7 +2115,6 @@ async function adminBootstrap(){
     await Promise.all([adminLoadProducts(), adminLoadOffers()]);
   }catch(e){ console.error(e); showToast('فشل تحميل بيانات لوحة التحكم: '+e.message,'error'); }
 }
-
 /* init */
 async function init(){
   try{
@@ -2231,13 +2258,11 @@ function observeOffers() {
       }
     });
   }, { threshold: 0.1 });
-
   // مراقبة جميع العروض
   document.querySelectorAll('#offersGrid .offer-card').forEach(offer => {
     observer.observe(offer);
   });
 }
-
 // دالة لتحديث محتوى العرض
 function updateOfferContent(offerId) {
   // هنا يمكنك استدعاء بيانات العرض من قاعدة البيانات
@@ -2257,13 +2282,11 @@ function updateOfferContent(offerId) {
 document.addEventListener('DOMContentLoaded', init);
 window.addEventListener('hashchange', handleDeepLink);
 window.addEventListener('popstate', handleDeepLink);
-
 /* nav clicks */
 document.getElementById('nav-home').addEventListener('click', e=>{ e.preventDefault(); navigateTo('home'); });
 document.getElementById('nav-offers').addEventListener('click', e=>{ e.preventDefault(); navigateTo('offers'); });
 document.getElementById('nav-create').addEventListener('click', e=>{ e.preventDefault(); navigateTo('create'); });
 document.getElementById('nav-admin').addEventListener('click', e=>{ e.preventDefault(); navigateTo('admin'); });
-
 /* Keyboard */
 document.addEventListener('keydown', function(e){
   if(e.key==='Escape'){ 
