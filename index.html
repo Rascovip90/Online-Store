@@ -93,7 +93,6 @@ main{padding:16px;max-width:1200px;margin:20px auto}
   text-align: center;
   min-height: var(--product-card-height);
 }
-
 .product-card .img-box{
   width: 100%;
   height: var(--product-card-image-height);
@@ -103,7 +102,6 @@ main{padding:16px;max-width:1200px;margin:20px auto}
   position: relative;
   order: 1; /* الصورة أولاً */
 }
-
 .product-card .img-box img{
   width: 100%;
   height: 100%;
@@ -111,14 +109,12 @@ main{padding:16px;max-width:1200px;margin:20px auto}
   display: block;
   cursor: pointer;
 }
-
 .card h4{
   margin: 8px 0 4px;
   font-size: var(--product-card-title-size);
   font-weight: 800;
   order: 2; /* العنوان ثانياً (تحت الصورة) */
 }
-
 .card p.desc{
   font-size: var(--product-card-font-size);
   color: var(--text-secondary);
@@ -129,20 +125,17 @@ main{padding:16px;max-width:1200px;margin:20px auto}
   min-height: 3.2em;
   order: 3; /* الوصف ثالثاً */
 }
-
 .card p.desc.expanded{
   -webkit-line-clamp: unset;
   overflow: visible;
 }
-
 .card p.price{
-  color: var(--primary);
+  color: var(--danger) !important; /* اللون الأحمر */
   font-weight: 800;
   margin: 6px 0;
   font-size: var(--product-card-price-size);
   order: 4; /* السعر رابعاً */
 }
-
 .product-card .btn-row{
   display: flex;
   gap: 8px;
@@ -151,7 +144,6 @@ main{padding:16px;max-width:1200px;margin:20px auto}
   margin-top: 8px;
   order: 5; /* الأزرار خامساً */
 }
-
 .product-card .thumbs{
   display: flex;
   gap: 8px;
@@ -160,7 +152,6 @@ main{padding:16px;max-width:1200px;margin:20px auto}
   margin-top: 8px;
   order: 6; /* الصور المصغرة سادساً */
 }
-
 .card .add-btn{background:var(--primary);color:#fff;border:0;padding:10px 14px;border-radius:12px;cursor:pointer;font-weight:700;box-shadow:var(--shadow);transition:all 0.2s ease}
 .card .add-btn:hover{background:var(--primary-dark);transform:translateY(-2px)}
 .badge-new{position:absolute;top:12px;left:12px;background:#fff;color:var(--accent);padding:6px 10px;border-radius:8px;font-weight:800;font-size:12px;border:1px solid var(--accent);box-shadow:var(--shadow)}
@@ -178,25 +169,23 @@ main{padding:16px;max-width:1200px;margin:20px auto}
   transition: all 0.3s ease;
   order: 3; /* نفس ترتيب الوصف */
 }
-
 .card .more-btn:hover{
   background: var(--primary);
   color: white;
 }
-
 .card .more-btn.show{
   display: inline-block;
 }
 /* Offers */
-.offers-stack{display:grid;grid-template-columns:repeat(auto-fill,minmax(var(--offer-card-width),1fr));gap:20px;align-items:stretch}
-.offer-card{display:grid;grid-template-rows:auto auto 1fr;gap:12px;height:var(--offer-card-height);overflow:hidden;padding:var(--offer-card-padding)}
+.offers-stack{display:grid;grid-template-columns:repeat(auto-fill,minmax(300px,1fr));gap:20px;align-items:stretch}
+.offer-card{display:flex;flex-direction:column;height:auto;min-height:380px;max-height:none;overflow:visible;padding:var(--offer-card-padding)}
 .offer-card .header{display:flex;justify-content:space-between;align-items:center}
 .offer-card .offer-desc{font-size:var(--offer-card-font-size);color:var(--text-secondary);display:-webkit-box;-webkit-line-clamp:3;-webkit-box-orient:vertical;overflow:hidden}
 .offer-card h3{font-size:var(--offer-card-title-size)}
-.offer-card .price-text{font-size:var(--offer-card-price-size)}
+.offer-card .price-text{color:var(--danger) !important;font-size:var(--offer-card-price-size)}
 /* mini-cards inside offers */
 .mini-grid{display:flex;gap:10px;align-items:center;justify-content:flex-start;flex-wrap:nowrap;overflow:auto;padding:8px;max-width:100%}
-#offersGrid .mini-grid{flex-wrap:wrap;overflow:hidden;padding:8px 0;align-content:flex-start}
+#offersGrid .mini-grid{flex-wrap:wrap;overflow:visible;padding:8px 0;align-content:flex-start;justify-content:center}
 /* dynamic sizes for mini-cards */
 .mini-card{background:var(--card);border-radius:10px;border:1px solid var(--border);padding:10px;text-align:center;display:flex;flex-direction:column;align-items:center;gap:8px;flex-shrink:0;transition:all 0.3s ease;cursor:pointer}
 .mini-card:hover{transform:scale(1.05);box-shadow:var(--shadow)}
@@ -224,11 +213,12 @@ main{padding:16px;max-width:1200px;margin:20px auto}
 .cart-item img{width:56px;height:56px;object-fit:cover;border-radius:10px}
 .cart-item .meta{flex:1;text-align:right}
 .cart-item .meta .name{font-weight:800}
+.cart-item .meta .sub{color:var(--danger) !important}
 .cart-item .qty{display:flex;gap:8px;align-items:center}
 .cart-item .qty button{background:var(--bg);border:none;padding:8px 10px;border-radius:8px;cursor:pointer;font-weight:700;transition:all 0.2s ease}
 .cart-item .qty button:hover{background:var(--primary);color:white}
 .cart-modal .footer{display:flex;flex-direction:column;gap:12px;padding-top:12px;border-top:1px solid var(--border)}
-.cart-modal .total{font-weight:900;font-size:20px;text-align:left}
+.cart-modal .total{font-weight:900;font-size:20px;text-align:left;color:var(--danger) !important}
 /* buttons */
 .btn-3d{background:var(--primary);color:white;border-radius:12px;padding:10px 16px;border:none;cursor:pointer;font-weight:700;box-shadow:var(--shadow);transition:all 0.2s ease}
 .btn-3d:hover{background:var(--primary-dark);transform:translateY(-2px)}
@@ -259,6 +249,9 @@ main{padding:16px;max-width:1200px;margin:20px auto}
 .mini-detail.active{transform:translateY(0) scale(1);opacity:1}
 .mini-detail .close-x{position:absolute;top:16px;left:16px;background:var(--card);border-radius:10px;padding:8px 10px;border:0;cursor:pointer;box-shadow:var(--shadow);font-size:20px}
 .mini-detail img{width:100%;height:240px;object-fit:cover;border-radius:12px;margin-bottom:12px}
+.mini-detail p[style*="color:var(--primary)"] {
+  color: var(--danger) !important; /* اللون الأحمر */
+}
 /* Admin (scoped) */
 #adminPage{--red:#e11d48;--bg:#f8fafc;--card:#ffffff;--txt:#1e293b;--muted:#64748b;padding:0;max-width:1200px;margin:20px auto}
 #adminPage .admin-header{text-align:center;padding:20px 12px;font-weight:700;font-size:24px;color:var(--primary)}
@@ -417,7 +410,7 @@ main{padding:16px;max-width:1200px;margin:20px auto}
 }
 .preview-card .price {
   font-weight: 700;
-  color: var(--primary);
+  color: var(--danger) !important;
   margin-top: 5px;
 }
 .reset-btn {
@@ -474,6 +467,10 @@ main{padding:16px;max-width:1200px;margin:20px auto}
 .create-offer-section .selected-products h4{margin:0 0 12px;font-size:16px;color:var(--text)}
 .create-offer-section .selected-list{display:flex;flex-wrap:wrap;gap:8px}
 .create-offer-section .selected-item{background:var(--primary);color:white;padding:6px 12px;border-radius:20px;font-size:14px;display:flex;align-items:center;gap:6px}
+.create-offer-section .selected-item .price {
+  color: #ffcccc !important; /* أحمر فاتح على خلفية داكنة */
+  font-weight: bold;
+}
 .create-offer-section .selected-item .remove-btn{cursor:pointer;font-weight:bold}
 .create-offer-section .btn-create-offer{background:var(--accent);color:#fff;border:none;padding:12px 24px;border-radius:12px;cursor:pointer;font-weight:700;font-size:16px;width:100%;transition:all 0.2s ease}
 .create-offer-section .btn-create-offer:hover{background:#d97706;transform:translateY(-2px)}
@@ -490,8 +487,13 @@ main{padding:16px;max-width:1200px;margin:20px auto}
   .img-arrow.right{right:12px}
   .mini-card{width:140px;height:100px}
   .cart-modal{width:94%}
-  .offers-stack{grid-template-columns:repeat(auto-fill,minmax(280px,1fr))}
+  .offers-stack{grid-template-columns:repeat(auto-fill,minmax(250px,1fr))}
   .create-offer-section .products-grid{grid-template-columns:repeat(auto-fill,minmax(150px,1fr))}
+}
+@media (max-width: 768px) {
+  .offers-stack {
+    grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
+  }
 }
 .empty-state{text-align:center;padding:40px 20px;background:var(--bg);border-radius:16px;border:1px dashed var(--border)}
 .empty-state img{width:120px;height:120px;opacity:.5;margin-bottom:16px}
@@ -556,14 +558,12 @@ header{
   .card {
     position: relative;
   }
-
 .share-badge {
   position: absolute;
   top: 0;      /* فوق تمامًا */
   right: -6px; /* يمين */
   z-index: 10;
 }
-
   .badge-new {
     position: absolute;
     top: -8px;
@@ -755,7 +755,7 @@ header{
                   <img src="https://via.placeholder.com/200x140" alt="معاينة">
                   <h5>اسم المنتج</h5>
                   <p>وصف مختصر للمنتج</p>
-                  <div class="price">25.00 ر.ع</div>
+                  <div class="price">25.00 OMR</div>
                 </div>
               </div>
             </div>
@@ -807,7 +807,7 @@ header{
                 <div class="preview-card" id="offer-preview-card" style="width:320px; height:380px;">
                   <h5>اسم العرض</h5>
                   <p>وصف مختصر للعرض</p>
-                  <div class="price">99.00 ر.ع</div>
+                  <div class="price">99.00 OMR</div>
                 </div>
               </div>
             </div>
@@ -869,7 +869,7 @@ header{
                   <img src="https://via.placeholder.com/180x120" alt="معاينة">
                   <h5>اسم المنتج</h5>
                   <p>وصف مختصر</p>
-                  <div class="price">25.00 ر.ع</div>
+                  <div class="price">25.00 OMR</div>
                 </div>
               </div>
             </div>
@@ -913,7 +913,7 @@ header{
   </div>
   <div class="items" id="cartItems"></div>
   <div class="footer">
-    <div class="total">الإجمالي: <span id="cartTotalText">0.00 ر.ع</span></div>
+    <div class="total">الإجمالي: <span id="cartTotalText">0.00 OMR</span></div>
     <div style="display:flex;gap:12px">
       <button id="cartClearBtn" class="btn-3d" style="background:var(--bg);color:var(--text)">إفراغ السلة</button>
       <button id="cartOrderBtn" class="btn-3d" style="background:var(--secondary);color:#fff">اطلب الآن</button>
@@ -926,7 +926,7 @@ header{
     <img id="miniDetailImg" src="" alt="صورة المنتج">
     <h3 id="miniDetailName"></h3>
     <p id="miniDetailDesc" style="color:var(--text-secondary)"></p>
-    <p style="font-weight:900;color:var(--primary)" id="miniDetailPrice"></p>
+    <p style="font-weight:900;color:var(--danger) !important" id="miniDetailPrice"></p>
     <div style="display:flex;gap:10px;justify-content:flex-end">
       <button class="btn-3d" id="miniAddCartBtn">أضف للسلة</button>
       
@@ -1002,7 +1002,7 @@ function showToast(txt, type, ms) {
   setTimeout(()=> toastEl.style.display = 'none', ms);
 }
 function escapeHtml(s){ if(s==null) return ''; return String(s).replace(/[&<>"']/g,m=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[m])); }
-function formatCurrency(v){ return Number(v||0).toFixed(2); }
+function formatCurrency(v){ return Number(v||0).toFixed(2) + ' OMR'; }
 function toggleBodyScroll(lock){ document.body.classList.toggle('no-scroll', !!lock); }
 /* cart */
 function saveCart(){ localStorage.setItem('my_cart_v_final2', JSON.stringify(cart)); }
@@ -1012,7 +1012,7 @@ function updateSticker(){
   stickerCount.textContent = c;
   stickerCount.style.display = c ? 'flex':'none';
   cartCountTop.textContent = c;
-  cartTotalText.textContent = formatCurrency(calculateTotal()) + ' ر.ع';
+  cartTotalText.textContent = formatCurrency(calculateTotal());
 }
 function renderCartModal(){
   const cartItemsEl = document.getElementById('cartItems');
@@ -1030,7 +1030,7 @@ function renderCartModal(){
     row.className='cart-item';
     row.innerHTML =
       '<img src="'+escapeHtml(img)+'" alt="'+escapeHtml(p.name)+'" loading="lazy" decoding="async">'+
-      '<div class="meta"><div class="name">'+escapeHtml(p.name)+'</div><div class="sub">'+formatCurrency(p.price)+' ر.ع × '+ci.qty+'</div></div>'+
+      '<div class="meta"><div class="name">'+escapeHtml(p.name)+'</div><div class="sub">'+formatCurrency(p.price)+' × '+ci.qty+'</div></div>'+
       '<div class="qty">'+
         '<button onclick="changeQty('+ci.id+','+(ci.isOffer?1:0)+',-1)">-</button>'+
         '<span style="min-width:28px;text-align:center">'+ci.qty+'</span>'+
@@ -1126,7 +1126,7 @@ function renderProducts(){
         '<h4>'+escapeHtml(p.name)+'</h4>'+
         '<p class="desc" id="'+descId+'">'+escapeHtml(p.desc||'')+'</p>'+
         '<button class="more-btn" id="'+btnId+'" onclick="toggleDescription('+p.id+')">مزيد ↓</button>'+
-        '<p class="price">'+formatCurrency(p.price)+' ر.ع</p>'+
+        '<p class="price">'+formatCurrency(p.price)+'</p>'+
       '</div>'+
       '<div class="btn-row">'+
         '<button class="add-btn" onclick="addToCartById('+p.id+')">أضف للسلة</button>'+
@@ -1172,7 +1172,7 @@ function renderOffers(){
         '<div class="mini-card '+sizeClass+'" data-prod-id="'+prod.id+'" data-offer-id="'+o.id+'">'+
           '<img src="'+escapeHtml((prod.images&&prod.images[0])||'')+'" alt="'+escapeHtml(prod.name)+'" loading="lazy" decoding="async">'+
           '<div style="font-size:14px;font-weight:800">'+escapeHtml(prod.name)+'</div>'+
-          '<div style="font-size:12px;color:var(--text-secondary);text-decoration:line-through">'+formatCurrency(prod.price)+' ر.ع</div>'+
+          '<div style="font-size:12px;color:var(--text-secondary);text-decoration:line-through">'+formatCurrency(prod.price)+'</div>'+
         '</div>';
       const plus = (idx < count-1) ? '<div class="plus-sep">+</div>' : '';
       return mini + plus;
@@ -1187,7 +1187,7 @@ function renderOffers(){
         '<div><button class="btn-3d" onclick="addOfferToCart('+o.id+')">اطلب الآن</button></div>'+
       '</div>'+
       '<div class="offer-desc">'+escapeHtml(o.desc||'')+'</div>'+
-      '<div style="font-weight:900;color:var(--primary);font-size:18px">السعر: '+formatCurrency(o.price)+' ر.ع</div>'+
+      '<div style="font-weight:900;color:var(--danger);font-size:18px">السعر: '+formatCurrency(o.price)+'</div>'+
       '<div class="mini-grid" style="margin-top:8px">'+miniHtml+'</div>';
     offersGrid.appendChild(card);
   });
@@ -1201,6 +1201,8 @@ function renderCreateOfferProducts(){
   }
   products.filter(p=> p.type==='normal' && !p.disabled).forEach(p=>{
     const main = (p.images||[])[0] || '';
+    const descId = 'create-desc-'+p.id;
+    const btnId = 'create-more-'+p.id;
     const card = document.createElement('div');
     card.className='card product-card';
     card.dataset.productId = p.id;
@@ -1209,18 +1211,48 @@ function renderCreateOfferProducts(){
       '<div class="img-box"><img src="'+escapeHtml(main)+'" class="main-img" alt="'+escapeHtml(p.name)+'" data-id="'+p.id+'" data-index="0" loading="lazy" decoding="async"></div>'+
       '<div class="body">'+
         '<h4>'+escapeHtml(p.name)+'</h4>'+
-        '<p class="desc">'+escapeHtml(p.desc||'')+'</p>'+
-        '<p class="price">'+formatCurrency(p.price)+' ر.ع</p>'+
+        '<p class="desc" id="'+descId+'">'+escapeHtml(p.desc||'')+'</p>'+
+        '<button class="more-btn" id="'+btnId+'" onclick="toggleCreateDescription('+p.id+')">مزيد ↓</button>'+
+        '<p class="price">'+formatCurrency(p.price)+'</p>'+
       '</div>'+
       '<div class="selection-indicator">✓</div>';
     createOfferProducts.appendChild(card);
+    
+    // التحقق من الحاجة لزر "مزيد"
+    setTimeout(() => { checkIfCreateTextNeedsMore(p.id); }, 100);
   });
+  
+  // إضافة مستمعي الأحداث
   document.querySelectorAll('#create-offer-products .product-card').forEach(card=>{
     card.addEventListener('click', function(){
-      const productId = parseInt(this.dataset.productId); toggleProductSelection(productId);
+      const productId = parseInt(this.dataset.productId); 
+      toggleProductSelection(productId);
     });
   });
 }
+
+function checkIfCreateTextNeedsMore(productId){
+  const desc = document.getElementById('create-desc-'+productId);
+  const btn = document.getElementById('create-more-'+productId);
+  if(!desc || !btn) return;
+  // جعل الزر ظاهراً دائماً بغض النظر عن طول النص
+  btn.classList.add('show');
+}
+
+function toggleCreateDescription(productId){
+  const desc = document.getElementById('create-desc-'+productId);
+  const btn = document.getElementById('create-more-'+productId);
+  if(!desc || !btn) return;
+  if(desc.classList.contains('expanded')){ 
+    desc.classList.remove('expanded'); 
+    btn.textContent='مزيد ↓'; 
+  }
+  else { 
+    desc.classList.add('expanded'); 
+    btn.textContent='أقل ↑'; 
+  }
+}
+
 function toggleProductSelection(productId){
   const index = selectedProductsForOffer.findIndex(p=> p.id===productId);
   if(index>-1) selectedProductsForOffer.splice(index,1);
@@ -1238,7 +1270,7 @@ function updateSelectedProductsDisplay(){
   selectedList.innerHTML = '';
   selectedProductsForOffer.forEach(p=>{
     const item = document.createElement('div'); item.className='selected-item';
-    item.innerHTML = `${escapeHtml(p.name)} - ${formatCurrency(p.price)} ر.ع <span class="remove-btn" onclick="removeSelectedProduct(${p.id})">×</span>`;
+    item.innerHTML = `${escapeHtml(p.name)} - <span class="price">${formatCurrency(p.price)}</span> <span class="remove-btn" onclick="removeSelectedProduct(${p.id})">×</span>`;
     selectedList.appendChild(item);
   });
 }
@@ -1247,10 +1279,10 @@ function sendSelectedProductsToWhatsApp(){
   if(selectedProductsForOffer.length===0){ showToast('الرجاء اختيار منتجات أولاً','error'); return; }
   let text = "🛒 *طلب عرض مخصص*\n\n───────────────\n\n";
   selectedProductsForOffer.forEach((p,i)=>{
-    text += `*${i+1}. ${p.name}*\n   - السعر: ${formatCurrency(p.price)} ر.ع\n\n`;
+    text += `*${i+1}. ${p.name}*\n   - السعر: ${formatCurrency(p.price)}\n\n`;
   });
   text += "───────────────\n";
-  text += `*💰 الإجمالي: ${formatCurrency(selectedProductsForOffer.reduce((sum,p)=> sum+p.price,0))} ر.ع*\n\n`;
+  text += `*💰 الإجمالي: ${formatCurrency(selectedProductsForOffer.reduce((sum,p)=> sum+p.price,0))}*\n\n`;
   text += "شكرا لكم لتواصلكم معنا سيتم التواصل معكم قريبا لتأكيد الطلب *شكرًا لثقتكم بمتجرنا!*";
   const url = 'https://wa.me/'+WHATSAPP_NUMBER.replace('+','')+'?text='+encodeURIComponent(text);
   window.open(url,'_blank');
@@ -1299,7 +1331,7 @@ function attachMiniCardHandlers(){
 function openMiniDetail(prodId){
   const p = products.find(pp=> pp.id===prodId);
   if(!p || !Array.isArray(p.images) || p.images.length===0){ showToast('لا توجد صور للعرض','error',1400); return; }
-  miniImg.src = p.images[0]||''; miniName.textContent = p.name||''; miniDesc.textContent = p.desc||''; miniPrice.textContent = formatCurrency(p.price)+' ر.ع';
+  miniImg.src = p.images[0]||''; miniName.textContent = p.name||''; miniDesc.textContent = p.desc||''; miniPrice.textContent = formatCurrency(p.price);
   miniAddCartBtn.onclick = function(){ addToCartById(p.id); showToast('تمت الإضافة للسلة','success'); closeMiniDetail(); };
   miniOverlay.classList.add('active'); setTimeout(()=> miniCardEl.classList.add('active'),20);
   miniOverlay.setAttribute('aria-hidden','false'); toggleBodyScroll(true);
@@ -1316,7 +1348,7 @@ function offerDeepLink(id){ return window.location.origin + window.location.path
 function shareProduct(id){
   const p = products.find(x=> x.id===id); if(!p) return;
   const link = productDeepLink(id);
-  const text = 'شاهد '+p.name+' بسعر '+formatCurrency(p.price)+' ر.ع';
+  const text = 'شاهد '+p.name+' بسعر '+formatCurrency(p.price);
   if(navigator.share){
     navigator.share({title:p.name,text:text,url:link}).catch(()=>{
       navigator.clipboard?.writeText(link).then(()=> showToast('تم نسخ رابط المنتج','success'), ()=> alert(link));
@@ -1328,7 +1360,7 @@ function shareProduct(id){
 function shareOffer(id){
   const o = offers.find(x=> x.id===id); if(!o) return;
   const link = offerDeepLink(id);
-  const text = 'شاهد عرض: '+o.name+' بسعر '+formatCurrency(o.price)+' ر.ع';
+  const text = 'شاهد عرض: '+o.name+' بسعر '+formatCurrency(o.price);
   if(navigator.share){
     navigator.share({title:o.name,text:text,url:link}).catch(()=>{
       navigator.clipboard?.writeText(link).then(()=> showToast('تم نسخ رابط العرض','success'), ()=> alert(link));
@@ -1828,6 +1860,7 @@ function loadCardSettings() {
     }
   }
 }
+
 async function adminLoadProducts(){
   try{
     const adminRoot = document.getElementById('adminPage');
@@ -1842,7 +1875,7 @@ async function adminLoadProducts(){
       const thumb = (Array.isArray(p.images)&&p.images[0])?p.images[0]:'';
       div.innerHTML =
         '<img class="thumb" src="'+escapeHtml(thumb)+'" onerror="this.src=\'\';" alt="" loading="lazy" decoding="async">'+
-        '<div><div style="font-weight:700">'+escapeHtml(p.name)+'</div><div class="muted" style="margin-top:4px">'+formatCurrency(p.price)+' ر.ع</div>'+
+        '<div><div style="font-weight:700">'+escapeHtml(p.name)+'</div><div class="muted" style="margin-top:4px">'+formatCurrency(p.price)+'</div>'+
         '<div class="chips" style="margin-top:8px"><span class="chip '+(p.disabled?'err':'ok')+'">'+(p.disabled?'معطّل':'نشِط')+'</span>'+
         ((p.images||[]).slice(0,3).map((_,i)=> '<span class="chip">صورة '+(i+1)+'</span>').join('')) + '</div></div>'+
         '<div class="flex"><button class="btn-edit" data-action="edit" data-id="'+p.id+'">تعديل</button>'+
@@ -1897,7 +1930,7 @@ async function adminLoadProducts(){
     (data||[]).forEach(p=>{
       const li = document.createElement('div'); li.className='item';
       li.innerHTML = '<img class="thumb" src="'+escapeHtml((p.images||[])[0]||'')+'" onerror="this.src=\'\';" alt="" loading="lazy" decoding="async">'+
-        '<div><div style="font-weight:700">'+escapeHtml(p.name)+'</div><div class="muted">'+formatCurrency(p.price)+' ر.ع</div></div>'+
+        '<div><div style="font-weight:700">'+escapeHtml(p.name)+'</div><div class="muted">'+formatCurrency(p.price)+'</div></div>'+
         '<div class="muted">#'+p.id+'</div>';
       miniHost.appendChild(li);
     });
@@ -1905,13 +1938,14 @@ async function adminLoadProducts(){
     (data||[]).forEach(p=>{
       const row = document.createElement('div'); row.className='p-row';
       row.innerHTML = '<input type="checkbox" class="pick" value="'+p.id+'">'+
-        '<div><div style="font-weight:600">'+escapeHtml(p.name)+'</div><div class="muted" style="font-size:13px">'+formatCurrency(p.price)+' ر.ع</div></div>'+
+        '<div><div style="font-weight:600">'+escapeHtml(p.name)+'</div><div class="muted" style="font-size:13px">'+formatCurrency(p.price)+'</div></div>'+
         '<img class="thumb" src="'+escapeHtml((p.images||[])[0]||'')+'" onerror="this.src=\'\';" alt="" loading="lazy" decoding="async">';
       selHost.appendChild(row);
     });
     return data;
   }catch(e){ console.error(e); showToast('فشل تحميل المنتجات: '+e.message,'error'); return []; }
 }
+
 async function adminLoadOffers(){
   try{
     const adminRoot = document.getElementById('adminPage');
@@ -1926,7 +1960,7 @@ async function adminLoadOffers(){
       const t = (o.images||[])[0]||'';
       div.innerHTML =
         '<img class="thumb" src="'+escapeHtml(t)+'" onerror="this.src=\'\';" alt="" loading="lazy" decoding="async">'+
-        '<div><div style="font-weight:700">'+escapeHtml(o.name)+'</div><div class="muted" style="margin-top:4px">السعر: '+formatCurrency(o.price||0)+' ر.ع</div>'+
+        '<div><div style="font-weight:700">'+escapeHtml(o.name)+'</div><div class="muted" style="margin-top:4px">السعر: '+formatCurrency(o.price||0)+'</div>'+
         '<div class="chips" style="margin-top:8px">'+((o.products_ids||[]).slice(0,4).map((_,i)=> '<span class="chip">منتج '+(i+1)+'</span>').join(''))+'</div></div>'+
         '<div class="flex"><button class="btn-3d" data-action="edit" data-id="'+o.id+'">تعديل</button><button class="btn-del" data-action="delete" data-id="'+o.id+'">حذف</button></div>';
       host.appendChild(div);
@@ -1967,13 +2001,14 @@ async function adminLoadOffers(){
     (data||[]).forEach(o=>{
       const li = document.createElement('div'); li.className='item';
       li.innerHTML = '<img class="thumb" src="'+escapeHtml((o.images||[])[0]||'')+'" onerror="this.src=\'\';" alt="" loading="lazy" decoding="async">'+
-        '<div><div style="font-weight:700">'+escapeHtml(o.name)+'</div><div class="muted">'+formatCurrency(o.price||0)+' ر.ع</div></div>'+
+        '<div><div style="font-weight:700">'+escapeHtml(o.name)+'</div><div class="muted">'+formatCurrency(o.price||0)+'</div></div>'+
         '<div class="muted">#'+o.id+'</div>';
       miniHost.appendChild(li);
     });
     return data;
   }catch(e){ console.error(e); showToast('فشل تحميل العروض: '+e.message,'error'); return []; }
 }
+
 /* suggestions */
 async function adminLoadSuggestions(){
   try{
@@ -2009,6 +2044,7 @@ async function adminLoadSuggestions(){
     });
   }catch(e){ console.error(e); showToast('فشل تحميل الاقتراحات: '+e.message,'error'); }
 }
+
 /* navigation */
 function navigateTo(section){
   document.getElementById('home').style.display='none';
@@ -2026,6 +2062,7 @@ function navigateTo(section){
     else{ adminShowLogin(); }
   }
 }
+
 /* deep link */
 function handleDeepLink(){
   if(deepLinkHandled) return;
@@ -2042,6 +2079,7 @@ function handleDeepLink(){
   if(pid && products.length){ navigateTo('home'); setTimeout(()=>{ openViewerById(pid,0); cleanAndLock('#home'); },180); }
   else if(oid && offers.length){ navigateTo('offers'); setTimeout(()=>{ const el = document.querySelector('.offer-card[data-offer-id="'+oid+'"]'); if(el) el.scrollIntoView({behavior:'smooth',block:'start'}); cleanAndLock('#offers'); },180); }
 }
+
 /* admin bootstrap */
 async function adminBootstrap(){
   try{
@@ -2049,6 +2087,7 @@ async function adminBootstrap(){
     await Promise.all([adminLoadProducts(), adminLoadOffers()]);
   }catch(e){ console.error(e); showToast('فشل تحميل بيانات لوحة التحكم: '+e.message,'error'); }
 }
+
 /* init */
 async function init(){
   try{
@@ -2104,9 +2143,9 @@ async function init(){
       cartOrderBtn.addEventListener('click', function(){
         if(cart.length===0){ alert('السلة فارغة'); return; }
         let text = "🛒 *طلب جديـد*\n\n───────────────\n\n";
-        cart.forEach((c,i)=>{ text += `*${i+1}. ${c.name}*\n   - الكمية: ${c.qty}\n   - السعر: ${formatCurrency(c.price * c.qty)} ر.ع\n\n`; });
+        cart.forEach((c,i)=>{ text += `*${i+1}. ${c.name}*\n   - الكمية: ${c.qty}\n   - السعر: ${formatCurrency(c.price * c.qty)}\n\n`; });
         text += "───────────────\n";
-        text += `*💰 الإجمالي: ${formatCurrency(calculateTotal())} ر.ع*\n\n`;
+        text += `*💰 الإجمالي: ${formatCurrency(calculateTotal())}*\n\n`;
         text += "شكرا لكم لتواصلكم معنا سيتم التواصل معكم قريبا لتأكيد الطلب *شكرًا لثقتكم بمتجرنا!*";
         const url = 'https://wa.me/'+WHATSAPP_NUMBER.replace('+','')+'?text='+encodeURIComponent(text);
         window.open(url,'_blank');
@@ -2174,14 +2213,17 @@ async function init(){
     showToast('حدث خطأ أثناء تحميل المتجر: '+error.message,'error'); 
   }
 }
+
 document.addEventListener('DOMContentLoaded', init);
 window.addEventListener('hashchange', handleDeepLink);
 window.addEventListener('popstate', handleDeepLink);
+
 /* nav clicks */
 document.getElementById('nav-home').addEventListener('click', e=>{ e.preventDefault(); navigateTo('home'); });
 document.getElementById('nav-offers').addEventListener('click', e=>{ e.preventDefault(); navigateTo('offers'); });
 document.getElementById('nav-create').addEventListener('click', e=>{ e.preventDefault(); navigateTo('create'); });
 document.getElementById('nav-admin').addEventListener('click', e=>{ e.preventDefault(); navigateTo('admin'); });
+
 /* Keyboard */
 document.addEventListener('keydown', function(e){
   if(e.key==='Escape'){ 
