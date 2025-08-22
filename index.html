@@ -480,6 +480,82 @@ main{padding:16px;max-width:1200px;margin:20px auto}
 /* Animations used by mini-cards */
 @keyframes vibrate{0%{transform:translate(0)}20%{transform:translate(-1px,1px)}40%{transform:translate(1px,-1px)}60%{transform:translate(-1px,-1px)}80%{transform:translate(1px,1px)}100%{transform:translate(0)}}
 .vibrate{animation:vibrate .7s linear}
+/* ترتيب المنتجات */
+#products-order-container {
+  max-height: 400px;
+  overflow-y: auto;
+  border: 1px solid var(--border);
+  border-radius: 12px;
+  padding: 10px;
+  background: var(--bg);
+}
+
+.order-item {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 12px;
+  margin-bottom: 8px;
+  background: var(--card);
+  border: 1px solid var(--border);
+  border-radius: 12px;
+  cursor: move;
+  transition: all 0.2s ease;
+}
+
+.order-item:hover {
+  box-shadow: var(--shadow);
+  transform: translateY(-2px);
+}
+
+.order-item.dragging {
+  opacity: 0.5;
+  transform: scale(0.95);
+}
+
+.order-item .drag-handle {
+  color: var(--text-secondary);
+  font-size: 20px;
+  cursor: grab;
+}
+
+.order-item .drag-handle:active {
+  cursor: grabbing;
+}
+
+.order-item img {
+  width: 50px;
+  height: 50px;
+  object-fit: cover;
+  border-radius: 8px;
+}
+
+.order-item .order-info {
+  flex: 1;
+}
+
+.order-item .order-name {
+  font-weight: 700;
+  margin-bottom: 4px;
+}
+
+.order-item .order-price {
+  color: var(--danger);
+  font-weight: 600;
+}
+
+.order-item .order-number {
+  background: var(--primary);
+  color: white;
+  width: 28px;
+  height: 28px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-weight: 700;
+  font-size: 14px;
+}
 /* responsive */
 @media (max-width:820px){
   .grid{grid-template-columns:repeat(auto-fill,minmax(160px,1fr))}
@@ -523,7 +599,6 @@ main{padding:16px;max-width:1200px;margin:20px auto}
     grid-template-columns: repeat(auto-fill, minmax(120px, 1fr));
   }
 }
-
 @media (max-width: 480px) {
   .product-card .img-box {
     height: 100px;
@@ -546,7 +621,6 @@ main{padding:16px;max-width:1200px;margin:20px auto}
     font-size: 12px;
   }
 }
-
 .empty-state{text-align:center;padding:40px 20px;background:var(--bg);border-radius:16px;border:1px dashed var(--border)}
 .empty-state img{width:120px;height:120px;opacity:.5;margin-bottom:16px}
 .empty-state h3{margin-bottom:8px;color:var(--text)}
@@ -661,7 +735,10 @@ header{
         <label for="suggestion-by">اسمك أو بريدك الإلكتروني (اختياري)</label>
         <input type="text" id="suggestion-by" placeholder="مثال: علي">
       </div>
-      <button id="suggestion-submit" class="btn-submit">إرسال الاقتراح</button>
+      <div style="display: flex; gap: 12px;">
+        <button id="suggestion-submit" class="btn-submit">إرسال الاقتراح</button>
+        <button id="suggestion-share" class="btn-submit" style="background: var(--secondary);">مشاركة</button>
+      </div>
       <div id="suggestion-success" class="success-message">شكرًا لاقتراحك! سنتواصل معك قريبًا.</div>
     </div>
   </section>
@@ -699,6 +776,13 @@ header{
         <button class="tab" data-tab="card-settings-sec">إعدادات البطاقات</button>
       </div>
       <section id="products-sec" class="section active">
+        <div class="card-settings-container" style="margin-bottom: 20px;">
+          <h3>ترتيب المنتجات</h3>
+          <p style="color: var(--text-secondary); margin-bottom: 15px;">اسحب وأفلت المنتجات لتغيير ترتيب ظهورها في المتجر</p>
+          <div id="products-order-container" class="list"></div>
+          <button id="save-products-order" class="btn-3d" style="margin-top: 15px;">حفظ الترتيب</button>
+        </div>
+        
         <h2>إضافة منتج</h2>
         <div class="grid grid-2">
           <div class="row"><label>اسم المنتج</label><input id="p-name" type="text" placeholder="مثال: ساعة يد"></div>
@@ -1011,6 +1095,8 @@ let supabaseClient = null;
 // متغيرات لتحديث العروض تلقائياً
 let lastOffersFetchTime = 0;
 const OFFERS_FETCH_INTERVAL = 60000; // دقيقة واحدة بالمللي ثانية
+// متغير لتخزين ترتيب المنتجات المؤقت
+let productsOrder = [];
 /* init supabase */
 async function initSupabase() {
   try {
@@ -1124,7 +1210,7 @@ async function fetchProducts(){
     }
     
     if(!supabaseClient) throw new Error("لم يتم تهيئة الاتصال بقاعدة البيانات");
-    const { data, error } = await supabaseClient.from('products').select('*').order('created_at',{ascending:false});
+    const { data, error } = await supabaseClient.from('products').select('*').order('order_index', { ascending: true, nullsFirst: true });
     if(error){ 
       console.error(error); 
       if (productsGrid) {
@@ -1142,7 +1228,7 @@ async function fetchProducts(){
     products = data.map(p=>({
       id:p.id, name:p.name, price:Number(p.price)||0,
       images:Array.isArray(p.images)?p.images:(p.images?String(p.images).split(',').map(s=>s.trim()):[]),
-      desc:p.description||'', type:p.type||'normal', created_at:p.created_at, disabled:!!p.disabled
+      desc:p.description||'', type:p.type||'normal', created_at:p.created_at, disabled:!!p.disabled, order_index: p.order_index
     }));
     renderProducts(); renderCreateOfferProducts(); 
   }catch(e){
@@ -1486,6 +1572,21 @@ function shareOffer(id){
     navigator.clipboard.writeText(link).then(()=> showToast('تم نسخ رابط العرض','success'), ()=> alert(link));
   }else{ prompt('نسخ الرابط:', link); }
 }
+/* دالة لمشاركة رابط قسم الاقتراحات */
+function shareSuggestionSection() {
+  const link = window.location.origin + window.location.pathname + '#home';
+  const text = "ساهم في تطوير متجرنا! اقترح منتجًا جديدًا وشارك في تحسين تجربتنا.";
+  
+  if(navigator.share){
+    navigator.share({title: "اقترح منتجًا", text: text, url: link}).catch(()=>{
+      navigator.clipboard?.writeText(link).then(()=> showToast('تم نسخ الرابط', 'success'), ()=> alert(link));
+    });
+  } else if(navigator.clipboard?.writeText){
+    navigator.clipboard.writeText(link).then(()=> showToast('تم نسخ الرابط', 'success'), ()=> alert(link));
+  } else {
+    prompt('انسخ الرابط:', link);
+  }
+}
 /* image viewer */
 let viewerImgs = [], viewerIndex = 0, viewerProduct = null;
 const imgViewerEl = document.getElementById('imgViewer');
@@ -1533,6 +1634,7 @@ function ensureAdminInitialized(){
       const targetSection = adminRoot.querySelector('#'+t.dataset.tab); if(targetSection) targetSection.classList.add('active');
       if(t.dataset.tab==='suggestions-sec'){ adminLoadSuggestions(); }
       if(t.dataset.tab==='card-settings-sec'){ loadCardSettings(); }
+      if(t.dataset.tab==='products-sec'){ loadProductsOrder(); }
     });
   });
   const adminPass = adminRoot.querySelector('#admin-pass');
@@ -1845,6 +1947,12 @@ function ensureAdminInitialized(){
   
   // Call setup function when card settings tab is opened
   setupCardSettings();
+  
+  // إعداد زر حفظ ترتيب المنتجات
+  const saveOrderBtn = document.getElementById('save-products-order');
+  if (saveOrderBtn) {
+    saveOrderBtn.addEventListener('click', saveProductsOrder);
+  }
 }
 function loadCardSettings() {
   // Load saved settings from localStorage
@@ -1989,7 +2097,7 @@ async function adminLoadProducts(){
     const adminRoot = document.getElementById('adminPage');
     const host = adminRoot.querySelector('#list-products');
     host.innerHTML = '<div style="text-align:center;padding:20px;">جاري تحميل المنتجات... <div class="loading-spinner"></div></div>';
-    const { data, error } = await supabaseClient.from('products').select('id, name, price, description, images, disabled').order('created_at',{ascending:false});
+    const { data, error } = await supabaseClient.from('products').select('id, name, price, description, images, disabled').order('order_index',{ascending:true, nullsFirst:true});
     if(error){ console.error('loadProducts',error); host.innerHTML='<div style="text-align:center;padding:20px;color:var(--danger)">فشل تحميل المنتجات. '+error.message+'</div>'; return []; }
     if(!data || data.length===0){ host.innerHTML='<div style="text-align:center;padding:20px;color:var(--text-secondary)">لا توجد منتجات</div>'; return []; }
     host.innerHTML='';
@@ -2333,6 +2441,12 @@ async function init(){
       });
     }
     
+    // إضافة مستمع حدث لزر المشاركة في قسم الاقتراحات
+    const suggestionShareBtn = document.getElementById('suggestion-share');
+    if(suggestionShareBtn) {
+      suggestionShareBtn.addEventListener('click', shareSuggestionSection);
+    }
+    
     createOfferBtn.addEventListener('click', sendSelectedProductsToWhatsApp);
     
     const refreshProductsBtn = document.getElementById('refresh-products');
@@ -2366,7 +2480,176 @@ async function init(){
     showToast('حدث خطأ أثناء تحميل المتجر: '+error.message,'error'); 
   }
 }
-
+// دالة لتحميل قائمة المنتجات القابلة للترتيب
+async function loadProductsOrder() {
+  try {
+    const container = document.getElementById('products-order-container');
+    if (!container) return;
+    
+    container.innerHTML = '<div style="text-align:center;padding:20px;">جاري تحميل المنتجات... <div class="loading-spinner"></div></div>';
+    
+    // تحميل المنتجات من قاعدة البيانات
+    const { data, error } = await supabaseClient
+      .from('products')
+      .select('id, name, price, images, order_index')
+      .order('order_index', { ascending: true, nullsFirst: false });
+    
+    if (error) {
+      console.error('loadProductsOrder', error);
+      container.innerHTML = '<div style="text-align:center;padding:20px;color:var(--danger)">فشل تحميل المنتجات. ' + error.message + '</div>';
+      return;
+    }
+    
+    if (!data || data.length === 0) {
+      container.innerHTML = '<div style="text-align:center;padding:20px;color:var(--text-secondary)">لا توجد منتجات</div>';
+      return;
+    }
+    
+    // تخزين ترتيب المنتجات الحالي
+    productsOrder = data;
+    
+    // عرض المنتجات في القائمة
+    container.innerHTML = '';
+    data.forEach((product, index) => {
+      const orderItem = document.createElement('div');
+      orderItem.className = 'order-item';
+      orderItem.dataset.productId = product.id;
+      orderItem.draggable = true;
+      
+      const mainImage = (product.images && product.images.length > 0) ? product.images[0] : 'https://via.placeholder.com/50x50?text=No+Image';
+      
+      orderItem.innerHTML = `
+        <div class="drag-handle">≡</div>
+        <img src="${escapeHtml(mainImage)}" alt="${escapeHtml(product.name)}" loading="lazy" decoding="async">
+        <div class="order-info">
+          <div class="order-name">${escapeHtml(product.name)}</div>
+          <div class="order-price">${formatCurrency(product.price)}</div>
+        </div>
+        <div class="order-number">${index + 1}</div>
+      `;
+      
+      container.appendChild(orderItem);
+    });
+    
+    // إضافة مستمعي الأحداث للسحب والإفلات
+    setupDragAndDrop();
+    
+  } catch (e) {
+    console.error(e);
+    showToast('فشل تحميل قائمة المنتجات: ' + e.message, 'error');
+  }
+}
+// دالة لإعداد السحب والإفلات
+function setupDragAndDrop() {
+  const orderItems = document.querySelectorAll('.order-item');
+  let draggedElement = null;
+  
+  orderItems.forEach(item => {
+    item.addEventListener('dragstart', function() {
+      draggedElement = this;
+      this.classList.add('dragging');
+    });
+    
+    item.addEventListener('dragend', function() {
+      this.classList.remove('dragging');
+    });
+    
+    item.addEventListener('dragover', function(e) {
+      e.preventDefault();
+      const container = document.getElementById('products-order-container');
+      const afterElement = getDragAfterElement(container, e.clientY);
+      
+      if (afterElement == null) {
+        container.appendChild(draggedElement);
+      } else {
+        container.insertBefore(draggedElement, afterElement);
+      }
+    });
+  });
+}
+// دالة لتحديد مكان وضع العنصر المسحوب
+function getDragAfterElement(container, y) {
+  const draggableElements = [...container.querySelectorAll('.order-item:not(.dragging)')];
+  
+  return draggableElements.reduce((closest, child) => {
+    const box = child.getBoundingClientRect();
+    const offset = y - box.top - box.height / 2;
+    
+    if (offset < 0 && offset > closest.offset) {
+      return { offset: offset, element: child };
+    } else {
+      return closest;
+    }
+  }, { offset: Number.NEGATIVE_INFINITY }).element;
+}
+// دالة لحفظ ترتيب المنتجات الجديد
+async function saveProductsOrder() {
+  try {
+    const orderItems = document.querySelectorAll('.order-item');
+    const saveBtn = document.getElementById('save-products-order');
+    
+    if (!orderItems || orderItems.length === 0) {
+      showToast('لا توجد منتجات لحفظ ترتيبها', 'warning');
+      return;
+    }
+    
+    const originalBtnText = saveBtn.textContent;
+    saveBtn.innerHTML = '<div class="loading-spinner"></div> جاري الحفظ...';
+    saveBtn.disabled = true;
+    
+    // تحديث ترتيب المنتجات في قاعدة البيانات
+    const updates = [];
+    orderItems.forEach((item, index) => {
+      const productId = parseInt(item.dataset.productId);
+      updates.push({
+        id: productId,
+        order_index: index
+      });
+    });
+    
+    // تحديث كل منتج على حدة
+    for (const update of updates) {
+      const { error } = await supabaseClient
+        .from('products')
+        .update({ order_index: update.order_index })
+        .eq('id', update.id);
+      
+      if (error) {
+        throw error;
+      }
+    }
+    
+    // تحديث ترتيب المنتجات في الذاكرة
+    productsOrder.sort((a, b) => {
+      const aIndex = updates.findIndex(u => u.id === a.id);
+      const bIndex = updates.findIndex(u => u.id === b.id);
+      return aIndex - bIndex;
+    });
+    
+    // تحديث واجهة المستخدم
+    orderItems.forEach((item, index) => {
+      const orderNumber = item.querySelector('.order-number');
+      if (orderNumber) {
+        orderNumber.textContent = index + 1;
+      }
+    });
+    
+    saveBtn.innerHTML = originalBtnText;
+    saveBtn.disabled = false;
+    
+    showToast('تم حفظ ترتيب المنتجات بنجاح', 'success');
+    
+    // تحديث عرض المنتجات في المتجر
+    await fetchProducts();
+    
+  } catch (e) {
+    console.error(e);
+    const saveBtn = document.getElementById('save-products-order');
+    saveBtn.innerHTML = 'حفظ الترتيب';
+    saveBtn.disabled = false;
+    showToast('فشل حفظ ترتيب المنتجات: ' + e.message, 'error');
+  }
+}
 // إضافة هذه الدالة في بداية الكود
 function observeOffers() {
   const observer = new IntersectionObserver((entries) => {
@@ -2390,7 +2673,6 @@ function observeOffers() {
     observer.observe(offer);
   });
 }
-
 // دالة لتحديث محتوى العرض
 function updateOfferContent(offerId) {
   // هنا يمكنك استدعاء بيانات العرض من قاعدة البيانات
@@ -2407,7 +2689,6 @@ function updateOfferContent(offerId) {
     }, 500);
   }
 }
-
 // إضافة دالة لتحديث العروض بشكل دوري
 function setupAutoRefreshOffers() {
   setInterval(() => {
@@ -2419,7 +2700,6 @@ function setupAutoRefreshOffers() {
     }
   }, 30000); // التحقق كل 30 ثانية
 }
-
 document.addEventListener('DOMContentLoaded', init);
 window.addEventListener('hashchange', handleDeepLink);
 window.addEventListener('popstate', handleDeepLink);
