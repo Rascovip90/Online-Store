@@ -4,7 +4,7 @@
 <meta charset="utf-8" />
 <meta name="viewport" content="width=device-width,initial-scale=1" />
 <title data-translate="app_title">متجر إلكتروني عصري</title>
-<link href="https://fonts.googleapis.com/css2?family=Tajawal:wght@400;500;700;900&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Tajawal:wght@400;500;700;900&family=Roboto:wght@400;500;700&display=swap" rel="stylesheet">
 <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
 <style>
 :root{
@@ -54,7 +54,7 @@ body[dir="ltr"] {
   font-family: 'Roboto', Arial, Helvetica, sans-serif;
 }
 header{
-  position:relative; /* تغيير من sticky إلى relative */
+  position:relative;
   z-index:140;
   padding:16px;
   border-bottom:0;
@@ -128,7 +128,7 @@ main{padding:16px;max-width:1200px;margin:20px auto}
   border-radius: 12px;
   background: var(--bg);
   position: relative;
-  order: 1; /* الصورة أولاً */
+  order: 1;
 }
 .product-card .img-box img{
   width: 100%;
@@ -141,7 +141,7 @@ main{padding:16px;max-width:1200px;margin:20px auto}
   margin: 8px 0 4px;
   font-size: var(--product-card-title-size);
   font-weight: 800;
-  order: 2; /* العنوان ثانياً (تحت الصورة) */
+  order: 2;
 }
 .card p.desc{
   font-size: var(--product-card-font-size);
@@ -151,18 +151,18 @@ main{padding:16px;max-width:1200px;margin:20px auto}
   -webkit-box-orient: vertical;
   overflow: hidden;
   min-height: 3.2em;
-  order: 3; /* الوصف ثالثاً */
+  order: 3;
 }
 .card p.desc.expanded{
   -webkit-line-clamp: unset;
   overflow: visible;
 }
 .card p.price{
-  color: var(--danger) !important; /* اللون الأحمر */
+  color: var(--danger) !important;
   font-weight: 800;
   margin: 6px 0;
   font-size: var(--product-card-price-size);
-  order: 4; /* السعر رابعاً */
+  order: 4;
 }
 .product-card .btn-row{
   display: flex;
@@ -170,7 +170,7 @@ main{padding:16px;max-width:1200px;margin:20px auto}
   justify-content: center;
   flex-wrap: wrap;
   margin-top: 8px;
-  order: 5; /* الأزرار خامساً */
+  order: 5;
 }
 .product-card .thumbs{
   display: flex;
@@ -178,7 +178,7 @@ main{padding:16px;max-width:1200px;margin:20px auto}
   justify-content: center;
   flex-wrap: wrap;
   margin-top: 8px;
-  order: 6; /* الصور المصغرة سادساً */
+  order: 6;
 }
 .card .add-btn{background:var(--primary);color:#fff;border:0;padding:10px 14px;border-radius:12px;cursor:pointer;font-weight:700;box-shadow:var(--shadow);transition:all 0.2s ease}
 .card .add-btn:hover{background:var(--primary-dark);transform:translateY(-2px)}
@@ -193,9 +193,9 @@ main{padding:16px;max-width:1200px;margin:20px auto}
   font-size: 12px;
   font-weight: 700;
   margin-top: 8px;
-  display: inline-block !important; /* إظهار الزر دائماً */
+  display: inline-block !important;
   transition: all 0.3s ease;
-  order: 3; /* نفس ترتيب الوصف */
+  order: 3;
 }
 .card .more-btn:hover{
   background: var(--primary);
@@ -278,7 +278,7 @@ main{padding:16px;max-width:1200px;margin:20px auto}
 .mini-detail .close-x{position:absolute;top:16px;right:16px;background:var(--card);border-radius:10px;padding:8px 10px;border:0;cursor:pointer;box-shadow:var(--shadow);font-size:20px}
 .mini-detail img{width:100%;height:240px;object-fit:cover;border-radius:12px;margin-bottom:12px}
 .mini-detail p[style*="color:var(--primary)"] {
-  color: var(--danger) !important; /* اللون الأحمر */
+  color: var(--danger) !important;
 }
 /* Admin (scoped) */
 #adminPage{--red:#e11d48;--bg:#f8fafc;--card:#ffffff;--txt:#1e293b;--muted:#64748b;padding:0;max-width:1200px;margin:20px auto}
@@ -496,7 +496,7 @@ main{padding:16px;max-width:1200px;margin:20px auto}
 .create-offer-section .selected-list{display:flex;flex-wrap:wrap;gap:8px}
 .create-offer-section .selected-item{background:var(--primary);color:white;padding:6px 12px;border-radius:20px;font-size:14px;display:flex;align-items:center;gap:6px}
 .create-offer-section .selected-item .price {
-  color: #ffcccc !important; /* أحمر فاتح على خلفية داكنة */
+  color: #ffcccc !important;
   font-weight: bold;
 }
 .create-offer-section .selected-item .remove-btn{cursor:pointer;font-weight:bold}
@@ -1102,20 +1102,356 @@ header{
 <div class="toast" id="toast"></div>
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2.39.7/dist/umd/supabase.min.js"></script>
 <script>
-// Translation System
+// Translation System - Embedded translations
 let currentLang = localStorage.getItem('lang') || 'ar';
-let translations = {};
 
-// Load translations
-async function loadTranslations() {
-  try {
-    const response = await fetch(`lang/${currentLang}.json`);
-    translations = await response.json();
-    updatePageTranslations();
-  } catch (error) {
-    console.error('Error loading translations:', error);
+// Embedded translations data
+const translationsData = {
+  ar: {
+    app_title: "متجر إلكتروني عصري",
+    quran_text: "(بِسْمِ ٱللَّهِ ٱلرَّحْمَـٰنِ ٱلرَّحِيمِ)<br>\"مَا يَفْتَحِ اللَّهُ لِلنَّاسِ مِن رَّحْمَةٍ فَلَا مُمْسِكَ لَهَا\"",
+    nav_home: "الرئيسية",
+    nav_offers: "العروض",
+    nav_create: "اصنع عرضك",
+    nav_admin: "لوحة التحكم",
+    products_title: "المنتجات",
+    refresh_btn: "تحديث القائمة",
+    suggest_product: "اقترح منتجًا جديدًا",
+    suggestion_name: "اسم المنتج المقترح",
+    suggestion_name_placeholder: "مثال: ساعة ذكية",
+    suggestion_desc: "وصف المنتج (اختياري)",
+    suggestion_desc_placeholder: "اكتب الوصف المختصر للمنتج المقترح",
+    suggestion_by: "اسمك أو بريدك الإلكتروني (اختياري)",
+    suggestion_by_placeholder: "مثال: علي",
+    send_suggestion: "إرسال الاقتراح",
+    share: "مشاركة",
+    suggestion_success: "شكرًا لاقتراحك! سنتواصل معك قريبًا.",
+    offers_title: "العروض",
+    refresh_offers: "تحديث العروض",
+    create_offer_title: "اصنع عرضك بنفسك",
+    create_offer_desc: "اختر المنتجات التي ترغب في إنشاء عرض لها وارسلها مباشرة إلى WhatsApp و سوف نرسل لك سعر عرضك الجديد",
+    selected_products: "المنتجات المختارة",
+    send_to_whatsapp: "إرسال إلى WhatsApp",
+    admin_title: "لوحة التحكم – المتجر",
+    admin_quran: "(بِسْمِ اللَّهِ الرَّحْمَٰنِ الرَّحِيمِ) – \"مَّا يَفْتَحِ اللَّهُ لِلنَّاسِ مِن رَّحْمَةٍ فَلَا مُمْسِكَ لَهَا\"",
+    add_product: "إضافة منتج",
+    product_name: "اسم المنتج",
+    product_name_placeholder: "مثال: ساعة يد",
+    price: "السعر",
+    price_placeholder: "0.00",
+    product_desc: "وصف المنتج",
+    product_desc_placeholder: "نص الوصف المختصر",
+    product_images: "صور المنتج (حتى 8)",
+    product_image_placeholder: "رابط صورة",
+    save_product: "حفظ المنتج",
+    update_product: "تحديث المنتج",
+    current_products: "المنتجات الحالية",
+    refresh_products: "تحديث المنتجات",
+    add_offer: "إضافة عرض",
+    offer_name: "اسم العرض",
+    offer_name_placeholder: "مثال: عرض العودة للمدارس",
+    new_price: "السعر الجديد",
+    offer_desc: "وصف العرض",
+    offer_desc_placeholder: "وصف مختصر للعرض",
+    select_offer_products: "اختر منتجات العرض",
+    save_offer: "حفظ العرض",
+    update_offer: "حفظ التعديل",
+    current_offers: "العروض الحالية",
+    current_lists: "القوائم الحالية (قراءة سريعة)",
+    products_list: "المنتجات",
+    offers_list: "العروض",
+    product_suggestions: "اقتراحات المنتجات",
+    card_settings: "إعدادات البطاقات المتقدمة",
+    product_card_settings: "إعدادات بطاقات المنتجات",
+    offer_card_settings: "إعدادات بطاقات العروض",
+    create_offer_card_settings: "إعدادات بطاقات \"اصنع عرضك\"",
+    card_width: "عرض البطاقة (px)",
+    card_height: "ارتفاع البطاقة",
+    auto_height: "تلقائي",
+    fixed_height: "ثابت",
+    font_size: "حجم الخط العام (px)",
+    title_size: "حجم عنوان المنتج (px)",
+    price_size: "حجم السعر (px)",
+    image_height: "ارتفاع الصورة (px)",
+    padding: "الحشو الداخلي (px)",
+    bg_color: "لون الخلفية",
+    preview: "معاينة",
+    product_preview: "معاينة بطاقة المنتج",
+    offer_preview: "معاينة بطاقة العرض",
+    create_offer_preview: "معاينة بطاقة \"اصنع عرضك\"",
+    reset_settings: "استعادة الإعدادات الافتراضية",
+    save_all_settings: "حفظ جميع الإعدادات",
+    products_order: "ترتيب المنتجات",
+    products_order_desc: "اسحب وأفلت المنتجات لتغيير ترتيب ظهورها في المتجر",
+    save_order: "حفظ الترتيب",
+    login: "تسجيل الدخول",
+    login_desc: "أدخل كلمة المرور للوصول إلى لوحة التحكم",
+    password: "كلمة المرور",
+    password_placeholder: "••••",
+    login_btn: "دخول",
+    wrong_password: "❌ كلمة المرور غير صحيحة",
+    loading: "جاري التحميل...",
+    saving: "جاري الحفظ...",
+    sending: "جاري الإرسال...",
+    no_products: "لا توجد منتجات",
+    no_products_desc: "يمكنك إضافة منتجات جديدة من لوحة التحكم.",
+    no_offers: "لا توجد عروض",
+    no_offers_desc: "يمكنك إضافة عروض جديدة من لوحة التحكم.",
+    no_suggestions: "لا توجد اقتراحات",
+    cart_title: "سلة المشتريات",
+    cart_desc: "المحتويات وكمية كل عنصر",
+    cart_empty: "السلة فارغة",
+    total: "الإجمالي",
+    clear_cart: "إفراغ السلة",
+    order_now: "اطلب الآن",
+    cart_count: "العدد",
+    add_to_cart: "أضف للسلة",
+    view_images: "عرض الصور",
+    more: "مزيد ↓",
+    less: "أقل ↑",
+    new: "جديد",
+    edit: "تعديل",
+    delete: "حذف",
+    disable: "تعطيل",
+    enable: "تفعيل",
+    active: "نشِط",
+    inactive: "معطّل",
+    image: "صورة",
+    confirm_delete: "هل تريد الحذف؟",
+    confirm_clear_cart: "هل تريد تفريغ السلة؟",
+    added_to_cart: "تمت الإضافة للسلة",
+    product_added: "تمت الإضافة",
+    offer_added: "تمت إضافة العرض",
+    product_updated: "تم تحديث المنتج",
+    offer_updated: "تم تحديث العرض",
+    product_deleted: "تم حذف المنتج",
+    offer_deleted: "تم حذف العرض",
+    suggestion_deleted: "تم حذف الاقتراح",
+    settings_saved: "تم حفظ الإعدادات",
+    order_saved: "تم حفظ الترتيب",
+    data_refreshed: "تم تحديث البيانات",
+    error_loading: "فشل التحميل",
+    error_saving: "فشل الحفظ",
+    error_deleting: "فشل الحذف",
+    error_sending: "فشل الإرسال",
+    error_occurred: "حدث خطأ",
+    complete_fields: "أكمل الحقول المطلوبة",
+    complete_name_image: "أكمل الاسم وصورة واحدة على الأقل",
+    complete_name_products: "أكمل اسم العرض واختر منتجًا واحدًا على الأقل",
+    no_images: "لا توجد صور",
+    cart_is_empty: "السلة فارغة",
+    new_request: "طلب جديـد",
+    quantity: "الكمية",
+    custom_offer: "طلب عرض مخصص",
+    total_price: "الإجمالي",
+    thank_you: "شكرا لكم لتواصلكم معنا سيتم التواصل معكم قريبا لتأكيد الطلب شكرًا لثقتكم بمتجرنا!",
+    share_product: "شاهد",
+    share_offer: "شاهد عرض",
+    link_copied: "تم نسخ الرابط",
+    loading_products: "جاري تحميل المنتجات...",
+    loading_offers: "جاري تحميل العروض...",
+    loading_suggestions: "جاري تحميل الاقتراحات...",
+    try_again: "إعادة المحاولة",
+    close: "إغلاق",
+    previous: "السابق",
+    next: "التالي",
+    remove: "إزالة",
+    order_sticker: "عرض السلة",
+    cart: "السلة",
+    offer_price: "السعر:",
+    original_price: "السعر الأصلي:",
+    offer_number: "العرض",
+    whatsapp_number: "رقم الواتساب",
+    admin_password: "كلمة مرور المسؤول",
+    product_order: "ترتيب المنتج",
+    product_card: "بطاقة المنتج",
+    offer_card: "بطاقة العرض",
+    create_offer_card: "بطاقة اصنع عرضك",
+    language: "اللغة",
+    arabic: "العربية",
+    english: "English",
+    suggested_by: "بواسطة",
+    unknown: "مجهول",
+    product_status_changed: "تم تغيير حالة المنتج",
+    product_loaded_for_edit: "تم تحميل بيانات المنتج للتعديل",
+    offer_loaded_for_edit: "يمكنك تعديل العرض ثم الضغط حفظ",
+    but_refresh_page: "ولكن يجب تحديث الصفحة",
+    copy_link: "انسخ الرابط"
+  },
+  en: {
+    app_title: "Modern E-commerce Store",
+    quran_text: "(In the name of Allah, the Entirely Merciful, the Especially Merciful)<br>\"Whatever Allah grants to people of mercy - none can withhold it\"",
+    nav_home: "Home",
+    nav_offers: "Offers",
+    nav_create: "Create Your Offer",
+    nav_admin: "Admin Panel",
+    products_title: "Products",
+    refresh_btn: "Refresh List",
+    suggest_product: "Suggest a New Product",
+    suggestion_name: "Suggested Product Name",
+    suggestion_name_placeholder: "e.g: Smart Watch",
+    suggestion_desc: "Product Description (Optional)",
+    suggestion_desc_placeholder: "Write a brief description of the suggested product",
+    suggestion_by: "Your Name or Email (Optional)",
+    suggestion_by_placeholder: "e.g: Ali",
+    send_suggestion: "Send Suggestion",
+    share: "Share",
+    suggestion_success: "Thank you for your suggestion! We will contact you soon.",
+    offers_title: "Offers",
+    refresh_offers: "Refresh Offers",
+    create_offer_title: "Create Your Own Offer",
+    create_offer_desc: "Select the products you want to create an offer for and send them directly to WhatsApp and we will send you the price of your new offer",
+    selected_products: "Selected Products",
+    send_to_whatsapp: "Send to WhatsApp",
+    admin_title: "Admin Panel - Store",
+    admin_quran: "(In the name of Allah, the Entirely Merciful, the Especially Merciful) – \"Whatever Allah grants to people of mercy - none can withhold it\"",
+    add_product: "Add Product",
+    product_name: "Product Name",
+    product_name_placeholder: "e.g: Wrist Watch",
+    price: "Price",
+    price_placeholder: "0.00",
+    product_desc: "Product Description",
+    product_desc_placeholder: "Brief description text",
+    product_images: "Product Images (up to 8)",
+    product_image_placeholder: "Image URL",
+    save_product: "Save Product",
+    update_product: "Update Product",
+    current_products: "Current Products",
+    refresh_products: "Refresh Products",
+    add_offer: "Add Offer",
+    offer_name: "Offer Name",
+    offer_name_placeholder: "e.g: Back to School Offer",
+    new_price: "New Price",
+    offer_desc: "Offer Description",
+    offer_desc_placeholder: "Brief offer description",
+    select_offer_products: "Select Offer Products",
+    save_offer: "Save Offer",
+    update_offer: "Save Changes",
+    current_offers: "Current Offers",
+    current_lists: "Current Lists (Quick View)",
+    products_list: "Products",
+    offers_list: "Offers",
+    product_suggestions: "Product Suggestions",
+    card_settings: "Advanced Card Settings",
+    product_card_settings: "Product Card Settings",
+    offer_card_settings: "Offer Card Settings",
+    create_offer_card_settings: "\"Create Your Offer\" Card Settings",
+    card_width: "Card Width (px)",
+    card_height: "Card Height",
+    auto_height: "Auto",
+    fixed_height: "Fixed",
+    font_size: "General Font Size (px)",
+    title_size: "Product Title Size (px)",
+    price_size: "Price Size (px)",
+    image_height: "Image Height (px)",
+    padding: "Internal Padding (px)",
+    bg_color: "Background Color",
+    preview: "Preview",
+    product_preview: "Product Card Preview",
+    offer_preview: "Offer Card Preview",
+    create_offer_preview: "\"Create Your Offer\" Card Preview",
+    reset_settings: "Reset to Default Settings",
+    save_all_settings: "Save All Settings",
+    products_order: "Products Order",
+    products_order_desc: "Drag and drop products to change their display order in the store",
+    save_order: "Save Order",
+    login: "Login",
+    login_desc: "Enter password to access admin panel",
+    password: "Password",
+    password_placeholder: "••••",
+    login_btn: "Login",
+    wrong_password: "❌ Incorrect password",
+    loading: "Loading...",
+    saving: "Saving...",
+    sending: "Sending...",
+    no_products: "No Products",
+    no_products_desc: "You can add new products from the admin panel.",
+    no_offers: "No Offers",
+    no_offers_desc: "You can add new offers from the admin panel.",
+    no_suggestions: "No Suggestions",
+    cart_title: "Shopping Cart",
+    cart_desc: "Contents and quantity of each item",
+    cart_empty: "Cart is empty",
+    total: "Total",
+    clear_cart: "Clear Cart",
+    order_now: "Order Now",
+    cart_count: "Count",
+    add_to_cart: "Add to Cart",
+    view_images: "View Images",
+    more: "More ↓",
+    less: "Less ↑",
+    new: "New",
+    edit: "Edit",
+    delete: "Delete",
+    disable: "Disable",
+    enable: "Enable",
+    active: "Active",
+    inactive: "Inactive",
+    image: "Image",
+    confirm_delete: "Are you sure you want to delete?",
+    confirm_clear_cart: "Are you sure you want to clear the cart?",
+    added_to_cart: "Added to Cart",
+    product_added: "Added Successfully",
+    offer_added: "Offer Added Successfully",
+    product_updated: "Product Updated Successfully",
+    offer_updated: "Offer Updated Successfully",
+    product_deleted: "Product Deleted Successfully",
+    offer_deleted: "Offer Deleted Successfully",
+    suggestion_deleted: "Suggestion Deleted Successfully",
+    settings_saved: "Settings Saved Successfully",
+    order_saved: "Order Saved Successfully",
+    data_refreshed: "Data Refreshed Successfully",
+    error_loading: "Loading Failed",
+    error_saving: "Saving Failed",
+    error_deleting: "Deletion Failed",
+    error_sending: "Sending Failed",
+    error_occurred: "An Error Occurred",
+    complete_fields: "Complete required fields",
+    complete_name_image: "Complete name and at least one image",
+    complete_name_products: "Complete offer name and select at least one product",
+    no_images: "No images available",
+    cart_is_empty: "Cart is empty",
+    new_request: "New Request",
+    quantity: "Quantity",
+    custom_offer: "Custom Offer Request",
+    total_price: "Total",
+    thank_you: "Thank you for contacting us, we will contact you soon to confirm your order. Thank you for trusting our store!",
+    share_product: "See",
+    share_offer: "See Offer",
+    link_copied: "Link Copied",
+    loading_products: "Loading products...",
+    loading_offers: "Loading offers...",
+    loading_suggestions: "Loading suggestions...",
+    try_again: "Try Again",
+    close: "Close",
+    previous: "Previous",
+    next: "Next",
+    remove: "Remove",
+    order_sticker: "View Cart",
+    cart: "Cart",
+    offer_price: "Price:",
+    original_price: "Original Price:",
+    offer_number: "Offer",
+    whatsapp_number: "WhatsApp Number",
+    admin_password: "Admin Password",
+    product_order: "Product Order",
+    product_card: "Product Card",
+    offer_card: "Offer Card",
+    create_offer_card: "Create Offer Card",
+    language: "Language",
+    arabic: "العربية",
+    english: "English",
+    suggested_by: "By",
+    unknown: "Unknown",
+    product_status_changed: "Product status changed successfully",
+    product_loaded_for_edit: "Product data loaded for editing",
+    offer_loaded_for_edit: "You can edit the offer then click save",
+    but_refresh_page: "but refresh the page",
+    copy_link: "Copy Link"
   }
-}
+};
+
+let translations = translationsData[currentLang];
 
 // Update page with translations
 function updatePageTranslations() {
@@ -1161,7 +1497,8 @@ function updatePageTranslations() {
 function setLanguage(lang) {
   currentLang = lang;
   localStorage.setItem('lang', lang);
-  loadTranslations();
+  translations = translationsData[lang];
+  updatePageTranslations();
 }
 
 // Get translation
@@ -2446,7 +2783,7 @@ async function adminBootstrap(){
 async function init(){
   try{
     // Load translations first
-    await loadTranslations();
+    updatePageTranslations();
     
     // تحميل إعدادات البطاقات من التخزين المحلي
     loadCardSettings();
