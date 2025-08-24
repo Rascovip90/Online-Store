@@ -3,7 +3,7 @@
 <head>
 <meta charset="utf-8" />
 <meta name="viewport" content="width=device-width,initial-scale=1" />
-<title>متجر إلكتروني عصري</title>
+<title data-translate="app_title">متجر إلكتروني عصري</title>
 <link href="https://fonts.googleapis.com/css2?family=Tajawal:wght@400;500;700;900&display=swap" rel="stylesheet">
 <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
 <style>
@@ -50,6 +50,9 @@
 html,body{height:100%}
 body{margin:0;font-family:'Tajawal',Arial,Helvetica,sans-serif;background:var(--bg);color:var(--text);-webkit-font-smoothing:antialiased}
 body.no-scroll{overflow:hidden}
+body[dir="ltr"] {
+  font-family: 'Roboto', Arial, Helvetica, sans-serif;
+}
 header{
   position:relative; /* تغيير من sticky إلى relative */
   z-index:140;
@@ -62,9 +65,34 @@ header{
   background:linear-gradient(135deg,var(--primary),var(--secondary));
   box-shadow:var(--shadow);
 }
-.header-top{display:flex;align-items:center;justify-content:center;gap:12px;width:100%}
+.header-top{display:flex;align-items:center;justify-content:space-between;width:100%}
 .logo .title{font-weight:900;font-size:24px;color:#fff;text-align:center;text-shadow:0 1px 2px rgba(0,0,0,.15)}
 .quran-text{font-size:14px;color:#eef2ff;text-align:center;font-style:italic;line-height:1.5;max-width:920px}
+/* Language Switcher */
+.lang-switcher {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  background: rgba(255, 255, 255, 0.2);
+  padding: 6px 12px;
+  border-radius: 20px;
+}
+.lang-switcher button {
+  background: transparent;
+  border: none;
+  color: white;
+  font-weight: 600;
+  cursor: pointer;
+  padding: 4px 8px;
+  border-radius: 4px;
+  transition: background 0.2s;
+}
+.lang-switcher button:hover {
+  background: rgba(255, 255, 255, 0.2);
+}
+.lang-switcher button.active {
+  background: rgba(255, 255, 255, 0.3);
+}
 /* nav */
 nav{display:flex;gap:12px;align-items:center;justify-content:center;padding:8px 6px;width:100%;flex-wrap:wrap}
 nav a{ text-decoration:none;color:var(--text);padding:10px 16px;border-radius:12px;border:2px solid transparent;font-weight:700;background:var(--card);box-shadow:var(--shadow);transition:all 0.2s ease-in-out;}
@@ -489,7 +517,6 @@ main{padding:16px;max-width:1200px;margin:20px auto}
   padding: 10px;
   background: var(--bg);
 }
-
 .order-item {
   display: flex;
   align-items: center;
@@ -502,48 +529,39 @@ main{padding:16px;max-width:1200px;margin:20px auto}
   cursor: move;
   transition: all 0.2s ease;
 }
-
 .order-item:hover {
   box-shadow: var(--shadow);
   transform: translateY(-2px);
 }
-
 .order-item.dragging {
   opacity: 0.5;
   transform: scale(0.95);
 }
-
 .order-item .drag-handle {
   color: var(--text-secondary);
   font-size: 20px;
   cursor: grab;
 }
-
 .order-item .drag-handle:active {
   cursor: grabbing;
 }
-
 .order-item img {
   width: 50px;
   height: 50px;
   object-fit: cover;
   border-radius: 8px;
 }
-
 .order-item .order-info {
   flex: 1;
 }
-
 .order-item .order-name {
   font-weight: 700;
   margin-bottom: 4px;
 }
-
 .order-item .order-price {
   color: var(--danger);
   font-weight: 600;
 }
-
 .order-item .order-number {
   background: var(--primary);
   color: white;
@@ -701,191 +719,195 @@ header{
 <body>
 <header>
   <div class="header-top">
-    <div class="logo"><div class="title">متجر إلكتروني عصري</div></div>
+    <div class="logo"><div class="title" data-translate="app_title">متجر إلكتروني عصري</div></div>
+    <div class="lang-switcher">
+      <button id="lang-ar" class="active" onclick="setLanguage('ar')">العربية</button>
+      <button id="lang-en" onclick="setLanguage('en')">English</button>
+    </div>
   </div>
-  <div class="quran-text">
+  <div class="quran-text" data-translate="quran_text">
 (بِسْمِ ٱللَّهِ ٱلرَّحْمَـٰنِ ٱلرَّحِيمِ)<br>
 "مَا يَفْتَحِ اللَّهُ لِلنَّاسِ مِن رَّحْمَةٍ فَلَا مُمْسِكَ لَهَا"
   </div>
   <nav>
-    <a id="nav-home" href="#home" class="active">الرئيسية</a>
-    <a id="nav-offers" href="#offers">العروض</a>
-    <a id="nav-create" href="#create">اصنع عرضك</a>
-    <a id="nav-admin" href="#admin">لوحة التحكم</a>
+    <a id="nav-home" href="#home" class="active" data-translate="nav_home">الرئيسية</a>
+    <a id="nav-offers" href="#offers" data-translate="nav_offers">العروض</a>
+    <a id="nav-create" href="#create" data-translate="nav_create">اصنع عرضك</a>
+    <a id="nav-admin" href="#admin" data-translate="nav_admin">لوحة التحكم</a>
   </nav>
 </header>
 <main id="main-content">
   <section id="home" style="display:block">
     <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:16px;">
-      <h2 class="section-title">المنتجات</h2>
-      <button class="btn-3d" onclick="fetchProducts()" style="background:var(--secondary);font-size:14px;padding:8px 12px;">تحديث القائمة</button>
+      <h2 class="section-title" data-translate="products_title">المنتجات</h2>
+      <button class="btn-3d" onclick="fetchProducts()" style="background:var(--secondary);font-size:14px;padding:8px 12px;" data-translate="refresh_btn">تحديث القائمة</button>
     </div>
     <div id="productsGrid" class="grid"></div>
     <div class="suggestion-form">
-      <h3>اقترح منتجًا جديدًا</h3>
+      <h3 data-translate="suggest_product">اقترح منتجًا جديدًا</h3>
       <div class="form-group">
-        <label for="suggestion-name">اسم المنتج المقترح</label>
-        <input type="text" id="suggestion-name" placeholder="ثال: ساعة ذكية">
+        <label for="suggestion-name" data-translate="suggestion_name">اسم المنتج المقترح</label>
+        <input type="text" id="suggestion-name" data-translate-placeholder="suggestion_name_placeholder" placeholder="ثال: ساعة ذكية">
       </div>
       <div class="form-group">
-        <label for="suggestion-desc">وصف المنتج (اختياري)</label>
-        <textarea id="suggestion-desc" placeholder="اكتب الوصف المختصر للمنتج المقترح"></textarea>
+        <label for="suggestion-desc" data-translate="suggestion_desc">وصف المنتج (اختياري)</label>
+        <textarea id="suggestion-desc" data-translate-placeholder="suggestion_desc_placeholder" placeholder="اكتب الوصف المختصر للمنتج المقترح"></textarea>
       </div>
       <div class="form-group">
-        <label for="suggestion-by">اسمك أو بريدك الإلكتروني (اختياري)</label>
-        <input type="text" id="suggestion-by" placeholder="مثال: علي">
+        <label for="suggestion-by" data-translate="suggestion_by">اسمك أو بريدك الإلكتروني (اختياري)</label>
+        <input type="text" id="suggestion-by" data-translate-placeholder="suggestion_by_placeholder" placeholder="مثال: علي">
       </div>
       <div style="display: flex; gap: 12px;">
-        <button id="suggestion-submit" class="btn-submit">إرسال الاقتراح</button>
-        <button id="suggestion-share" class="btn-submit" style="background: var(--secondary);">مشاركة</button>
+        <button id="suggestion-submit" class="btn-submit" data-translate="send_suggestion">إرسال الاقتراح</button>
+        <button id="suggestion-share" class="btn-submit" style="background: var(--secondary);" data-translate="share">مشاركة</button>
       </div>
-      <div id="suggestion-success" class="success-message">شكرًا لاقتراحك! سنتواصل معك قريبًا.</div>
+      <div id="suggestion-success" class="success-message" data-translate="suggestion_success">شكرًا لاقتراحك! سنتواصل معك قريبًا.</div>
     </div>
   </section>
   <section id="offers" style="display:none">
     <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:16px;">
-      <h2 class="section-title">العروض</h2>
-      <button class="btn-3d" onclick="fetchOffers()" style="background:var(--secondary);font-size:14px;padding:8px 12px;">تحديث العروض</button>
+      <h2 class="section-title" data-translate="offers_title">العروض</h2>
+      <button class="btn-3d" onclick="fetchOffers()" style="background:var(--secondary);font-size:14px;padding:8px 12px;" data-translate="refresh_offers">تحديث العروض</button>
     </div>
     <div id="offersGrid" class="offers-stack"></div>
   </section>
   <section id="create" style="display:none">
     <div class="create-offer-section">
-      <h3>اصنع عرضك بنفسك</h3>
-      <p style="color:var(--text-secondary);margin-bottom:20px">اختر المنتجات التي ترغب في إنشاء عرض لها وارسلها مباشرة إلى WhatsApp
+      <h3 data-translate="create_offer_title">اصنع عرضك بنفسك</h3>
+      <p style="color:var(--text-secondary);margin-bottom:20px" data-translate="create_offer_desc">اختر المنتجات التي ترغب في إنشاء عرض لها وارسلها مباشرة إلى WhatsApp
       و سوف نرسل لك سعر عرضك الجديد</p>
       <div class="products-grid" id="create-offer-products"></div>
       <div class="selected-products" id="selected-products" style="display:none">
-        <h4>المنتجات المختارة</h4>
+        <h4 data-translate="selected_products">المنتجات المختارة</h4>
         <div class="selected-list" id="selected-list"></div>
       </div>
-      <button id="create-offer-btn" class="btn-create-offer" style="display:none">إرسال إلى WhatsApp</button>
+      <button id="create-offer-btn" class="btn-create-offer" style="display:none" data-translate="send_to_whatsapp">إرسال إلى WhatsApp</button>
     </div>
   </section>
 </main>
 <section id="adminPage" style="display:none">
-  <div class="admin-header">لوحة التحكم – المتجر</div>
-  <div class="quran-admin">(بِسْمِ اللَّهِ الرَّحْمَٰنِ الرَّحِيمِ) – "مَّا يَفْتَحِ اللَّهُ لِلنَّاسِ مِن رَّحْمَةٍ فَلَا مُمْسِكَ لَهَا"</div>
+  <div class="admin-header" data-translate="admin_title">لوحة التحكم – المتجر</div>
+  <div class="quran-admin" data-translate="admin_quran">(بِسْمِ اللَّهِ الرَّحْمَٰنِ الرَّحِيمِ) – "مَّا يَفْتَحِ اللَّهُ لِلنَّاسِ مِن رَّحْمَةٍ فَلَا مُمْسِكَ لَهَا"</div>
   <div class="wrap">
     <div class="card">
       <div class="tabs">
-        <button class="tab active" data-tab="products-sec">المنتجات</button>
-        <button class="tab" data-tab="offers-sec">العروض</button>
-        <button class="tab" data-tab="lists-sec">القوائم الحالية</button>
-        <button class="tab" data-tab="suggestions-sec">اقتراحات المنتجات</button>
-        <button class="tab" data-tab="card-settings-sec">إعدادات البطاقات</button>
+        <button class="tab active" data-tab="products-sec" data-translate="products_list">المنتجات</button>
+        <button class="tab" data-tab="offers-sec" data-translate="offers_list">العروض</button>
+        <button class="tab" data-tab="lists-sec" data-translate="current_lists">القوائم الحالية</button>
+        <button class="tab" data-tab="suggestions-sec" data-translate="product_suggestions">اقتراحات المنتجات</button>
+        <button class="tab" data-tab="card-settings-sec" data-translate="card_settings">إعدادات البطاقات</button>
       </div>
       <section id="products-sec" class="section active">
         <div class="card-settings-container" style="margin-bottom: 20px;">
-          <h3>ترتيب المنتجات</h3>
-          <p style="color: var(--text-secondary); margin-bottom: 15px;">اسحب وأفلت المنتجات لتغيير ترتيب ظهورها في المتجر</p>
+          <h3 data-translate="products_order">ترتيب المنتجات</h3>
+          <p style="color: var(--text-secondary); margin-bottom: 15px;" data-translate="products_order_desc">اسحب وأفلت المنتجات لتغيير ترتيب ظهورها في المتجر</p>
           <div id="products-order-container" class="list"></div>
-          <button id="save-products-order" class="btn-3d" style="margin-top: 15px;">حفظ الترتيب</button>
+          <button id="save-products-order" class="btn-3d" style="margin-top: 15px;" data-translate="save_order">حفظ الترتيب</button>
         </div>
         
-        <h2>إضافة منتج</h2>
+        <h2 data-translate="add_product">إضافة منتج</h2>
         <div class="grid grid-2">
-          <div class="row"><label>اسم المنتج</label><input id="p-name" type="text" placeholder="مثال: ساعة يد"></div>
-          <div class="row"><label>السعر</label><input id="p-price" type="number" step="0.01" placeholder="0.00"></div>
+          <div class="row"><label data-translate="product_name">اسم المنتج</label><input id="p-name" type="text" data-translate-placeholder="product_name_placeholder" placeholder="مثال: ساعة يد"></div>
+          <div class="row"><label data-translate="price">السعر</label><input id="p-price" type="number" step="0.01" data-translate-placeholder="price_placeholder" placeholder="0.00"></div>
         </div>
-        <div class="row" style="margin-top:8px"><label>وصف المنتج</label><textarea id="p-desc" placeholder="نص الوصف المختصر"></textarea></div>
-        <h3>صور المنتج (حتى 8)</h3>
+        <div class="row" style="margin-top:8px"><label data-translate="product_desc">وصف المنتج</label><textarea id="p-desc" data-translate-placeholder="product_desc_placeholder" placeholder="نص الوصف المختصر"></textarea></div>
+        <h3 data-translate="product_images">صور المنتج (حتى 8)</h3>
         <div class="imgs-grid cols-2">
-          <input id="p-img1" type="text" placeholder="رابط صورة 1">
-          <input id="p-img2" type="text" placeholder="رابط صورة 2">
-          <input id="p-img3" type="text" placeholder="رابط صورة 3">
-          <input id="p-img4" type="text" placeholder="رابط صورة 4">
-          <input id="p-img5" type="text" placeholder="رابط صورة 5">
-          <input id="p-img6" type="text" placeholder="رابط صورة 6">
-          <input id="p-img7" type="text" placeholder="رابط صورة 7">
-          <input id="p-img8" type="text" placeholder="رابط صورة 8">
+          <input id="p-img1" type="text" data-translate-placeholder="product_image_placeholder" placeholder="رابط صورة 1">
+          <input id="p-img2" type="text" data-translate-placeholder="product_image_placeholder" placeholder="رابط صورة 2">
+          <input id="p-img3" type="text" data-translate-placeholder="product_image_placeholder" placeholder="رابط صورة 3">
+          <input id="p-img4" type="text" data-translate-placeholder="product_image_placeholder" placeholder="رابط صورة 4">
+          <input id="p-img5" type="text" data-translate-placeholder="product_image_placeholder" placeholder="رابط صورة 5">
+          <input id="p-img6" type="text" data-translate-placeholder="product_image_placeholder" placeholder="رابط صورة 6">
+          <input id="p-img7" type="text" data-translate-placeholder="product_image_placeholder" placeholder="رابط صورة 7">
+          <input id="p-img8" type="text" data-translate-placeholder="product_image_placeholder" placeholder="رابط صورة 8">
         </div>
         <div class="spacer"></div>
-        <button id="btn-add-product" class="btn-3d">حفظ المنتج</button>
+        <button id="btn-add-product" class="btn-3d" data-translate="save_product">حفظ المنتج</button>
         <div id="msg-add-product" class="msg"></div>
-        <h3 style="margin-top:20px">المنتجات الحالية</h3>
+        <h3 style="margin-top:20px" data-translate="current_products">المنتجات الحالية</h3>
         <div id="list-products" class="list"></div>
-        <button id="refresh-products" class="refresh-btn">تحديث المنتجات</button>
+        <button id="refresh-products" class="refresh-btn" data-translate="refresh_products">تحديث المنتجات</button>
       </section>
       <section id="offers-sec" class="section">
-        <h2>إضافة عرض</h2>
+        <h2 data-translate="add_offer">إضافة عرض</h2>
         <div class="grid grid-2">
-          <div class="row"><label>اسم العرض</label><input id="o-title" type="text" placeholder="مثال: عرض العودة للمدارس"></div>
-          <div class="row"><label>السعر الجديد</label><input id="o-price" type="number" step="0.01" placeholder="0.00"></div>
+          <div class="row"><label data-translate="offer_name">اسم العرض</label><input id="o-title" type="text" data-translate-placeholder="offer_name_placeholder" placeholder="مثال: عرض العودة للمدارس"></div>
+          <div class="row"><label data-translate="new_price">السعر الجديد</label><input id="o-price" type="number" step="0.01" data-translate-placeholder="price_placeholder" placeholder="0.00"></div>
         </div>
-        <div class="row" style="margin-top:8px"><label>وصف العرض</label><textarea id="o-desc" placeholder="وصف مختصر للعرض"></textarea></div>
-        <h3>اختر منتجات العرض</h3>
+        <div class="row" style="margin-top:8px"><label data-translate="offer_desc">وصف العرض</label><textarea id="o-desc" data-translate-placeholder="offer_desc_placeholder" placeholder="وصف مختصر للعرض"></textarea></div>
+        <h3 data-translate="select_offer_products">اختر منتجات العرض</h3>
         <div id="select-products" class="select-products"></div>
         <div class="spacer"></div>
-        <button id="btn-add-offer" class="btn-3d">حفظ العرض</button>
+        <button id="btn-add-offer" class="btn-3d" data-translate="save_offer">حفظ العرض</button>
         <div id="msg-add-offer" class="msg"></div>
-        <h3 style="margin-top:20px">العروض الحالية</h3>
+        <h3 style="margin-top:20px" data-translate="current_offers">العروض الحالية</h3>
         <div id="list-offers" class="list"></div>
       </section>
       <section id="lists-sec" class="section">
-        <h2>القوائم الحالية (قراءة سريعة)</h2>
+        <h2 data-translate="current_lists">القوائم الحالية (قراءة سريعة)</h2>
         <div class="grid grid-2">
-          <div class="card"><h3>المنتجات</h3><div id="list-products-mini" class="list"></div></div>
-          <div class="card"><h3>العروض</h3><div id="list-offers-mini" class="list"></div></div>
+          <div class="card"><h3 data-translate="products_list">المنتجات</h3><div id="list-products-mini" class="list"></div></div>
+          <div class="card"><h3 data-translate="offers_list">العروض</h3><div id="list-offers-mini" class="list"></div></div>
         </div>
       </section>
       <section id="suggestions-sec" class="section">
-        <h2>اقتراحات المنتجات</h2>
+        <h2 data-translate="product_suggestions">اقتراحات المنتجات</h2>
         <div id="list-suggestions" class="list"></div>
       </section>
       <section id="card-settings-sec" class="section">
-        <h2>إعدادات البطاقات المتقدمة</h2>
+        <h2 data-translate="card_settings">إعدادات البطاقات المتقدمة</h2>
         <div class="card-settings-container">
           <div class="card-type-settings">
-            <h4>إعدادات بطاقات المنتجات</h4>
+            <h4 data-translate="product_card_settings">إعدادات بطاقات المنتجات</h4>
             <div class="settings-grid">
               <div class="setting-group">
-                <label>عرض البطاقة (px)</label>
+                <label data-translate="card_width">عرض البطاقة (px)</label>
                 <input type="range" id="product-card-width-slider" min="150" max="300" value="200" step="10">
                 <span class="range-value" id="product-card-width-value">200px</span>
               </div>
               <div class="setting-group">
-                <label>ارتفاع البطاقة</label>
+                <label data-translate="card_height">ارتفاع البطاقة</label>
                 <select id="product-card-height-select">
-                  <option value="auto">تلقائي</option>
-                  <option value="300px">ثابت (300px)</option>
-                  <option value="350px">ثابت (350px)</option>
-                  <option value="400px">ثابت (400px)</option>
+                  <option value="auto" data-translate="auto_height">تلقائي</option>
+                  <option value="300px" data-translate="fixed_height">ثابت (300px)</option>
+                  <option value="350px" data-translate="fixed_height">ثابت (350px)</option>
+                  <option value="400px" data-translate="fixed_height">ثابت (400px)</option>
                 </select>
               </div>
               <div class="setting-group">
-                <label>حجم الخط العام (px)</label>
+                <label data-translate="font_size">حجم الخط العام (px)</label>
                 <input type="range" id="product-font-size-slider" min="12" max="20" value="16" step="1">
                 <span class="range-value" id="product-font-size-value">16px</span>
               </div>
               <div class="setting-group">
-                <label>حجم عنوان المنتج (px)</label>
+                <label data-translate="title_size">حجم عنوان المنتج (px)</label>
                 <input type="range" id="product-title-size-slider" min="14" max="22" value="16" step="1">
                 <span class="range-value" id="product-title-size-value">16px</span>
               </div>
               <div class="setting-group">
-                <label>حجم السعر (px)</label>
+                <label data-translate="price_size">حجم السعر (px)</label>
                 <input type="range" id="product-price-size-slider" min="14" max="24" value="18" step="1">
                 <span class="range-value" id="product-price-size-value">18px</span>
               </div>
               <div class="setting-group">
-                <label>ارتفاع الصورة (px)</label>
+                <label data-translate="image_height">ارتفاع الصورة (px)</label>
                 <input type="range" id="product-image-height-slider" min="100" max="200" value="140" step="10">
                 <span class="range-value" id="product-image-height-value">140px</span>
               </div>
               <div class="setting-group">
-                <label>الحشو الداخلي (px)</label>
+                <label data-translate="padding">الحشو الداخلي (px)</label>
                 <input type="range" id="product-padding-slider" min="8" max="24" value="16" step="2">
                 <span class="range-value" id="product-padding-value">16px</span>
               </div>
               <div class="setting-group">
-                <label>لون الخلفية</label>
+                <label data-translate="bg_color">لون الخلفية</label>
                 <input type="color" id="product-bg-color" value="#ffffff">
                 <span class="color-preview" id="product-bg-preview" style="background-color:#ffffff"></span>
               </div>
             </div>
             <div class="preview-section">
-              <div class="preview-title">معاينة بطاقة المنتج</div>
+              <div class="preview-title" data-translate="product_preview">معاينة بطاقة المنتج</div>
               <div class="preview-container">
                 <div class="preview-card" id="product-preview-card">
                   <img src="https://via.placeholder.com/200x140" alt="معاينة">
@@ -895,50 +917,50 @@ header{
                 </div>
               </div>
             </div>
-            <button class="reset-btn" id="reset-product-settings">استعادة الإعدادات الافتراضية</button>
+            <button class="reset-btn" id="reset-product-settings" data-translate="reset_settings">استعادة الإعدادات الافتراضية</button>
           </div>
           
           <div class="card-type-settings">
-            <h4>إعدادات بطاقات العروض</h4>
+            <h4 data-translate="offer_card_settings">إعدادات بطاقات العروض</h4>
             <div class="settings-grid">
               <div class="setting-group">
-                <label>عرض البطاقة (px)</label>
+                <label data-translate="card_width">عرض البطاقة (px)</label>
                 <input type="range" id="offer-card-width-slider" min="250" max="400" value="320" step="10">
                 <span class="range-value" id="offer-card-width-value">320px</span>
               </div>
               <div class="setting-group">
-                <label>ارتفاع البطاقة (px)</label>
+                <label data-translate="card_height">ارتفاع البطاقة (px)</label>
                 <input type="range" id="offer-card-height-slider" min="300" max="500" value="380" step="10">
                 <span class="range-value" id="offer-card-height-value">380px</span>
               </div>
               <div class="setting-group">
-                <label>حجم الخط العام (px)</label>
+                <label data-translate="font_size">حجم الخط العام (px)</label>
                 <input type="range" id="offer-font-size-slider" min="12" max="20" value="16" step="1">
                 <span class="range-value" id="offer-font-size-value">16px</span>
               </div>
               <div class="setting-group">
-                <label>حجم عنوان العرض (px)</label>
+                <label data-translate="title_size">حجم عنوان العرض (px)</label>
                 <input type="range" id="offer-title-size-slider" min="14" max="24" value="18" step="1">
                 <span class="range-value" id="offer-title-size-value">18px</span>
               </div>
               <div class="setting-group">
-                <label>حجم السعر (px)</label>
+                <label data-translate="price_size">حجم السعر (px)</label>
                 <input type="range" id="offer-price-size-slider" min="14" max="24" value="18" step="1">
                 <span class="range-value" id="offer-price-size-value">18px</span>
               </div>
               <div class="setting-group">
-                <label>الحشو الداخلي (px)</label>
+                <label data-translate="padding">الحشو الداخلي (px)</label>
                 <input type="range" id="offer-padding-slider" min="8" max="24" value="16" step="2">
                 <span class="range-value" id="offer-padding-value">16px</span>
               </div>
               <div class="setting-group">
-                <label>لون الخلفية</label>
+                <label data-translate="bg_color">لون الخلفية</label>
                 <input type="color" id="offer-bg-color" value="#ffffff">
                 <span class="color-preview" id="offer-bg-preview" style="background-color:#ffffff"></span>
               </div>
             </div>
             <div class="preview-section">
-              <div class="preview-title">معاينة بطاقة العرض</div>
+              <div class="preview-title" data-translate="offer_preview">معاينة بطاقة العرض</div>
               <div class="preview-container">
                 <div class="preview-card" id="offer-preview-card" style="width:320px; height:380px;">
                   <h5>اسم العرض</h5>
@@ -947,59 +969,59 @@ header{
                 </div>
               </div>
             </div>
-            <button class="reset-btn" id="reset-offer-settings">استعادة الإعدادات الافتراضية</button>
+            <button class="reset-btn" id="reset-offer-settings" data-translate="reset_settings">استعادة الإعدادات الافتراضية</button>
           </div>
           
           <div class="card-type-settings">
-            <h4>إعدادات بطاقات "اصنع عرضك بنفسك"</h4>
+            <h4 data-translate="create_offer_card_settings">إعدادات بطاقات "اصنع عرضك بنفسك"</h4>
             <div class="settings-grid">
               <div class="setting-group">
-                <label>عرض البطاقة (px)</label>
+                <label data-translate="card_width">عرض البطاقة (px)</label>
                 <input type="range" id="create-offer-card-width-slider" min="140" max="240" value="180" step="10">
                 <span class="range-value" id="create-offer-card-width-value">180px</span>
               </div>
               <div class="setting-group">
-                <label>ارتفاع البطاقة</label>
+                <label data-translate="card_height">ارتفاع البطاقة</label>
                 <select id="create-offer-card-height-select">
-                  <option value="auto">تلقائي</option>
-                  <option value="250px">ثابت (250px)</option>
-                  <option value="300px">ثابت (300px)</option>
-                  <option value="350px">ثابت (350px)</option>
+                  <option value="auto" data-translate="auto_height">تلقائي</option>
+                  <option value="250px" data-translate="fixed_height">ثابت (250px)</option>
+                  <option value="300px" data-translate="fixed_height">ثابت (300px)</option>
+                  <option value="350px" data-translate="fixed_height">ثابت (350px)</option>
                 </select>
               </div>
               <div class="setting-group">
-                <label>حجم الخط العام (px)</label>
+                <label data-translate="font_size">حجم الخط العام (px)</label>
                 <input type="range" id="create-offer-font-size-slider" min="12" max="18" value="14" step="1">
                 <span class="range-value" id="create-offer-font-size-value">14px</span>
               </div>
               <div class="setting-group">
-                <label>حجم عنوان المنتج (px)</label>
+                <label data-translate="title_size">حجم عنوان المنتج (px)</label>
                 <input type="range" id="create-offer-title-size-slider" min="12" max="20" value="15" step="1">
                 <span class="range-value" id="create-offer-title-size-value">15px</span>
               </div>
               <div class="setting-group">
-                <label>حجم السعر (px)</label>
+                <label data-translate="price_size">حجم السعر (px)</label>
                 <input type="range" id="create-offer-price-size-slider" min="12" max="20" value="16" step="1">
                 <span class="range-value" id="create-offer-price-size-value">16px</span>
               </div>
               <div class="setting-group">
-                <label>ارتفاع الصورة (px)</label>
+                <label data-translate="image_height">ارتفاع الصورة (px)</label>
                 <input type="range" id="create-offer-image-height-slider" min="80" max="160" value="120" step="10">
                 <span class="range-value" id="create-offer-image-height-value">120px</span>
               </div>
               <div class="setting-group">
-                <label>الحشو الداخلي (px)</label>
+                <label data-translate="padding">الحشو الداخلي (px)</label>
                 <input type="range" id="create-offer-padding-slider" min="8" max="24" value="16" step="2">
                 <span class="range-value" id="create-offer-padding-value">16px</span>
               </div>
               <div class="setting-group">
-                <label>لون الخلفية</label>
+                <label data-translate="bg_color">لون الخلفية</label>
                 <input type="color" id="create-offer-bg-color" value="#ffffff">
                 <span class="color-preview" id="create-offer-bg-preview" style="background-color:#ffffff"></span>
               </div>
             </div>
             <div class="preview-section">
-              <div class="preview-title">معاينة بطاقة "اصنع عرضك"</div>
+              <div class="preview-title" data-translate="create_offer_preview">معاينة بطاقة "اصنع عرضك"</div>
               <div class="preview-container">
                 <div class="preview-card" id="create-offer-preview-card">
                   <img src="https://via.placeholder.com/180x120" alt="معاينة">
@@ -1009,10 +1031,10 @@ header{
                 </div>
               </div>
             </div>
-            <button class="reset-btn" id="reset-create-offer-settings">استعادة الإعدادات الافتراضية</button>
+            <button class="reset-btn" id="reset-create-offer-settings" data-translate="reset_settings">استعادة الإعدادات الافتراضية</button>
           </div>
           
-          <button class="save-settings-btn" id="save-all-card-settings">حفظ جميع الإعدادات</button>
+          <button class="save-settings-btn" id="save-all-card-settings" data-translate="save_all_settings">حفظ جميع الإعدادات</button>
         </div>
       </section>
     </div>
@@ -1020,11 +1042,11 @@ header{
   <div id="adminLoginModal" class="login-backdrop hidden">
     <div class="card login-card">
       <button id="adminLoginClose" class="close-x">✖</button>
-      <h2 style="text-align:center">تسجيل الدخول</h2>
-      <p class="muted" style="text-align:center;margin-top:-6px">أدخل كلمة المرور للوصول إلى لوحة التحكم</p>
-      <div class="row" style="margin-top:12px"><label>كلمة المرور</label><input id="admin-pass" type="password" placeholder="••••"></div>
+      <h2 style="text-align:center" data-translate="login">تسجيل الدخول</h2>
+      <p class="muted" style="text-align:center;margin-top:-6px" data-translate="login_desc">أدخل كلمة المرور للوصول إلى لوحة التحكم</p>
+      <div class="row" style="margin-top:12px"><label data-translate="password">كلمة المرور</label><input id="admin-pass" type="password" data-translate-placeholder="password_placeholder" placeholder="••••"></div>
       <div class="spacer"></div>
-      <div class="flex" style="justify-content:space-between"><button id="btn-login" class="btn-3d" style="flex:1">دخول</button></div>
+      <div class="flex" style="justify-content:space-between"><button id="btn-login" class="btn-3d" style="flex:1" data-translate="login_btn">دخول</button></div>
       <div id="login-msg" class="msg"></div>
       <p class="subtle" style="margin-top:12px;text-align:center">
       ﷺ صلِّ على النبي  ﷺ   </p>
@@ -1034,13 +1056,13 @@ header{
 <div class="order-sticker" id="orderSticker" title="عرض السلة">
   <div class="sticker-count" id="stickerCount">0</div>
   <div class="icon">🛒</div>
-  <div class="label">السلة</div>
+  <div class="label" data-translate="cart">السلة</div>
 </div>
 <div class="cart-modal" id="cartModal" aria-hidden="true">
   <div class="head">
     <div style="display:flex;flex-direction:column;align-items:flex-start">
-      <div style="font-weight:900">سلة المشتريات</div>
-      <div style="font-size:14px;color:var(--text-secondary)">المحتويات وكمية كل عنصر</div>
+      <div style="font-weight:900" data-translate="cart_title">سلة المشتريات</div>
+      <div style="font-size:14px;color:var(--text-secondary)" data-translate="cart_desc">المحتويات وكمية كل عنصر</div>
     </div>
     <div style="display:flex;gap:10px;align-items:center">
       <div style="font-weight:900;color:var(--primary)" id="cartCountTop">0</div>
@@ -1049,10 +1071,10 @@ header{
   </div>
   <div class="items" id="cartItems"></div>
   <div class="footer">
-    <div class="total">الإجمالي: <span id="cartTotalText">0.00 OMR</span></div>
+    <div class="total" data-translate="total">الإجمالي: <span id="cartTotalText">0.00 OMR</span></div>
     <div style="display:flex;gap:12px">
-      <button id="cartClearBtn" class="btn-3d" style="background:var(--bg);color:var(--text)">إفراغ السلة</button>
-      <button id="cartOrderBtn" class="btn-3d" style="background:var(--secondary);color:#fff">اطلب الآن</button>
+      <button id="cartClearBtn" class="btn-3d" style="background:var(--bg);color:var(--text)" data-translate="clear_cart">إفراغ السلة</button>
+      <button id="cartOrderBtn" class="btn-3d" style="background:var(--secondary);color:#fff" data-translate="order_now">اطلب الآن</button>
     </div>
   </div>
 </div>
@@ -1064,7 +1086,7 @@ header{
     <p id="miniDetailDesc" style="color:var(--text-secondary)"></p>
     <p style="font-weight:900;color:var(--danger) !important" id="miniDetailPrice"></p>
     <div style="display:flex;gap:10px;justify-content:flex-end">
-      <button class="btn-3d" id="miniAddCartBtn">أضف للسلة</button>
+      <button class="btn-3d" id="miniAddCartBtn" data-translate="add_to_cart">أضف للسلة</button>
       
     </div>
   </div>
@@ -1080,6 +1102,80 @@ header{
 <div class="toast" id="toast"></div>
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2.39.7/dist/umd/supabase.min.js"></script>
 <script>
+// Translation System
+let currentLang = localStorage.getItem('lang') || 'ar';
+let translations = {};
+
+// Load translations
+async function loadTranslations() {
+  try {
+    const response = await fetch(`lang/${currentLang}.json`);
+    translations = await response.json();
+    updatePageTranslations();
+  } catch (error) {
+    console.error('Error loading translations:', error);
+  }
+}
+
+// Update page with translations
+function updatePageTranslations() {
+  // Update HTML lang and dir attributes
+  document.documentElement.lang = currentLang;
+  document.documentElement.dir = currentLang === 'ar' ? 'rtl' : 'ltr';
+  
+  // Update all elements with data-translate attribute
+  document.querySelectorAll('[data-translate]').forEach(element => {
+    const key = element.getAttribute('data-translate');
+    if (translations[key]) {
+      element.textContent = translations[key];
+    }
+  });
+  
+  // Update placeholders
+  document.querySelectorAll('[data-translate-placeholder]').forEach(element => {
+    const key = element.getAttribute('data-translate-placeholder');
+    if (translations[key]) {
+      element.placeholder = translations[key];
+    }
+  });
+  
+  // Update title
+  const titleElement = document.querySelector('title[data-translate]');
+  if (titleElement && translations[titleElement.getAttribute('data-translate')]) {
+    document.title = translations[titleElement.getAttribute('data-translate')];
+  }
+  
+  // Update language switcher buttons
+  document.getElementById('lang-ar').classList.toggle('active', currentLang === 'ar');
+  document.getElementById('lang-en').classList.toggle('active', currentLang === 'en');
+  
+  // Update font family for English
+  if (currentLang === 'en') {
+    document.body.style.fontFamily = "'Roboto', Arial, Helvetica, sans-serif";
+  } else {
+    document.body.style.fontFamily = "'Tajawal', Arial, Helvetica, sans-serif";
+  }
+}
+
+// Set language
+function setLanguage(lang) {
+  currentLang = lang;
+  localStorage.setItem('lang', lang);
+  loadTranslations();
+}
+
+// Get translation
+function t(key, params = {}) {
+  let text = translations[key] || key;
+  
+  // Replace parameters
+  Object.keys(params).forEach(param => {
+    text = text.replace(new RegExp(`{${param}}`, 'g'), params[param]);
+  });
+  
+  return text;
+}
+
 /* Supabase connection */
 const SUPABASE_URL = "https://rqiognpfzyyfyferyjah.supabase.co";
 const SUPABASE_KEY = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InJxaW9nbnBmenl5ZnlmZXJ5amFoIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NTQ3MzI2ODcsImV4cCI6MjA3MDMwODY4N30.srA9q_fRyWo0d4htuiC4lyrBg2j5QSABfA1yi_8MSIc";
@@ -1160,7 +1256,7 @@ function renderCartModal(){
   if (!cartItemsEl) return;
   cartItemsEl.innerHTML = '';
   if (cart.length === 0){
-    cartItemsEl.innerHTML = '<div style="text-align:center;padding:20px;color:var(--text-secondary)">السلة فارغة</div>';
+    cartItemsEl.innerHTML = '<div style="text-align:center;padding:20px;color:var(--text-secondary)">' + t('cart_empty') + '</div>';
     updateSticker(); return;
   }
   cart.forEach(ci=>{
@@ -1177,7 +1273,7 @@ function renderCartModal(){
         '<span style="min-width:28px;text-align:center">'+ci.qty+'</span>'+
         '<button onclick="changeQty('+ci.id+','+(ci.isOffer?1:0)+',1)">+</button>'+
       '</div>'+
-      '<div style="margin-left:8px"><button class="btn-3d" onclick="removeFromCart('+ci.id+','+(ci.isOffer?1:0)+')">حذف</button></div>';
+      '<div style="margin-left:8px"><button class="btn-3d" onclick="removeFromCart('+ci.id+','+(ci.isOffer?1:0)+')">' + t('delete') + '</button></div>';
     cartItemsEl.appendChild(row);
   });
   updateSticker();
@@ -1199,14 +1295,14 @@ function addToCartById(id){
   if(!p) return;
   const ex = cart.find(it=> it.id===id && !it.isOffer);
   if(ex) ex.qty++; else cart.push({id:p.id,name:p.name,price:p.price,images:p.images,qty:1,isOffer:false});
-  saveCart(); renderCartModal(); showToast('تمت الإضافة','success',1200);
+  saveCart(); renderCartModal(); showToast(t('added_to_cart'),'success',1200);
 }
 /* fetch */
 async function fetchProducts(){
   try{
     // إضافة رسالة تحميل
     if (productsGrid) {
-      productsGrid.innerHTML = '<div style="text-align:center;padding:20px;"><div class="loading-spinner"></div> جاري تحميل المنتجات...</div>';
+      productsGrid.innerHTML = '<div style="text-align:center;padding:20px;"><div class="loading-spinner"></div> ' + t('loading_products') + '</div>';
     }
     
     if(!supabaseClient) throw new Error("لم يتم تهيئة الاتصال بقاعدة البيانات");
@@ -1214,14 +1310,14 @@ async function fetchProducts(){
     if(error){ 
       console.error(error); 
       if (productsGrid) {
-        productsGrid.innerHTML = '<div class="empty-state"><h3>لا توجد منتجات متاحة</h3><p>لم نتمكن من تحميل المنتجات من قاعدة البيانات.</p><button class="btn-3d" onclick="fetchProducts()">إعادة المحاولة</button></div>'; 
+        productsGrid.innerHTML = '<div class="empty-state"><h3>' + t('no_products') + '</h3><p>' + t('error_loading') + '</p><button class="btn-3d" onclick="fetchProducts()">' + t('try_again') + '</button></div>'; 
       }
-      showToast('فشل تحميل المنتجات: ' + error.message, 'error');
+      showToast(t('error_loading') + ': ' + error.message, 'error');
       return;
     }
     if(!data || data.length===0){
       if (productsGrid) {
-        productsGrid.innerHTML = '<div class="empty-state"><h3>لا توجد منتجات</h3><p>يمكنك إضافة منتجات جديدة من لوحة التحكم.</p></div>'; 
+        productsGrid.innerHTML = '<div class="empty-state"><h3>' + t('no_products') + '</h3><p>' + t('no_products_desc') + '</p></div>'; 
       }
       return;
     }
@@ -1234,9 +1330,9 @@ async function fetchProducts(){
   }catch(e){
     console.error(e); 
     if (productsGrid) {
-      productsGrid.innerHTML = '<div class="empty-state"><h3>حدث خطأ</h3><p>لم نتمكن من تحميل المنتجات. الرجاء المحاولة مرة أخرى.</p><button class="btn-3d" onclick="fetchProducts()">إعادة المحاولة</button></div>';
+      productsGrid.innerHTML = '<div class="empty-state"><h3>' + t('error_occurred') + '</h3><p>' + t('error_loading') + '</p><button class="btn-3d" onclick="fetchProducts()">' + t('try_again') + '</button></div>';
     }
-    showToast('خطأ غير متوقع: ' + e.message, 'error');
+    showToast(t('error_occurred') + ': ' + e.message, 'error');
   }
 }
 async function fetchOffers(){
@@ -1244,7 +1340,7 @@ async function fetchOffers(){
     console.log("جاري تحميل العروض...");
     // إضافة رسالة تحميل
     if (offersGrid) {
-      offersGrid.innerHTML = '<div style="text-align:center;padding:20px;"><div class="loading-spinner"></div> جاري تحميل العروض...</div>';
+      offersGrid.innerHTML = '<div style="text-align:center;padding:20px;"><div class="loading-spinner"></div> ' + t('loading_offers') + '</div>';
     }
     
     if(!supabaseClient) throw new Error("لم يتم تهيئة الاتصال بقاعدة البيانات");
@@ -1252,15 +1348,15 @@ async function fetchOffers(){
     if(error){ 
       console.error("خطأ في تحميل العروض:", error); 
       if (offersGrid) {
-        offersGrid.innerHTML = '<div class="empty-state"><h3>لا توجد عروض متاحة</h3><p>لم نتمكن من تحميل العروض من قاعدة البيانات.</p><button class="btn-3d" onclick="fetchOffers()">إعادة المحاولة</button></div>'; 
+        offersGrid.innerHTML = '<div class="empty-state"><h3>' + t('no_offers') + '</h3><p>' + t('error_loading') + '</p><button class="btn-3d" onclick="fetchOffers()">' + t('try_again') + '</button></div>'; 
       }
-      showToast('فشل تحميل العروض: ' + error.message, 'error');
+      showToast(t('error_loading') + ': ' + error.message, 'error');
       return;
     }
     console.log("تم تحميل العروض:", data);
     if(!data || data.length===0){
       if (offersGrid) {
-        offersGrid.innerHTML = '<div class="empty-state"><h3>لا توجد عروض</h3><p>يمكنك إضافة عروض جديدة من لوحة التحكم.</p></div>'; 
+        offersGrid.innerHTML = '<div class="empty-state"><h3>' + t('no_offers') + '</h3><p>' + t('no_offers_desc') + '</p></div>'; 
       }
       return;
     }
@@ -1278,16 +1374,16 @@ async function fetchOffers(){
   }catch(e){
     console.error("استثناء في تحميل العروض:", e); 
     if (offersGrid) {
-      offersGrid.innerHTML = '<div class="empty-state"><h3>حدث خطأ</h3><p>لم نتمكن من تحميل العروض. الرجاء المحاولة مرة أخرى.</p><button class="btn-3d" onclick="fetchOffers()">إعادة المحاولة</button></div>';
+      offersGrid.innerHTML = '<div class="empty-state"><h3>' + t('error_occurred') + '</h3><p>' + t('error_loading') + '</p><button class="btn-3d" onclick="fetchOffers()">' + t('try_again') + '</button></div>';
     }
-    showToast('خطأ غير متوقع: ' + e.message, 'error');
+    showToast(t('error_occurred') + ': ' + e.message, 'error');
   }
 }
 /* render products (+ share badge) */
 function renderProducts(){
   productsGrid.innerHTML = '';
   if(products.length===0){
-    productsGrid.innerHTML = '<div class="empty-state"><h3>لا توجد منتجات</h3><p>يمكنك إضافة منتجات جديدة من لوحة التحكم.</p></div>'; return;
+    productsGrid.innerHTML = '<div class="empty-state"><h3>' + t('no_products') + '</h3><p>' + t('no_products_desc') + '</p></div>'; return;
   }
   const now = Date.now();
   products.filter(p=> p.type==='normal' && !p.disabled).forEach(p=>{
@@ -1298,18 +1394,18 @@ function renderProducts(){
     const descId = 'desc-'+p.id;
     const btnId = 'more-'+p.id;
     card.innerHTML =
-      (now - (p.created_at? new Date(p.created_at).getTime():now) < 12*3600*1000 ? '<div class="badge-new">جديد</div>' : '') +
-      '<button class="share-badge" onclick="event.stopPropagation(); shareProduct('+p.id+')" title="مشاركة"><span class="material-icons">share</span></button>'+
+      (now - (p.created_at? new Date(p.created_at).getTime():now) < 12*3600*1000 ? '<div class="badge-new">' + t('new') + '</div>' : '') +
+      '<button class="share-badge" onclick="event.stopPropagation(); shareProduct('+p.id+')" title="' + t('share') + '"><span class="material-icons">share</span></button>'+
       '<div class="img-box"><img src="'+escapeHtml(main)+'" class="main-img" alt="'+escapeHtml(p.name)+'" data-id="'+p.id+'" data-index="0" loading="lazy" decoding="async"></div>'+
       '<div class="body">'+
         '<h4>'+escapeHtml(p.name)+'</h4>'+
         '<p class="desc" id="'+descId+'">'+escapeHtml(p.desc||'')+'</p>'+
-        '<button class="more-btn" id="'+btnId+'" onclick="toggleDescription('+p.id+')">مزيد ↓</button>'+
+        '<button class="more-btn" id="'+btnId+'" onclick="toggleDescription('+p.id+')">' + t('more') + '</button>'+
         '<p class="price">'+formatCurrency(p.price)+'</p>'+
       '</div>'+
       '<div class="btn-row">'+
-        '<button class="add-btn" onclick="addToCartById('+p.id+')">أضف للسلة</button>'+
-        '<button class="add-btn" onclick="openViewerById('+p.id+',0)">عرض الصور</button>'+
+        '<button class="add-btn" onclick="addToCartById('+p.id+')">' + t('add_to_cart') + '</button>'+
+        '<button class="add-btn" onclick="openViewerById('+p.id+',0)">' + t('view_images') + '</button>'+
       '</div>'+
       '<div class="thumbs">'+
         imgs.map((u,i)=> '<img src="'+escapeHtml(u)+'" class="thumb small-thumbnail '+(i===0?'highlight':'')+'" data-id="'+p.id+'" data-index="'+i+'" loading="lazy" decoding="async">').join('')+
@@ -1331,14 +1427,20 @@ function toggleDescription(productId){
   const desc = document.getElementById('desc-'+productId);
   const btn = document.getElementById('more-'+productId);
   if(!desc || !btn) return;
-  if(desc.classList.contains('expanded')){ desc.classList.remove('expanded'); btn.textContent='مزيد ↓'; }
-  else { desc.classList.add('expanded'); btn.textContent='أقل ↑'; }
+  if(desc.classList.contains('expanded')){ 
+    desc.classList.remove('expanded'); 
+    btn.textContent = t('more'); 
+  }
+  else { 
+    desc.classList.add('expanded'); 
+    btn.textContent = t('less'); 
+  }
 }
 /* render offers (+ share badge) */
 function renderOffers(){
   offersGrid.innerHTML = '';
   if(offers.length===0){
-    offersGrid.innerHTML = '<div class="empty-state"><h3>لا توجد عروض</h3><p>يمكنك إضافة عروض جديدة من لوحة التحكم.</p></div>'; 
+    offersGrid.innerHTML = '<div class="empty-state"><h3>' + t('no_offers') + '</h3><p>' + t('no_offers_desc') + '</p></div>'; 
     return;
   }
   
@@ -1375,19 +1477,19 @@ function renderOffers(){
     let cardHTML = '';
     
     // زر المشاركة
-    cardHTML += '<button class="share-badge" onclick="event.stopPropagation(); shareOffer(' + o.id + ')" title="مشاركة"><span class="material-icons">share</span></button>';
+    cardHTML += '<button class="share-badge" onclick="event.stopPropagation(); shareOffer(' + o.id + ')" title="' + t('share') + '"><span class="material-icons">share</span></button>';
     
     // رأس البطاقة
     cardHTML += '<div class="header">';
-    cardHTML += '<div style="font-weight:900;font-size:18px">العرض '+(offerIndex+1)+' — '+escapeHtml(o.name)+'</div>';
-    cardHTML += '<div><button class="btn-3d" onclick="addOfferToCart('+o.id+')">اطلب الآن</button></div>';
+    cardHTML += '<div style="font-weight:900;font-size:18px">' + t('offer_number') + ' '+(offerIndex+1)+' — '+escapeHtml(o.name)+'</div>';
+    cardHTML += '<div><button class="btn-3d" onclick="addOfferToCart('+o.id+')">' + t('order_now') + '</button></div>';
     cardHTML += '</div>';
     
     // وصف العرض
     cardHTML += '<div class="offer-desc">'+escapeHtml(o.desc||'')+'</div>';
     
     // سعر العرض
-    cardHTML += '<div style="font-weight:900;color:var(--danger);font-size:18px">السعر: '+formatCurrency(o.price)+'</div>';
+    cardHTML += '<div style="font-weight:900;color:var(--danger);font-size:18px">' + t('offer_price') + ' '+formatCurrency(o.price)+'</div>';
     
     // المنتجات المصغرة
     cardHTML += '<div class="mini-grid" style="margin-top:8px">'+miniHtml+'</div>';
@@ -1403,7 +1505,7 @@ function renderOffers(){
 function renderCreateOfferProducts(){
   createOfferProducts.innerHTML = '';
   if(products.length===0){
-    createOfferProducts.innerHTML = '<div class="empty-state"><h3>لا توجد منتجات</h3><p>يمكنك إضافة منتجات جديدة من لوحة التحكم.</p><button class="btn-3d" onclick="fetchProducts()">تحديث المنتجات</button></div>'; return;
+    createOfferProducts.innerHTML = '<div class="empty-state"><h3>' + t('no_products') + '</h3><p>' + t('no_products_desc') + '</p><button class="btn-3d" onclick="fetchProducts()">' + t('refresh_btn') + '</button></div>'; return;
   }
   products.filter(p=> p.type==='normal' && !p.disabled).forEach(p=>{
     const main = (p.images||[])[0] || '';
@@ -1413,12 +1515,12 @@ function renderCreateOfferProducts(){
     card.className='card product-card';
     card.dataset.productId = p.id;
     card.innerHTML =
-      '<button class="share-badge" onclick="event.stopPropagation(); shareProduct('+p.id+')" title="مشاركة"><span class="material-icons">share</span></button>'+
+      '<button class="share-badge" onclick="event.stopPropagation(); shareProduct('+p.id+')" title="' + t('share') + '"><span class="material-icons">share</span></button>'+
       '<div class="img-box"><img src="'+escapeHtml(main)+'" class="main-img" alt="'+escapeHtml(p.name)+'" data-id="'+p.id+'" data-index="0" loading="lazy" decoding="async"></div>'+
       '<div class="body">'+
         '<h4>'+escapeHtml(p.name)+'</h4>'+
         '<p class="desc" id="'+descId+'">'+escapeHtml(p.desc||'')+'</p>'+
-        '<button class="more-btn" id="'+btnId+'" onclick="toggleCreateDescription('+p.id+')">مزيد ↓</button>'+
+        '<button class="more-btn" id="'+btnId+'" onclick="toggleCreateDescription('+p.id+')">' + t('more') + '</button>'+
         '<p class="price">'+formatCurrency(p.price)+'</p>'+
       '</div>'+
       '<div class="selection-indicator">✓</div>';
@@ -1449,11 +1551,11 @@ function toggleCreateDescription(productId){
   if(!desc || !btn) return;
   if(desc.classList.contains('expanded')){ 
     desc.classList.remove('expanded'); 
-    btn.textContent='مزيد ↓'; 
+    btn.textContent = t('more'); 
   }
   else { 
     desc.classList.add('expanded'); 
-    btn.textContent='أقل ↑'; 
+    btn.textContent = t('less'); 
   }
 }
 function toggleProductSelection(productId){
@@ -1479,14 +1581,14 @@ function updateSelectedProductsDisplay(){
 }
 function removeSelectedProduct(productId){ toggleProductSelection(productId); }
 function sendSelectedProductsToWhatsApp(){
-  if(selectedProductsForOffer.length===0){ showToast('الرجاء اختيار منتجات أولاً','error'); return; }
-  let text = "🛒 *طلب عرض مخصص*\n\n───────────────\n\n";
+  if(selectedProductsForOffer.length===0){ showToast(t('complete_fields'),'error'); return; }
+  let text = "🛒 *" + t('custom_offer') + "*\n\n───────────────\n\n";
   selectedProductsForOffer.forEach((p,i)=>{
-    text += `*${i+1}. ${p.name}*\n   - السعر: ${formatCurrency(p.price)}\n\n`;
+    text += `*${i+1}. ${p.name}*\n   - ` + t('price') + `: ${formatCurrency(p.price)}\n\n`;
   });
   text += "───────────────\n";
-  text += `*💰 الإجمالي: ${formatCurrency(selectedProductsForOffer.reduce((sum,p)=> sum+p.price,0))}*\n\n`;
-  text += "شكرا لكم لتواصلكم معنا سيتم التواصل معكم قريبا لتأكيد الطلب *شكرًا لثقتكم بمتجرنا!*";
+  text += `*💰 ` + t('total_price') + `: ${formatCurrency(selectedProductsForOffer.reduce((sum,p)=> sum+p.price,0))}*\n\n`;
+  text += t('thank_you');
   const url = 'https://wa.me/'+WHATSAPP_NUMBER.replace('+','')+'?text='+encodeURIComponent(text);
   window.open(url,'_blank');
   selectedProductsForOffer = []; updateSelectedProductsDisplay();
@@ -1497,7 +1599,7 @@ function addOfferToCart(offerId){
   const o = offers.find(x=> x.id===offerId); if(!o) return;
   const ex = cart.find(it=> it.id===offerId && it.isOffer);
   if(ex) ex.qty++; else cart.push({id:o.id,name:o.name,price:o.price,images:o.images,qty:1,isOffer:true});
-  saveCart(); renderCartModal(); showToast('تمت إضافة العرض إلى السلة','success',1200);
+  saveCart(); renderCartModal(); showToast(t('offer_added'),'success',1200);
 }
 /* thumbs */
 function attachThumbHandlers(){
@@ -1533,9 +1635,10 @@ function attachMiniCardHandlers(){
 /* mini detail */
 function openMiniDetail(prodId){
   const p = products.find(pp=> pp.id===prodId);
-  if(!p || !Array.isArray(p.images) || p.images.length===0){ showToast('لا توجد صور للعرض','error',1400); return; }
+  if(!p || !Array.isArray(p.images) || p.images.length===0){ showToast(t('no_images'),'error',1400); return; }
   miniImg.src = p.images[0]||''; miniName.textContent = p.name||''; miniDesc.textContent = p.desc||''; miniPrice.textContent = formatCurrency(p.price);
-  miniAddCartBtn.onclick = function(){ addToCartById(p.id); showToast('تمت الإضافة للسلة','success'); closeMiniDetail(); };
+  miniAddCartBtn.textContent = t('add_to_cart');
+  miniAddCartBtn.onclick = function(){ addToCartById(p.id); showToast(t('added_to_cart'),'success'); closeMiniDetail(); };
   miniOverlay.classList.add('active'); setTimeout(()=> miniCardEl.classList.add('active'),20);
   miniOverlay.setAttribute('aria-hidden','false'); toggleBodyScroll(true);
 }
@@ -1551,40 +1654,40 @@ function offerDeepLink(id){ return window.location.origin + window.location.path
 function shareProduct(id){
   const p = products.find(x=> x.id===id); if(!p) return;
   const link = productDeepLink(id);
-  const text = 'شاهد '+p.name+' بسعر '+formatCurrency(p.price);
+  const text = t('share_product') + ' '+p.name+' ' + t('original_price') + ' '+formatCurrency(p.price);
   if(navigator.share){
     navigator.share({title:p.name,text:text,url:link}).catch(()=>{
-      navigator.clipboard?.writeText(link).then(()=> showToast('تم نسخ رابط المنتج','success'), ()=> alert(link));
+      navigator.clipboard?.writeText(link).then(()=> showToast(t('link_copied'),'success'), ()=> alert(link));
     });
   }else if(navigator.clipboard?.writeText){
-    navigator.clipboard.writeText(link).then(()=> showToast('تم نسخ رابط المنتج','success'), ()=> alert(link));
-  }else{ prompt('نسخ الرابط:', link); }
+    navigator.clipboard.writeText(link).then(()=> showToast(t('link_copied'),'success'), ()=> alert(link));
+  }else{ prompt(t('copy_link')+':', link); }
 }
 function shareOffer(id){
   const o = offers.find(x=> x.id===id); if(!o) return;
   const link = offerDeepLink(id);
-  const text = 'شاهد عرض: '+o.name+' بسعر '+formatCurrency(o.price);
+  const text = t('share_offer') + ': '+o.name+' ' + t('offer_price') + ' '+formatCurrency(o.price);
   if(navigator.share){
     navigator.share({title:o.name,text:text,url:link}).catch(()=>{
-      navigator.clipboard?.writeText(link).then(()=> showToast('تم نسخ رابط العرض','success'), ()=> alert(link));
+      navigator.clipboard?.writeText(link).then(()=> showToast(t('link_copied'),'success'), ()=> alert(link));
     });
   }else if(navigator.clipboard?.writeText){
-    navigator.clipboard.writeText(link).then(()=> showToast('تم نسخ رابط العرض','success'), ()=> alert(link));
-  }else{ prompt('نسخ الرابط:', link); }
+    navigator.clipboard.writeText(link).then(()=> showToast(t('link_copied'),'success'), ()=> alert(link));
+  }else{ prompt(t('copy_link')+':', link); }
 }
 /* دالة لمشاركة رابط قسم الاقتراحات */
 function shareSuggestionSection() {
   const link = window.location.origin + window.location.pathname + '#home';
-  const text = "ساهم في تطوير متجرنا! اقترح منتجًا جديدًا وشارك في تحسين تجربتنا.";
+  const text = t('suggest_product') + ". " + t('suggestion_desc');
   
   if(navigator.share){
-    navigator.share({title: "اقترح منتجًا", text: text, url: link}).catch(()=>{
-      navigator.clipboard?.writeText(link).then(()=> showToast('تم نسخ الرابط', 'success'), ()=> alert(link));
+    navigator.share({title: t('suggest_product'), text: text, url: link}).catch(()=>{
+      navigator.clipboard?.writeText(link).then(()=> showToast(t('link_copied'), 'success'), ()=> alert(link));
     });
   } else if(navigator.clipboard?.writeText){
-    navigator.clipboard.writeText(link).then(()=> showToast('تم نسخ الرابط', 'success'), ()=> alert(link));
+    navigator.clipboard.writeText(link).then(()=> showToast(t('link_copied'), 'success'), ()=> alert(link));
   } else {
-    prompt('انسخ الرابط:', link);
+    prompt(t('copy_link')+':', link);
   }
 }
 /* image viewer */
@@ -1608,10 +1711,10 @@ function updateViewerInfo(){
 }
 function openViewerById(prodId,startIndex){
   const prod = products.find(p=> p.id===prodId);
-  if(!prod || !Array.isArray(prod.images) || prod.images.length===0){ showToast('لا توجد صور لهذا المنتج','error',1400); return; }
+  if(!prod || !Array.isArray(prod.images) || prod.images.length===0){ showToast(t('no_images'),'error',1400); return; }
   viewerProduct = prod; viewerImgs = (prod.images||[]).slice(0,8); viewerIndex = startIndex || 0; ensureViewerBar(); showViewer(); updateViewerInfo(); toggleBodyScroll(true);
 }
-function showViewer(){ if(!viewerImgs.length){ showToast('لا توجد صور','error',1200); return; } viewerImg.src = viewerImgs[viewerIndex]||''; imgViewerEl.classList.add('active'); imgViewerEl.setAttribute('aria-hidden','false'); updateViewerInfo(); }
+function showViewer(){ if(!viewerImgs.length){ showToast(t('no_images'),'error',1200); return; } viewerImg.src = viewerImgs[viewerIndex]||''; imgViewerEl.classList.add('active'); imgViewerEl.setAttribute('aria-hidden','false'); updateViewerInfo(); }
 function closeViewer(){ imgViewerEl.classList.remove('active'); imgViewerEl.setAttribute('aria-hidden','true'); toggleBodyScroll(false); }
 viewerPrev.addEventListener('click', function(){ if(!viewerImgs.length) return; viewerIndex = (viewerIndex - 1 + viewerImgs.length)%viewerImgs.length; viewerImg.classList.add('fade'); setTimeout(()=>{ viewerImg.src = viewerImgs[viewerIndex]; viewerImg.classList.remove('fade'); updateViewerInfo(); },120); });
 viewerNext.addEventListener('click', function(){ if(!viewerImgs.length) return; viewerIndex = (viewerIndex + 1)%viewerImgs.length; viewerImg.classList.add('fade'); setTimeout(()=>{ viewerImg.src = viewerImgs[viewerIndex]; viewerImg.classList.remove('fade'); updateViewerInfo(); },120); });
@@ -1643,7 +1746,7 @@ function ensureAdminInitialized(){
   function showMsg(el,text,type){ if(!type) type='ok'; el.textContent=text; el.className='msg '+(type==='ok'?'ok':'err'); el.style.display='block'; setTimeout(()=> el.style.display='none',2500); }
   loginBtn.addEventListener('click', function(){
     if((adminPass.value||'').trim()===ADMIN_PASSWORD){ sessionStorage.setItem('adminAuth','true'); adminHideLogin(); adminBootstrap(); }
-    else{ showMsg(loginMsg,'❌ كلمة المرور غير صحيحة','err'); }
+    else{ showMsg(loginMsg,t('wrong_password'),'err'); }
   });
   adminPass.addEventListener('keydown', e=>{ if(e.key==='Enter') loginBtn.click(); });
   document.getElementById('adminLoginClose')?.addEventListener('click', function(){ document.getElementById('adminLoginModal').classList.add('hidden'); navigateTo('home'); });
@@ -1656,27 +1759,27 @@ function ensureAdminInitialized(){
       const price = parseFloat((adminRoot.querySelector('#p-price').value||'').trim())||0;
       const description = (adminRoot.querySelector('#p-desc').value||'').trim();
       const imgs=[]; for(let i=1;i<=8;i++){ const v=(adminRoot.querySelector('#p-img'+i).value||'').trim(); if(v) imgs.push(v); }
-      if(!name || !imgs.length){ showMsg(msgAddProduct,'أكمل الاسم وصورة واحدة على الأقل','err'); return; }
-      const originalBtnText = btnAddProduct.textContent; btnAddProduct.innerHTML='<div class="loading-spinner"></div> جاري الحفظ...'; btnAddProduct.disabled=true;
-      showMsg(msgAddProduct,'جاري حفظ المنتج...','ok');
+      if(!name || !imgs.length){ showMsg(msgAddProduct,t('complete_name_image'),'err'); return; }
+      const originalBtnText = btnAddProduct.textContent; btnAddProduct.innerHTML='<div class="loading-spinner"></div> ' + t('saving'); btnAddProduct.disabled=true;
+      showMsg(msgAddProduct,t('saving'),'ok');
       if(editingProductId){
         const { data, error } = await supabaseClient.from('products').update({name,price,description,images:imgs}).eq('id',editingProductId).select();
         btnAddProduct.innerHTML=originalBtnText; btnAddProduct.disabled=false;
-        if(error){ console.error(error); showMsg(msgAddProduct,'❌ فشل تحديث المنتج: '+error.message,'err'); return; }
-        showMsg(msgAddProduct,'✅ تم تحديث المنتج بنجاح','ok');
-        editingProductId=null; btnAddProduct.textContent='حفظ المنتج';
+        if(error){ console.error(error); showMsg(msgAddProduct,'❌ ' + t('error_saving') + ': '+error.message,'err'); return; }
+        showMsg(msgAddProduct,'✅ ' + t('product_updated'),'ok');
+        editingProductId=null; btnAddProduct.textContent=t('save_product');
       }else{
         const { data, error } = await supabaseClient.from('products').insert({name,price,description,images:imgs,type:'normal',disabled:false,created_at:new Date().toISOString()}).select();
         btnAddProduct.innerHTML=originalBtnText; btnAddProduct.disabled=false;
-        if(error){ console.error(error); showMsg(msgAddProduct,'❌ فشل إضافة المنتج: '+error.message,'err'); return; }
+        if(error){ console.error(error); showMsg(msgAddProduct,'❌ ' + t('error_saving') + ': '+error.message,'err'); return; }
         if(data && data.length>0){
           products.unshift({id:data[0].id,name:data[0].name,price:Number(data[0].price)||0,images:Array.isArray(data[0].images)?data[0].images:[],desc:data[0].description||'',type:data[0].type||'normal',created_at:data[0].created_at,disabled:!!data[0].disabled});
-          showMsg(msgAddProduct,'✅ تم إضافة المنتج بنجاح','ok'); renderProducts(); renderCreateOfferProducts();
-        }else{ console.error('لم يتم إرجاع بيانات المنتج'); showMsg(msgAddProduct,'⚠️ تم الإضافة لكن يجب تحديث الصفحة','ok'); }
+          showMsg(msgAddProduct,'✅ ' + t('product_added'),'ok'); renderProducts(); renderCreateOfferProducts();
+        }else{ console.error('لم يتم إرجاع بيانات المنتج'); showMsg(msgAddProduct,'⚠️ ' + t('product_added') + ' ' + t('but_refresh_page'),'ok'); }
       }
       adminRoot.querySelector('#p-name').value=''; adminRoot.querySelector('#p-price').value=''; adminRoot.querySelector('#p-desc').value=''; for(let i=1;i<=8;i++) adminRoot.querySelector('#p-img'+i).value='';
       setTimeout(async()=>{ await adminLoadProducts(); },500);
-    }catch(e){ console.error(e); showMsg(msgAddProduct,'❌ حدث خطأ غير متوقع: '+e.message,'err'); btnAddProduct.textContent='حفظ المنتج'; btnAddProduct.disabled=false; }
+    }catch(e){ console.error(e); showMsg(msgAddProduct,'❌ ' + t('error_occurred') + ': '+e.message,'err'); btnAddProduct.textContent=t('save_product'); btnAddProduct.disabled=false; }
   });
   /* Save/Update Offer */
   const btnAddOffer = adminRoot.querySelector('#btn-add-offer');
@@ -1687,12 +1790,12 @@ function ensureAdminInitialized(){
       const new_price=parseFloat((adminRoot.querySelector('#o-price').value||'').trim())||0;
       const description=(adminRoot.querySelector('#o-desc').value||'').trim();
       const picks=Array.from(adminRoot.querySelectorAll('.select-products .pick:checked')).map(c=> Number(c.value));
-      if(!title || !picks.length){ msgAddOffer.textContent='أكمل اسم العرض واختر منتجًا واحدًا على الأقل'; msgAddOffer.className='msg err'; msgAddOffer.style.display='block'; setTimeout(()=> msgAddOffer.style.display='none',2500); return; }
-      const originalBtnText = btnAddOffer.textContent; btnAddOffer.innerHTML='<div class="loading-spinner"></div> جاري الحفظ...'; btnAddOffer.disabled=true;
+      if(!title || !picks.length){ msgAddOffer.textContent=t('complete_name_products'); msgAddOffer.className='msg err'; msgAddOffer.style.display='block'; setTimeout(()=> msgAddOffer.style.display='none',2500); return; }
+      const originalBtnText = btnAddOffer.textContent; btnAddOffer.innerHTML='<div class="loading-spinner"></div> ' + t('saving'); btnAddOffer.disabled=true;
       if(editingOfferId){
         const { data, error } = await supabaseClient.from('offers').update({name:title,price:new_price,description,products_ids:picks}).eq('id',editingOfferId).select();
         btnAddOffer.innerHTML=originalBtnText; btnAddOffer.disabled=false;
-        if(error){ console.error(error); msgAddOffer.textContent='❌ فشل حفظ العرض: '+error.message; msgAddOffer.className='msg err'; msgAddOffer.style.display='block'; return; }
+        if(error){ console.error(error); msgAddOffer.textContent='❌ ' + t('error_saving') + ': '+error.message; msgAddOffer.className='msg err'; msgAddOffer.style.display='block'; return; }
         const offerIndex = offers.findIndex(o=> o.id===editingOfferId);
         if(offerIndex>-1 && data && data.length>0){
           offers[offerIndex]={id:data[0].id,name:data[0].name,price:Number(data[0].price)||0,products_ids:Array.isArray(data[0].products_ids)?data[0].products_ids:[],desc:data[0].description||'',images:data[0].images||[]};
@@ -1700,27 +1803,27 @@ function ensureAdminInitialized(){
           // تحديث العروض في الواجهة الرئيسية
           fetchOffers();
         }
-        msgAddOffer.textContent='✅ تم حفظ تعديل العرض بنجاح'; msgAddOffer.className='msg ok'; msgAddOffer.style.display='block'; editingOfferId=null; btnAddOffer.textContent='حفظ العرض';
+        msgAddOffer.textContent='✅ ' + t('offer_updated'); msgAddOffer.className='msg ok'; msgAddOffer.style.display='block'; editingOfferId=null; btnAddOffer.textContent=t('save_offer');
       }else{
         const { data, error } = await supabaseClient.from('offers').insert({name:title,price:new_price,description,products_ids:picks,created_at:new Date().toISOString()}).select();
         btnAddOffer.innerHTML=originalBtnText; btnAddOffer.disabled=false;
-        if(error){ console.error(error); msgAddOffer.textContent='❌ فشل إضافة العرض: '+error.message; msgAddOffer.className='msg err'; msgAddOffer.style.display='block'; return; }
+        if(error){ console.error(error); msgAddOffer.textContent='❌ ' + t('error_saving') + ': '+error.message; msgAddOffer.className='msg err'; msgAddOffer.style.display='block'; return; }
         if(data && data.length>0){
           offers.unshift({id:data[0].id,name:data[0].name,price:Number(data[0].price)||0,products_ids:Array.isArray(data[0].products_ids)?data[0].products_ids:[],desc:data[0].description||'',images:data[0].images||[]});
           renderOffers();
-          msgAddOffer.textContent='✅ تم إضافة العرض بنجاح'; msgAddOffer.className='msg ok'; msgAddOffer.style.display='block';
+          msgAddOffer.textContent='✅ ' + t('offer_added'); msgAddOffer.className='msg ok'; msgAddOffer.style.display='block';
           
           // تحديث العروض في الواجهة الرئيسية
           fetchOffers();
         }else{
-          console.error('لم يتم إرجاع بيانات العرض'); msgAddOffer.textContent='⚠️ تم الإضافة لكن يجب تحديث الصفحة'; msgAddOffer.className='msg ok'; msgAddOffer.style.display='block';
+          console.error('لم يتم إرجاع بيانات العرض'); msgAddOffer.textContent='⚠️ ' + t('offer_added') + ' ' + t('but_refresh_page'); msgAddOffer.className='msg ok'; msgAddOffer.style.display='block';
         }
       }
       adminRoot.querySelector('#o-title').value=''; adminRoot.querySelector('#o-price').value=''; adminRoot.querySelector('#o-desc').value='';
       adminRoot.querySelectorAll('.select-products .pick').forEach(c=> c.checked=false);
       setTimeout(async()=>{ await adminLoadOffers(); },500);
     }catch(e){
-      console.error(e); msgAddOffer.textContent='❌ حدث خطأ غير متوقع: '+e.message; msgAddOffer.className='msg err'; msgAddOffer.style.display='block'; btnAddOffer.textContent='حفظ العرض'; btnAddOffer.disabled=false;
+      console.error(e); msgAddOffer.textContent='❌ ' + t('error_occurred') + ': '+e.message; msgAddOffer.className='msg err'; msgAddOffer.style.display='block'; btnAddOffer.textContent=t('save_offer'); btnAddOffer.disabled=false;
     }
   });
   
@@ -2090,16 +2193,16 @@ function saveCardSettings() {
   renderOffers();
   renderCreateOfferProducts();
   
-  showToast('تم حفظ إعدادات البطاقات بنجاح', 'success');
+  showToast(t('settings_saved'), 'success');
 }
 async function adminLoadProducts(){
   try{
     const adminRoot = document.getElementById('adminPage');
     const host = adminRoot.querySelector('#list-products');
-    host.innerHTML = '<div style="text-align:center;padding:20px;">جاري تحميل المنتجات... <div class="loading-spinner"></div></div>';
+    host.innerHTML = '<div style="text-align:center;padding:20px;">' + t('loading_products') + ' <div class="loading-spinner"></div></div>';
     const { data, error } = await supabaseClient.from('products').select('id, name, price, description, images, disabled').order('order_index',{ascending:true, nullsFirst:true});
-    if(error){ console.error('loadProducts',error); host.innerHTML='<div style="text-align:center;padding:20px;color:var(--danger)">فشل تحميل المنتجات. '+error.message+'</div>'; return []; }
-    if(!data || data.length===0){ host.innerHTML='<div style="text-align:center;padding:20px;color:var(--text-secondary)">لا توجد منتجات</div>'; return []; }
+    if(error){ console.error('loadProducts',error); host.innerHTML='<div style="text-align:center;padding:20px;color:var(--danger)">' + t('error_loading') + '. '+error.message+'</div>'; return []; }
+    if(!data || data.length===0){ host.innerHTML='<div style="text-align:center;padding:20px;color:var(--text-secondary)">' + t('no_products') + '</div>'; return []; }
     host.innerHTML='';
     (data||[]).forEach(p=>{
       const div = document.createElement('div'); div.className='item';
@@ -2107,11 +2210,11 @@ async function adminLoadProducts(){
       div.innerHTML =
         '<img class="thumb" src="'+escapeHtml(thumb)+'" onerror="this.src=\'\';" alt="" loading="lazy" decoding="async">'+
         '<div><div style="font-weight:700">'+escapeHtml(p.name)+'</div><div class="muted" style="margin-top:4px">'+formatCurrency(p.price)+'</div>'+
-        '<div class="chips" style="margin-top:8px"><span class="chip '+(p.disabled?'err':'ok')+'">'+(p.disabled?'معطّل':'نشِط')+'</span>'+
-        ((p.images||[]).slice(0,3).map((_,i)=> '<span class="chip">صورة '+(i+1)+'</span>').join('')) + '</div></div>'+
-        '<div class="flex"><button class="btn-edit" data-action="edit" data-id="'+p.id+'">تعديل</button>'+
-        '<button class="btn-3d" data-action="toggle" data-id="'+p.id+'" data-disabled="'+(p.disabled?1:0)+'">'+(p.disabled?'تفعيل':'تعطيل')+'</button>'+
-        '<button class="btn-del" data-action="delete" data-id="'+p.id+'">حذف</button></div>';
+        '<div class="chips" style="margin-top:8px"><span class="chip '+(p.disabled?'err':'ok')+'">'+(p.disabled?t('inactive'):t('active'))+'</span>'+
+        ((p.images||[]).slice(0,3).map((_,i)=> '<span class="chip">' + t('image') + ' '+(i+1)+'</span>').join('')) + '</div></div>'+
+        '<div class="flex"><button class="btn-edit" data-action="edit" data-id="'+p.id+'">' + t('edit') + '</button>'+
+        '<button class="btn-3d" data-action="toggle" data-id="'+p.id+'" data-disabled="'+(p.disabled?1:0)+'">'+(p.disabled?t('enable'):t('disable'))+'</button>'+
+        '<button class="btn-del" data-action="delete" data-id="'+p.id+'">' + t('delete') + '</button></div>';
       host.appendChild(div);
     });
     host.querySelectorAll('[data-action="edit"]').forEach(btn=>{
@@ -2121,16 +2224,16 @@ async function adminLoadProducts(){
         try{
           const { data, error } = await supabaseClient.from('products').select('*').eq('id',id).single();
           btn.innerHTML=originalBtnText; btn.disabled=false;
-          if(error){ showToast('فشل جلب بيانات المنتج: '+error.message,'error'); return; }
+          if(error){ showToast(t('error_loading') + ': '+error.message,'error'); return; }
           const adminRoot = document.getElementById('adminPage');
           adminRoot.querySelector('#p-name').value=data.name||'';
           adminRoot.querySelector('#p-price').value=data.price||'';
           adminRoot.querySelector('#p-desc').value=data.description||'';
           for(let i=1;i<=8;i++){ const imgField=adminRoot.querySelector('#p-img'+i); imgField.value = (data.images && data.images[i-1]) ? data.images[i-1] : ''; }
-          editingProductId = id; document.getElementById('btn-add-product').textContent='تحديث المنتج';
+          editingProductId = id; document.getElementById('btn-add-product').textContent=t('update_product');
           document.querySelector('#adminPage .tab[data-tab="products-sec"]').click();
-          showToast('تم تحميل بيانات المنتج للتعديل','success',2000);
-        }catch(e){ console.error(e); btn.innerHTML=originalBtnText; btn.disabled=false; showToast('فشل تحميل بيانات المنتج: '+e.message,'error'); }
+          showToast(t('product_loaded_for_edit'),'success',2000);
+        }catch(e){ console.error(e); btn.innerHTML=originalBtnText; btn.disabled=false; showToast(t('error_loading') + ': '+e.message,'error'); }
       });
     });
     host.querySelectorAll('[data-action="toggle"]').forEach(btn=>{
@@ -2140,21 +2243,21 @@ async function adminLoadProducts(){
         try{
           const { error } = await supabaseClient.from('products').update({disabled:!cur}).eq('id',id);
           btn.innerHTML=originalBtnText; btn.disabled=false;
-          if(error){ showToast('فشل تغيير حالة المنتج: '+error.message,'error'); return; }
-          showToast('تم تغيير حالة المنتج بنجاح','success'); await adminLoadProducts(); await fetchProducts();
-        }catch(e){ console.error(e); btn.innerHTML=originalBtnText; btn.disabled=false; showToast('فشل تغيير حالة المنتج: '+e.message,'error'); }
+          if(error){ showToast(t('error_occurred') + ': '+error.message,'error'); return; }
+          showToast(t('product_status_changed'),'success'); await adminLoadProducts(); await fetchProducts();
+        }catch(e){ console.error(e); btn.innerHTML=originalBtnText; btn.disabled=false; showToast(t('error_occurred') + ': '+e.message,'error'); }
       });
     });
     host.querySelectorAll('[data-action="delete"]').forEach(btn=>{
       btn.addEventListener('click', async function(){
-        const id = btn.dataset.id; if(!confirm('هل تريد حذف هذا المنتج؟')) return;
+        const id = btn.dataset.id; if(!confirm(t('confirm_delete'))) return;
         const originalBtnText=btn.textContent; btn.innerHTML='<div class="loading-spinner"></div>'; btn.disabled=true;
         try{
           const { error } = await supabaseClient.from('products').delete().eq('id',id);
           btn.innerHTML=originalBtnText; btn.disabled=false;
-          if(error){ showToast('فشل حذف المنتج: '+error.message,'error'); return; }
-          showToast('تم حذف المنتج بنجاح','success'); await adminLoadProducts(); await fetchProducts(); await fetchOffers();
-        }catch(e){ console.error(e); btn.innerHTML=originalBtnText; btn.disabled=false; showToast('فشل حذف المنتج: '+e.message,'error'); }
+          if(error){ showToast(t('error_deleting') + ': '+error.message,'error'); return; }
+          showToast(t('product_deleted'),'success'); await adminLoadProducts(); await fetchProducts(); await fetchOffers();
+        }catch(e){ console.error(e); btn.innerHTML=originalBtnText; btn.disabled=false; showToast(t('error_deleting') + ': '+e.message,'error'); }
       });
     });
     const miniHost = adminRoot.querySelector('#list-products-mini'); miniHost.innerHTML='';
@@ -2174,25 +2277,25 @@ async function adminLoadProducts(){
       selHost.appendChild(row);
     });
     return data;
-  }catch(e){ console.error(e); showToast('فشل تحميل المنتجات: '+e.message,'error'); return []; }
+  }catch(e){ console.error(e); showToast(t('error_loading') + ': '+e.message,'error'); return []; }
 }
 async function adminLoadOffers(){
   try{
     const adminRoot = document.getElementById('adminPage');
     const host = adminRoot.querySelector('#list-offers');
-    host.innerHTML = '<div style="text-align:center;padding:20px;">جاري تحميل العروض... <div class="loading-spinner"></div></div>';
+    host.innerHTML = '<div style="text-align:center;padding:20px;">' + t('loading_offers') + ' <div class="loading-spinner"></div></div>';
     const { data, error } = await supabaseClient.from('offers').select('id,name,price,description,images,products_ids').order('created_at',{ascending:false});
-    if(error){ console.error('loadOffers',error); host.innerHTML='<div style="text-align:center;padding:20px;color:var(--danger)">فشل تحميل العروض. '+error.message+'</div>'; return []; }
-    if(!data || data.length===0){ host.innerHTML='<div style="text-align:center;padding:20px;color:var(--text-secondary)">لا توجد عروض</div>'; return []; }
+    if(error){ console.error('loadOffers',error); host.innerHTML='<div style="text-align:center;padding:20px;color:var(--danger)">' + t('error_loading') + '. '+error.message+'</div>'; return []; }
+    if(!data || data.length===0){ host.innerHTML='<div style="text-align:center;padding:20px;color:var(--text-secondary)">' + t('no_offers') + '</div>'; return []; }
     host.innerHTML='';
     (data||[]).forEach(o=>{
       const div = document.createElement('div'); div.className='item';
       const t = (o.images||[])[0]||'';
       div.innerHTML =
         '<img class="thumb" src="'+escapeHtml(t)+'" onerror="this.src=\'\';" alt="" loading="lazy" decoding="async">'+
-        '<div><div style="font-weight:700">'+escapeHtml(o.name)+'</div><div class="muted" style="margin-top:4px">السعر: '+formatCurrency(o.price||0)+'</div>'+
-        '<div class="chips" style="margin-top:8px">'+((o.products_ids||[]).slice(0,4).map((_,i)=> '<span class="chip">منتج '+(i+1)+'</span>').join(''))+'</div></div>'+
-        '<div class="flex"><button class="btn-3d" data-action="edit" data-id="'+o.id+'">تعديل</button><button class="btn-del" data-action="delete" data-id="'+o.id+'">حذف</button></div>';
+        '<div><div style="font-weight:700">'+escapeHtml(o.name)+'</div><div class="muted" style="margin-top:4px">' + t('new_price') + ': '+formatCurrency(o.price||0)+'</div>'+
+        '<div class="chips" style="margin-top:8px">'+((o.products_ids||[]).slice(0,4).map((_,i)=> '<span class="chip">' + t('product') + ' '+(i+1)+'</span>').join(''))+'</div></div>'+
+        '<div class="flex"><button class="btn-3d" data-action="edit" data-id="'+o.id+'">' + t('edit') + '</button><button class="btn-del" data-action="delete" data-id="'+o.id+'">' + t('delete') + '</button></div>';
       host.appendChild(div);
     });
     host.querySelectorAll('[data-action="edit"]').forEach(btn=>{
@@ -2202,29 +2305,29 @@ async function adminLoadOffers(){
         try{
           const { data, error } = await supabaseClient.from('offers').select('*').eq('id',id).single();
           btn.innerHTML=originalBtnText; btn.disabled=false;
-          if(error){ showToast('فشل جلب بيانات العرض: '+error.message,'error'); return; }
+          if(error){ showToast(t('error_loading') + ': '+error.message,'error'); return; }
           const adminRoot = document.getElementById('adminPage');
           adminRoot.querySelector('#o-title').value=data.name||'';
           adminRoot.querySelector('#o-price').value=data.price||'';
           adminRoot.querySelector('#o-desc').value=data.description||'';
           const picks = new Set(Array.isArray(data.products_ids)?data.products_ids:(data.products_ids?String(data.products_ids).split(',').map(n=> Number(n.trim())):[]));
           adminRoot.querySelectorAll('.select-products .pick').forEach(c=> c.checked = picks.has(Number(c.value)));
-          editingOfferId = id; adminRoot.querySelector('#btn-add-offer').textContent='حفظ التعديل';
-          showToast('يمكنك تعديل العرض ثم الضغط حفظ','success',1600);
+          editingOfferId = id; adminRoot.querySelector('#btn-add-offer').textContent=t('update_offer');
+          showToast(t('offer_loaded_for_edit'),'success',1600);
           document.querySelector('#adminPage .tab[data-tab="offers-sec"]').click();
-        }catch(e){ console.error(e); btn.innerHTML=originalBtnText; btn.disabled=false; showToast('فشل تحميل بيانات العرض: '+e.message,'error'); }
+        }catch(e){ console.error(e); btn.innerHTML=originalBtnText; btn.disabled=false; showToast(t('error_loading') + ': '+e.message,'error'); }
       });
     });
     host.querySelectorAll('[data-action="delete"]').forEach(btn=>{
       btn.addEventListener('click', async function(){
-        const id = btn.dataset.id; if(!confirm('هل تريد حذف هذا العرض؟')) return;
+        const id = btn.dataset.id; if(!confirm(t('confirm_delete'))) return;
         const originalBtnText=btn.textContent; btn.innerHTML='<div class="loading-spinner"></div>'; btn.disabled=true;
         try{
           const { error } = await supabaseClient.from('offers').delete().eq('id',id);
           btn.innerHTML=originalBtnText; btn.disabled=false;
-          if(error){ showToast('فشل حذف العرض: '+error.message,'error'); return; }
-          showToast('تم حذف العرض بنجاح','success'); await adminLoadOffers(); await fetchOffers();
-        }catch(e){ console.error(e); btn.innerHTML=originalBtnText; btn.disabled=false; showToast('فشل حذف العرض: '+e.message,'error'); }
+          if(error){ showToast(t('error_deleting') + ': '+error.message,'error'); return; }
+          showToast(t('offer_deleted'),'success'); await adminLoadOffers(); await fetchOffers();
+        }catch(e){ console.error(e); btn.innerHTML=originalBtnText; btn.disabled=false; showToast(t('error_deleting') + ': '+e.message,'error'); }
       });
     });
     const miniHost = adminRoot.querySelector('#list-offers-mini'); miniHost.innerHTML='';
@@ -2236,16 +2339,16 @@ async function adminLoadOffers(){
       miniHost.appendChild(li);
     });
     return data;
-  }catch(e){ console.error(e); showToast('فشل تحميل العروض: '+e.message,'error'); return []; }
+  }catch(e){ console.error(e); showToast(t('error_loading') + ': '+e.message,'error'); return []; }
 }
 /* suggestions */
 async function adminLoadSuggestions(){
   try{
     const host = document.getElementById('list-suggestions'); if(!host) return;
-    host.innerHTML = '<div style="text-align:center;padding:20px;">جاري تحميل الاقتراحات... <div class="loading-spinner"></div></div>';
+    host.innerHTML = '<div style="text-align:center;padding:20px;">' + t('loading_suggestions') + ' <div class="loading-spinner"></div></div>';
     const { data, error } = await supabaseClient.from('product_suggestions').select('*').order('created_at',{ascending:false});
-    if(error){ console.error('loadSuggestions',error); host.innerHTML='<div style="text-align:center;padding:20px;color:var(--danger)">فشل تحميل الاقتراحات. '+error.message+'</div>'; return; }
-    if(!data || data.length===0){ host.innerHTML='<div style="text-align:center;padding:20px;color:var(--text-secondary)">لا توجد اقتراحات</div>'; return; }
+    if(error){ console.error('loadSuggestions',error); host.innerHTML='<div style="text-align:center;padding:20px;color:var(--danger)">' + t('error_loading') + '. '+error.message+'</div>'; return; }
+    if(!data || data.length===0){ host.innerHTML='<div style="text-align:center;padding:20px;color:var(--text-secondary)">' + t('no_suggestions') + '</div>'; return; }
     host.innerHTML='';
     (data||[]).forEach(s=>{
       const div = document.createElement('div'); div.className='item';
@@ -2253,25 +2356,25 @@ async function adminLoadSuggestions(){
         '<div>'+
           '<div style="font-weight:700">'+escapeHtml(s.name)+'</div>'+
           '<div style="color:var(--text-secondary); font-size:14px; margin-top:6px">'+escapeHtml(s.description||'')+'</div>'+
-          '<div style="color:var(--text-secondary); font-size:13px; margin-top:8px">بواسطة: '+escapeHtml(s.suggested_by||'مجهول')+'</div>'+
+          '<div style="color:var(--text-secondary); font-size:13px; margin-top:8px">' + t('suggested_by') + ': '+escapeHtml(s.suggested_by||t('unknown'))+'</div>'+
           '<div style="color:var(--text-secondary); font-size:13px; margin-top:4px">'+ new Date(s.created_at).toLocaleString('ar-SA') +'</div>'+
         '</div>'+
-        '<div class="flex"><button class="btn-3d" data-action="delete-suggestion" data-id="'+s.id+'">حذف</button></div>';
+        '<div class="flex"><button class="btn-3d" data-action="delete-suggestion" data-id="'+s.id+'">' + t('delete') + '</button></div>';
       host.appendChild(div);
     });
     host.querySelectorAll('[data-action="delete-suggestion"]').forEach(btn=>{
       btn.addEventListener('click', async function(){
-        const id = btn.dataset.id; if(!confirm('هل تريد حذف هذا الاقتراح؟')) return;
+        const id = btn.dataset.id; if(!confirm(t('confirm_delete'))) return;
         const originalBtnText=btn.textContent; btn.innerHTML='<div class="loading-spinner"></div>'; btn.disabled=true;
         try{
           const { error } = await supabaseClient.from('product_suggestions').delete().eq('id',id);
           btn.innerHTML=originalBtnText; btn.disabled=false;
-          if(error){ showToast('فشل حذف الاقتراح: '+error.message,'error'); return; }
-          showToast('تم حذف الاقتراح بنجاح','success'); await adminLoadSuggestions();
-        }catch(e){ console.error(e); btn.innerHTML=originalBtnText; btn.disabled=false; showToast('فشل حذف الاقتراح: '+e.message,'error'); }
+          if(error){ showToast(t('error_deleting') + ': '+error.message,'error'); return; }
+          showToast(t('suggestion_deleted'),'success'); await adminLoadSuggestions();
+        }catch(e){ console.error(e); btn.innerHTML=originalBtnText; btn.disabled=false; showToast(t('error_deleting') + ': '+e.message,'error'); }
       });
     });
-  }catch(e){ console.error(e); showToast('فشل تحميل الاقتراحات: '+e.message,'error'); }
+  }catch(e){ console.error(e); showToast(t('error_loading') + ': '+e.message,'error'); }
 }
 /* navigation */
 function navigateTo(section){
@@ -2337,11 +2440,14 @@ async function adminBootstrap(){
   try{
     adminBootstrapped = true; 
     await Promise.all([adminLoadProducts(), adminLoadOffers()]);
-  }catch(e){ console.error(e); showToast('فشل تحميل بيانات لوحة التحكم: '+e.message,'error'); }
+  }catch(e){ console.error(e); showToast(t('error_loading') + ': '+e.message,'error'); }
 }
 /* init */
 async function init(){
   try{
+    // Load translations first
+    await loadTranslations();
+    
     // تحميل إعدادات البطاقات من التخزين المحلي
     loadCardSettings();
     
@@ -2352,7 +2458,7 @@ async function init(){
     cart = JSON.parse(localStorage.getItem('my_cart_v_final2')||'[]');
     
     // عرض رسالة تحميل
-    showToast('جاري تحميل المتجر...', 'info', 1000);
+    showToast(t('loading'), 'info', 1000);
     
     // تحميل المنتجات أولاً
     await fetchProducts();
@@ -2389,22 +2495,22 @@ async function init(){
     
     if(cartClearBtn){ 
       cartClearBtn.addEventListener('click', function(){ 
-        if(!confirm('هل تريد تفريغ السلة؟')) return; 
+        if(!confirm(t('confirm_clear_cart'))) return; 
         cart=[]; 
         saveCart(); 
         renderCartModal(); 
-        showToast('تم تفريغ السلة','success'); 
+        showToast(t('cart_cleared'),'success'); 
       }); 
     }
     
     if(cartOrderBtn){
       cartOrderBtn.addEventListener('click', function(){
-        if(cart.length===0){ alert('السلة فارغة'); return; }
-        let text = "🛒 *طلب جديـد*\n\n───────────────\n\n";
-        cart.forEach((c,i)=>{ text += `*${i+1}. ${c.name}*\n   - الكمية: ${c.qty}\n   - السعر: ${formatCurrency(c.price * c.qty)}\n\n`; });
+        if(cart.length===0){ alert(t('cart_is_empty')); return; }
+        let text = "🛒 *" + t('new_request') + "*\n\n───────────────\n\n";
+        cart.forEach((c,i)=>{ text += `*${i+1}. ${c.name}*\n   - ` + t('quantity') + `: ${c.qty}\n   - ` + t('price') + `: ${formatCurrency(c.price * c.qty)}\n\n`; });
         text += "───────────────\n";
-        text += `*💰 الإجمالي: ${formatCurrency(calculateTotal())}*\n\n`;
-        text += "شكرا لكم لتواصلكم معنا سيتم التواصل معكم قريبا لتأكيد الطلب *شكرًا لثقتكم بمتجرنا!*";
+        text += `*💰 ` + t('total') + `: ${formatCurrency(calculateTotal())}*\n\n`;
+        text += t('thank_you');
         const url = 'https://wa.me/'+WHATSAPP_NUMBER.replace('+','')+'?text='+encodeURIComponent(text);
         window.open(url,'_blank');
       });
@@ -2416,27 +2522,27 @@ async function init(){
         const name = document.getElementById('suggestion-name').value.trim();
         const description = document.getElementById('suggestion-desc').value.trim();
         const suggested_by = document.getElementById('suggestion-by').value.trim();
-        if(!name){ showToast('الرجاء إدخال اسم المنتج المقترح','error'); return; }
+        if(!name){ showToast(t('complete_fields'),'error'); return; }
         const originalBtnText = suggestionSubmit.textContent; 
-        suggestionSubmit.innerHTML='<div class="loading-spinner"></div> جاري الإرسال...'; 
+        suggestionSubmit.innerHTML='<div class="loading-spinner"></div> ' + t('sending'); 
         suggestionSubmit.disabled=true;
         try{
           const suggestion = { name, description, suggested_by, created_at:new Date().toISOString() };
           const { error } = await supabaseClient.from('product_suggestions').insert([suggestion]).select();
           suggestionSubmit.innerHTML=originalBtnText; 
           suggestionSubmit.disabled=false;
-          if(error){ console.error(error); showToast('فشل إرسال الاقتراح: '+error.message,'error'); return; }
+          if(error){ console.error(error); showToast(t('error_sending') + ': '+error.message,'error'); return; }
           document.getElementById('suggestion-success').style.display='block';
           document.getElementById('suggestion-name').value=''; 
           document.getElementById('suggestion-desc').value=''; 
           document.getElementById('suggestion-by').value='';
           setTimeout(()=>{ document.getElementById('suggestion-success').style.display='none'; },5000);
-          showToast('تم إرسال اقتراحك بنجاح','success');
+          showToast(t('suggestion_success'),'success');
         }catch(e){ 
           console.error(e); 
           suggestionSubmit.innerHTML=originalBtnText; 
           suggestionSubmit.disabled=false; 
-          showToast('فشل إرسال الاقتراح: '+e.message,'error'); 
+          showToast(t('error_sending') + ': '+e.message,'error'); 
         }
       });
     }
@@ -2453,19 +2559,19 @@ async function init(){
     if(refreshProductsBtn){
       refreshProductsBtn.addEventListener('click', async function(){
         const originalBtnText=refreshProductsBtn.textContent; 
-        refreshProductsBtn.innerHTML='<div class="loading-spinner"></div> جاري التحديث...'; 
+        refreshProductsBtn.innerHTML='<div class="loading-spinner"></div> ' + t('loading'); 
         refreshProductsBtn.disabled=true;
         try{ 
           await Promise.all([adminLoadProducts(), adminLoadOffers(), fetchProducts(), fetchOffers()]); 
           refreshProductsBtn.innerHTML=originalBtnText; 
           refreshProductsBtn.disabled=false; 
-          showToast('تم تحديث البيانات بنجاح','success'); 
+          showToast(t('data_refreshed'),'success'); 
         }
         catch(e){ 
           console.error(e); 
           refreshProductsBtn.innerHTML=originalBtnText; 
           refreshProductsBtn.disabled=false; 
-          showToast('فشل تحديث البيانات: '+e.message,'error'); 
+          showToast(t('error_occurred') + ': '+e.message,'error'); 
         }
       });
     }
@@ -2477,7 +2583,7 @@ async function init(){
     setTimeout(handleDeepLink, 500);
   }catch(error){ 
     console.error('خطأ في التهيئة:', error); 
-    showToast('حدث خطأ أثناء تحميل المتجر: '+error.message,'error'); 
+    showToast(t('error_occurred') + ': '+error.message,'error'); 
   }
 }
 // دالة لتحميل قائمة المنتجات القابلة للترتيب
@@ -2486,7 +2592,7 @@ async function loadProductsOrder() {
     const container = document.getElementById('products-order-container');
     if (!container) return;
     
-    container.innerHTML = '<div style="text-align:center;padding:20px;">جاري تحميل المنتجات... <div class="loading-spinner"></div></div>';
+    container.innerHTML = '<div style="text-align:center;padding:20px;">' + t('loading_products') + ' <div class="loading-spinner"></div></div>';
     
     // تحميل المنتجات من قاعدة البيانات
     const { data, error } = await supabaseClient
@@ -2496,12 +2602,12 @@ async function loadProductsOrder() {
     
     if (error) {
       console.error('loadProductsOrder', error);
-      container.innerHTML = '<div style="text-align:center;padding:20px;color:var(--danger)">فشل تحميل المنتجات. ' + error.message + '</div>';
+      container.innerHTML = '<div style="text-align:center;padding:20px;color:var(--danger)">' + t('error_loading') + '. ' + error.message + '</div>';
       return;
     }
     
     if (!data || data.length === 0) {
-      container.innerHTML = '<div style="text-align:center;padding:20px;color:var(--text-secondary)">لا توجد منتجات</div>';
+      container.innerHTML = '<div style="text-align:center;padding:20px;color:var(--text-secondary)">' + t('no_products') + '</div>';
       return;
     }
     
@@ -2536,7 +2642,7 @@ async function loadProductsOrder() {
     
   } catch (e) {
     console.error(e);
-    showToast('فشل تحميل قائمة المنتجات: ' + e.message, 'error');
+    showToast(t('error_loading') + ': ' + e.message, 'error');
   }
 }
 // دالة لإعداد السحب والإفلات
@@ -2589,12 +2695,12 @@ async function saveProductsOrder() {
     const saveBtn = document.getElementById('save-products-order');
     
     if (!orderItems || orderItems.length === 0) {
-      showToast('لا توجد منتجات لحفظ ترتيبها', 'warning');
+      showToast(t('no_products'), 'warning');
       return;
     }
     
     const originalBtnText = saveBtn.textContent;
-    saveBtn.innerHTML = '<div class="loading-spinner"></div> جاري الحفظ...';
+    saveBtn.innerHTML = '<div class="loading-spinner"></div> ' + t('saving');
     saveBtn.disabled = true;
     
     // تحديث ترتيب المنتجات في قاعدة البيانات
@@ -2637,7 +2743,7 @@ async function saveProductsOrder() {
     saveBtn.innerHTML = originalBtnText;
     saveBtn.disabled = false;
     
-    showToast('تم حفظ ترتيب المنتجات بنجاح', 'success');
+    showToast(t('order_saved'), 'success');
     
     // تحديث عرض المنتجات في المتجر
     await fetchProducts();
@@ -2645,9 +2751,9 @@ async function saveProductsOrder() {
   } catch (e) {
     console.error(e);
     const saveBtn = document.getElementById('save-products-order');
-    saveBtn.innerHTML = 'حفظ الترتيب';
+    saveBtn.innerHTML = t('save_order');
     saveBtn.disabled = false;
-    showToast('فشل حفظ ترتيب المنتجات: ' + e.message, 'error');
+    showToast(t('error_occurred') + ': ' + e.message, 'error');
   }
 }
 // إضافة هذه الدالة في بداية الكود
