@@ -410,7 +410,24 @@ main{padding:16px;max-width:1200px;margin:20px auto}
 .order-sticker .label{font-size:12px;font-weight:900;margin-top:4px;color:white}
 .sticker-count{position:absolute;top:6px;right:6px;background:var(--danger);color:#fff;border-radius:999px;padding:6px 10px;font-size:14px;display:flex;align-items:center;justify-content:center;font-weight:900;box-shadow:0 2px 4px rgba(0,0,0,0.1)}
 /* game account sticker */
-.game-account-sticker{position:fixed;right:100px;bottom:20px;width:70px;height:70px;background:var(--secondary);border-radius:50%;display:flex;flex-direction:column;align-items:center;justify-content:center;border:3px solid white;cursor:pointer;z-index:1000;box-shadow:var(--shadow-lg);transition:all 0.3s ease}
+.game-account-sticker{
+  position:fixed;
+  left:20px;
+  bottom:20px;
+  width:70px;
+  height:70px;
+  background:var(--accent); /* أصفر */
+  border-radius:50%;
+  display:flex;
+  flex-direction:column;
+  align-items:center;
+  justify-content:center;
+  border:3px solid white;
+  cursor:pointer;
+  z-index:1000;
+  box-shadow:var(--shadow-lg);
+  transition:all 0.3s ease;
+}
 .game-account-sticker:hover{transform:scale(1.1)}
 .game-account-sticker .icon{font-size:28px;color:white}
 .game-account-sticker .label{font-size:12px;font-weight:900;margin-top:4px;color:white}
@@ -853,7 +870,24 @@ main{padding:16px;max-width:1200px;margin:20px auto}
   .cart-modal{width:94%}
   .offers-stack{grid-template-columns:repeat(auto-fill,minmax(250px,1fr))}
   .create-offer-section .products-grid{grid-template-columns:repeat(auto-fill,minmax(150px,1fr))}
-  .game-account-sticker{right:80px}
+  .game-account-sticker{
+  position:fixed;
+  left:20px;
+  bottom:20px;
+  width:70px;
+  height:70px;
+  background:var(--accent); /* أصفر */
+  border-radius:50%;
+  display:flex;
+  flex-direction:column;
+  align-items:center;
+  justify-content:center;
+  border:3px solid white;
+  cursor:pointer;
+  z-index:1000;
+  box-shadow:var(--shadow-lg);
+  transition:all 0.3s ease;
+}
   /* === تعديل === تصغير العرض الفردي أكثر على الشاشات المتوسطة */
   .single-product-card{
     max-width:90%;
@@ -928,9 +962,24 @@ main{padding:16px;max-width:1200px;margin:20px auto}
     max-height: 90vh;
   }
   
-  .game-account-sticker {
-    right: 80px;
-  }
+  .game-account-sticker{
+  position:fixed;
+  left:20px;
+  bottom:20px;
+  width:70px;
+  height:70px;
+  background:var(--accent); /* أصفر */
+  border-radius:50%;
+  display:flex;
+  flex-direction:column;
+  align-items:center;
+  justify-content:center;
+  border:3px solid white;
+  cursor:pointer;
+  z-index:1000;
+  box-shadow:var(--shadow-lg);
+  transition:all 0.3s ease;
+}
   
   /* === تعديل === تصغير العرض الفردي أكثر على الشاشات الصغيرة */
   .single-product-card{
@@ -983,11 +1032,24 @@ main{padding:16px;max-width:1200px;margin:20px auto}
     font-size: 12px;
   }
   
-  .game-account-sticker {
-    right: 60px;
-    width: 60px;
-    height: 60px;
-  }
+  .game-account-sticker{
+  position:fixed;
+  left:20px;
+  bottom:20px;
+  width:70px;
+  height:70px;
+  background:var(--accent); /* أصفر */
+  border-radius:50%;
+  display:flex;
+  flex-direction:column;
+  align-items:center;
+  justify-content:center;
+  border:3px solid white;
+  cursor:pointer;
+  z-index:1000;
+  box-shadow:var(--shadow-lg);
+  transition:all 0.3s ease;
+}
   
   .game-account-sticker .icon {
     font-size: 24px;
@@ -1223,7 +1285,10 @@ header{
       </div>
     </div>
     <div id="gameAccountsGrid" class="grid"></div>
-    <div id="singleGameAccountView" class="single-view" style="display:none;"></div>
+    <div id="singleGameAccountView" class="single-view" style="display:none; position:relative;">
+  <button class="img-arrow left" onclick="prevGameAccountImage()">&#10094;</button>
+  <button class="img-arrow right" onclick="nextGameAccountImage()">&#10095;</button>
+</div>
     <div class="empty-state" id="gameAccountsEmpty" style="display:none;">
       <h3>لا توجد حسابات ألعاب متاحة</h3>
       <p>يمكنك إضافة حسابات جديدة من لوحة التحكم.</p>
@@ -5052,33 +5117,35 @@ async function init() {
       }
     });
     
-    document.getElementById('gameAccountCartOrderBtn').addEventListener('click', () => {
-      if (gameAccountCart.length === 0) {
-        showToast('سلة الألعاب فارغة', 'warning');
-        return;
-      }
-      
-      let text = "🎮 *طلب حسابات ألعاب*\n\n───────────────\n\n";
-      gameAccountCart.forEach((item, i) => {
-        // تحديد اسم المنصة بالعربية
-        const platformNames = {
-          'pc': 'كمبيوتر',
-          'playstation': 'بلايستيشن',
-          'xbox': 'إكس بوكس',
-          'nintendo': 'نينتندو',
-          'mobile': 'جوال'
-        };
-        const platformName = platformNames[item.platform] || item.platform;
-        
-        text += `*${i+1}. ${item.name}*\n   - المنصة: ${platformName}\n   - السعر: ${formatCurrency(item.price)}\n   - الكمية: ${item.qty}\n\n`;
-      });
-      text += "───────────────\n";
-      text += `*💰 الإجمالي: ${formatCurrency(calculateGameAccountCartTotal())}*\n\n`;
-      text += "شكرا لكم لتواصلكم معنا سيتم التواصل معكم قريبا لتأكيد الطلب شكرًا لثقتكم بمتجرنا!";
-      
-      const url = 'https://wa.me/' + WHATSAPP_NUMBER.replace('+', '') + '?text=' + encodeURIComponent(text);
-      window.open(url, '_blank');
-    });
+    
+document.getElementById('gameAccountCartOrderBtn').addEventListener('click', () => {
+  if (gameAccountCart.length === 0) {
+    showToast('سلة الألعاب فارغة', 'warning');
+    return;
+  }
+
+  let text = "🎮 *طلب حسابات ألعاب*\n\n───────────────\n\n";
+  gameAccountCart.forEach((item, i) => {
+    const platformNames = {
+      'pc': 'كمبيوتر',
+      'playstation': 'بلايستيشن',
+      'xbox': 'إكس بوكس',
+      'nintendo': 'نينتندو',
+      'mobile': 'جوال'
+    };
+    const platformName = platformNames[item.platform] || item.platform;
+    text += `*${i+1}. ${item.name}*\n   - المنصة: ${platformName}\n   - السعر: ${formatCurrency(item.price)}\n   - الكمية: ${item.qty}\n\n`;
+  });
+  text += "───────────────\n";
+  text += `*💰 الإجمالي: ${formatCurrency(calculateGameAccountCartTotal())}*\n\n`;
+  text += "شكرا لكم لتواصلكم معنا سيتم التواصل معكم قريبا لتأكيد الطلب شكرًا لثقتكم بمتجرنا!";
+
+  // رقم خاص بسلة الألعاب
+  const GAME_ACCOUNT_WHATSAPP = "97332605";
+  const url = 'https://wa.me/' + GAME_ACCOUNT_WHATSAPP + '?text=' + encodeURIComponent(text);
+  window.open(url, '_blank');
+});
+
     
     // Setup cart sticker
     document.getElementById('orderSticker').addEventListener('click', () => {
@@ -5291,6 +5358,26 @@ function swapGameAccountImage(el, id) {
     const mainImg = document.getElementById('main-ga-img-' + id);
     if (mainImg) mainImg.src = el.src;
   } catch (e) { console.error('swapGameAccountImage error', e); }
+}
+</script>
+
+
+<script>
+let currentGameAccountImageIndex = 0;
+
+function showGameAccountImage(index) {
+  const imgs = document.querySelectorAll("#singleGameAccountView .thumbs img");
+  if (imgs.length === 0) return;
+  currentGameAccountImageIndex = (index + imgs.length) % imgs.length;
+  document.querySelector("#singleGameAccountView .img-box img").src = imgs[currentGameAccountImageIndex].src;
+}
+
+function prevGameAccountImage() {
+  showGameAccountImage(currentGameAccountImageIndex - 1);
+}
+
+function nextGameAccountImage() {
+  showGameAccountImage(currentGameAccountImageIndex + 1);
 }
 </script>
 
